@@ -1,4 +1,4 @@
-import { userStore } from "../store";
+import { store } from "../store";
 
 const defaultUserInfo = {
   username: "",
@@ -9,10 +9,10 @@ const defaultUserInfo = {
 export const userService = (() => {
   return {
     isLogin: () => {
-      return userStore.get("user") != null;
+      return store.get("user") != null;
     },
     login: (user) => {
-      userStore.set(
+      store.set(
         "user",
         {
           ...defaultUserInfo,
@@ -22,11 +22,11 @@ export const userService = (() => {
       );
     },
     logout: () => {
-      userStore.remove("user");
+      store.remove("user");
     },
     updateProfile: (profile) => {
-      const user = userStore.get("user");
-      userStore.set(
+      const user = store.get("user");
+      store.set(
         "user",
         {
           ...user,
@@ -36,7 +36,7 @@ export const userService = (() => {
       );
     },
     get userProfile() {
-      return userStore.get("user") ?? defaultUserInfo;
+      return store.get("user") ?? defaultUserInfo;
     },
   };
 })();

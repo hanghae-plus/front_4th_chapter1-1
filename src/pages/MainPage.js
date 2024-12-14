@@ -102,5 +102,6 @@ export const MainPage = () => `
 `;
 
 MainPage.init = () => {
-  Header.init();
+  Header.init?.();
+  Footer.init?.();
 };

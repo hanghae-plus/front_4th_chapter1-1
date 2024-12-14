@@ -42,4 +42,4 @@ function createStore(callback = () => {}) {
   };
 }
 
-export const userStore = createStore(() => App.render());
+export const store = createStore(() => App.render());

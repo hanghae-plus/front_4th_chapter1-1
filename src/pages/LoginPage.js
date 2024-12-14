@@ -28,6 +28,11 @@ export const LoginPage = () => {
 };
 
 LoginPage.init = () => {
+  if (userService.isLogin()) {
+    Router.push("/");
+    return;
+  }
+
   const form = document.querySelector("form");
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -40,9 +45,4 @@ LoginPage.init = () => {
 
     Router.push("/");
   });
-
-  if (userService.isLogin()) {
-    Router.push("/");
-    return;
-  }
 };
