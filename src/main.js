@@ -234,6 +234,7 @@ const ProfilePage = () => `
 `;
 
 document.body.innerHTML = `
+  임시텍스트
   ${MainPage()}
   ${ProfilePage()}
   ${LoginPage()}
