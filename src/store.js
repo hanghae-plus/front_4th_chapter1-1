@@ -1,3 +1,5 @@
+import { SPARouter } from "./SPARouter";
+
 const persistentState = {
   isPersistent: (namespace, key) => {
     return localStorage.getItem(`${namespace}.${key}`) !== null;
@@ -10,7 +12,7 @@ const persistentState = {
   },
 };
 
-function createStore(namespace = "global") {
+function createStore(namespace = "global", callback = () => {}) {
   const state = new Map();
 
   return {
@@ -30,6 +32,7 @@ function createStore(namespace = "global") {
         localStorage.removeItem(`${namespace}.${key}`);
         state.set(key, value);
       }
+      callback();
     },
     remove: (key) => {
       state.delete(key);
@@ -38,6 +41,6 @@ function createStore(namespace = "global") {
   };
 }
 
-export const defaultStore = createStore();
+export const defaultStore = createStore("global", () => SPARouter.callback());
 
-export const userStore = createStore("user");
+export const userStore = createStore("user", () => SPARouter.callback());
