@@ -9,8 +9,8 @@ export const Header = () => {
 
     <nav class="bg-white shadow-md p-2 sticky top-14">
     <ul class="flex justify-around">
-      <li><a href="/" class="${Router.pathname === "/" ? "text-blue-600" : "text-gray-600"}">홈</a></li>
-      ${Router.pathname === "profile" || userService.isLogin() ? `<li><a href="/profile" class="${Router.pathname === "/profile" ? "text-blue-600" : "text-gray-600"}">프로필</a></li>` : ""}
+      <li><a href="/" class="${window.location.pathname === "/" ? "text-blue-600" : "text-gray-600"}">홈</a></li>
+      ${window.location.pathname === "profile" || userService.isLogin() ? `<li><a href="/profile" class="${window.location.pathname === "/profile" ? "text-blue-600" : "text-gray-600"}">프로필</a></li>` : ""}
       <li><a href="#" class="text-gray-600">${userService.isLogin() ? "로그아웃" : "로그인"}</a></li>
     </ul>
     </nav>
