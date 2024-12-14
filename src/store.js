@@ -1,46 +1,44 @@
 import { SPARouter } from "./SPARouter";
 
 const persistentState = {
-  isPersistent: (namespace, key) => {
-    return localStorage.getItem(`${namespace}.${key}`) !== null;
+  isPersistent: (key) => {
+    return localStorage.getItem(`${key}`) !== null;
   },
-  setPersistent: (namespace, key) => {
-    localStorage.setItem(`${namespace}.${key}`, true);
+  setPersistent: (key) => {
+    localStorage.setItem(`${key}`, true);
   },
-  resetKey: (namespace, key) => {
-    localStorage.removeItem(`${namespace}.${key}`);
+  resetKey: (key) => {
+    localStorage.removeItem(`${key}`);
   },
 };
 
-function createStore(namespace = "global", callback = () => {}) {
+function createStore(callback = () => {}) {
   const state = new Map();
 
   return {
     get: (key) => {
-      if (persistentState.isPersistent(namespace, key)) {
-        return JSON.parse(localStorage.getItem(`${namespace}.${key}`));
+      if (persistentState.isPersistent(key)) {
+        return JSON.parse(localStorage.getItem(`${key}`));
       } else {
         return state.get(key);
       }
     },
     set: (key, value, { persistent } = { persistent: false }) => {
       if (persistent) {
-        persistentState.setPersistent(namespace, key);
-        localStorage.setItem(`${namespace}.${key}`, JSON.stringify(value));
+        persistentState.setPersistent(key);
+        localStorage.setItem(`${key}`, JSON.stringify(value));
       } else {
-        persistentState.resetKey(namespace, key);
-        localStorage.removeItem(`${namespace}.${key}`);
+        persistentState.resetKey(key);
+        localStorage.removeItem(`${key}`);
         state.set(key, value);
       }
       callback();
     },
     remove: (key) => {
       state.delete(key);
-      persistentState.resetKey(namespace, key);
+      persistentState.resetKey(key);
     },
   };
 }
 
-export const defaultStore = createStore("global", () => SPARouter.callback());
-
-export const userStore = createStore("user", () => SPARouter.callback());
+export const userStore = createStore(() => SPARouter.callback());
