@@ -12,7 +12,7 @@ const persistentState = {
   },
 };
 
-function createStore(callback = () => {}) {
+function createStore({ afterUpdate = () => {} }) {
   const state = new Map();
 
   return {
@@ -32,14 +32,15 @@ function createStore(callback = () => {}) {
         localStorage.removeItem(key);
         state.set(key, value);
       }
-      callback();
+      afterUpdate();
     },
     remove: (key) => {
       localStorage.removeItem(key);
       state.set(key, null);
       persistentState.resetKey(key);
+      afterUpdate();
     },
   };
 }
 
-export const store = createStore(() => App.render());
+export const store = createStore({ afterUpdate: () => App.render() });
