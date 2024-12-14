@@ -2,11 +2,11 @@ import { MainPage } from "./pages/MainPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { LoginPage } from "./pages/LoginPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import { SPARouter } from "./SPARouter";
+import { Router } from "./Router";
 
 function renderApp() {
   const TargetPage = (() => {
-    switch (SPARouter.pathname) {
+    switch (Router.pathname) {
       case "/":
         return MainPage;
       case "/login":
@@ -20,7 +20,7 @@ function renderApp() {
 
   document.querySelector("#root").innerHTML = TargetPage();
 
-  SPARouter.init({ callback: renderApp });
+  Router.init({ callback: renderApp });
   TargetPage?.init?.();
 }
 

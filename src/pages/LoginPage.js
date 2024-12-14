@@ -1,4 +1,4 @@
-import { SPARouter } from "../SPARouter";
+import { Router } from "../Router";
 import { userService } from "../services/userService";
 
 export const LoginPage = () => {
@@ -38,11 +38,11 @@ LoginPage.init = () => {
       password: form.querySelector("input[type=password]").value,
     });
 
-    SPARouter.push("/");
+    Router.push("/");
   });
 
   if (userService.isLogin()) {
-    SPARouter.push("/");
+    Router.push("/");
     return;
   }
 };

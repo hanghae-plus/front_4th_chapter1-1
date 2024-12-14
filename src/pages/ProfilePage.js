@@ -1,5 +1,5 @@
 import { userService } from "../services/userService";
-import { SPARouter } from "../SPARouter";
+import { Router } from "../Router";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 
@@ -74,7 +74,7 @@ export const ProfilePage = () => `
 
 ProfilePage.init = () => {
   if (!userService.isLogin()) {
-    SPARouter.push("/login");
+    Router.push("/login");
     return;
   }
 
@@ -87,7 +87,7 @@ ProfilePage.init = () => {
     const bio = form.bio.value;
 
     userService.updateProfile({ username, email, bio });
-    SPARouter.callback();
+    Router.callback();
   });
 
   Header.init();

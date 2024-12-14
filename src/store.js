@@ -1,4 +1,4 @@
-import { SPARouter } from "./SPARouter";
+import { Router } from "./Router";
 
 const persistentState = {
   isPersistent: (key) => {
@@ -41,4 +41,4 @@ function createStore(callback = () => {}) {
   };
 }
 
-export const userStore = createStore(() => SPARouter.callback());
+export const userStore = createStore(() => Router.callback());
