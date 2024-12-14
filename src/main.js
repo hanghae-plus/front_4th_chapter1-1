@@ -62,7 +62,6 @@ function submitEventHandler(e) {
       render("/profile");
       updateContent();
     }
-    return;
   }
 
   if (id === "profile-form") {
@@ -71,15 +70,24 @@ function submitEventHandler(e) {
     const bio = formData.get("bio");
 
     localStorage.setItem("user", JSON.stringify({ username, email, bio }));
-    return;
+    render("/profile");
+    updateContent();
   }
 }
 
 function clickEventHandler(e) {
-  const { id } = e.target;
+  const { id, tagName } = e.target;
 
   if (id === "logout") {
     logout();
+  }
+
+  if (tagName === "A") {
+    e.preventDefault();
+    const { href } = e.target;
+    const path = href.slice(href.lastIndexOf("/"));
+    render(path);
+    updateContent();
   }
 }
 
