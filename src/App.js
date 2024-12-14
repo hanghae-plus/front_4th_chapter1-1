@@ -1,9 +1,9 @@
 import { Routes } from "./Routes";
-import { getPathname } from "./utils/getPathname";
+import { getHash, getPathname } from "./utils";
 
 export const App = {
   render: () => {
-    const TargetPage = Routes.target(getPathname());
+    const TargetPage = Routes.target(getPathname(), getHash());
 
     document.querySelector("#root").innerHTML = TargetPage();
 

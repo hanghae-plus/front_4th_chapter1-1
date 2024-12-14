@@ -31,4 +31,9 @@ export const Renderer = {
       });
     });
   },
+  onHashChange: (callback) => {
+    window.onhashchange = () => {
+      callback();
+    };
+  },
 };

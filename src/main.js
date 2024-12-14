@@ -8,4 +8,5 @@ document.addEventListener("DOMContentLoaded", () => {
 Renderer.onPopState(() => App.render());
 Renderer.onPushState(() => App.render());
 Renderer.onReplaceState(() => App.render());
+Renderer.onHashChange(() => App.render());
 Renderer.onATagClick(() => App.render());
