@@ -2,11 +2,10 @@ import { MainPage } from "./pages/MainPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { LoginPage } from "./pages/LoginPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import { Router } from "./Router";
 
-function renderApp() {
+export function renderApp() {
   const TargetPage = (() => {
-    switch (Router.pathname) {
+    switch (window.location.pathname) {
       case "/":
         return MainPage;
       case "/login":
@@ -20,8 +19,9 @@ function renderApp() {
 
   document.querySelector("#root").innerHTML = TargetPage();
 
-  Router.init({ callback: renderApp });
   TargetPage?.init?.();
 }
 
-renderApp();
+document.addEventListener("DOMContentLoaded", () => {
+  renderApp();
+});
