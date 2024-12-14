@@ -11,31 +11,24 @@ export const Header = () => {
     <ul class="flex justify-around">
       <li><a href="/" class="${window.location.pathname === "/" ? "text-blue-600" : "text-gray-600"}">홈</a></li>
       ${window.location.pathname === "profile" || userService.isLogin() ? `<li><a href="/profile" class="${window.location.pathname === "/profile" ? "text-blue-600" : "text-gray-600"}">프로필</a></li>` : ""}
-      <li><a href="#" class="text-gray-600">${userService.isLogin() ? "로그아웃" : "로그인"}</a></li>
+      <li><a href="#" class="text-gray-600" id="${userService.isLogin() ? "logout" : "login"}">${userService.isLogin() ? "로그아웃" : "로그인"}</a></li>
     </ul>
     </nav>
   `;
 };
 
 Header.init = () => {
-  const allATag = document.querySelectorAll("a");
-  for (const logoutButton of allATag) {
-    if (logoutButton.innerText !== "로그아웃") {
-      continue;
-    }
-
-    logoutButton.addEventListener("click", (e) => {
+  const lotoutButton = document.getElementById("logout");
+  if (lotoutButton) {
+    lotoutButton.addEventListener("click", (e) => {
       e.preventDefault();
       userService.logout();
       Router.push("/");
     });
   }
 
-  for (const loginButton of allATag) {
-    if (loginButton.innerText !== "로그인") {
-      continue;
-    }
-
+  const loginButton = document.getElementById("login");
+  if (loginButton) {
     loginButton.addEventListener("click", (e) => {
       e.preventDefault();
       Router.push("/login");

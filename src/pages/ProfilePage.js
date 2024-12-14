@@ -14,7 +14,7 @@ export const ProfilePage = () => `
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
               내 프로필
             </h2>
-            <form>
+            <form id="profile-form">
               <div class="mb-4">
                 <label
                   for="username"
@@ -78,13 +78,17 @@ ProfilePage.init = () => {
     return;
   }
 
-  const form = document.querySelector("form");
+  const form = document.getElementById("profile-form");
+  const usernameInput = document.getElementById("username");
+  const emailInput = document.getElementById("email");
+  const bioInput = document.getElementById("bio");
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const username = form.username.value;
-    const email = form.email.value;
-    const bio = form.bio.value;
+    const username = usernameInput.value;
+    const email = emailInput.value;
+    const bio = bioInput.value;
 
     userService.updateProfile({ username, email, bio });
   });
