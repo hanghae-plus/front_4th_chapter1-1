@@ -1,7 +1,7 @@
 import { MainPage } from "./pages/MainPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { LoginPage } from "./pages/LoginPage";
-import { ErrorPage } from "./pages/ErrorPage";
+import { NotFoundPage } from "./pages/NotFoundPage";
 import { SPARouter } from "./SPARouter";
 
 function renderApp() {
@@ -14,7 +14,7 @@ function renderApp() {
       case "/profile":
         return ProfilePage;
       default:
-        return ErrorPage;
+        return NotFoundPage;
     }
   })();
 
