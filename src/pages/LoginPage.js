@@ -1,4 +1,8 @@
-export const LoginPage = () => `
+import { SPARouter } from "../SPARouter";
+import { userService } from "../services/userService";
+
+export const LoginPage = () => {
+  return `
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
@@ -21,3 +25,24 @@ export const LoginPage = () => `
     </div>
   </main>
 `;
+};
+
+LoginPage.init = () => {
+  const button = document.querySelector("button[type=submit]");
+  const form = document.querySelector("form");
+  button?.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    userService.login({
+      email: form.querySelector("input[type=text]").value,
+      password: form.querySelector("input[type=password]").value,
+    });
+
+    SPARouter.push("/");
+  });
+
+  if (userService.isLogin()) {
+    SPARouter.push("/");
+    return;
+  }
+};

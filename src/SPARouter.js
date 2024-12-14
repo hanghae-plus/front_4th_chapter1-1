@@ -12,15 +12,19 @@ function preventDefaultATagLogic({ callback = () => {} }) {
 }
 
 export const SPARouter = {
+  callback: null,
   push: (url) => {
     window.history.pushState({}, "", url);
+    SPARouter.callback?.();
   },
 
   replace: (url) => {
     window.history.replaceState({}, "", url);
+    SPARouter.callback?.();
   },
 
   init: ({ callback = () => {} }) => {
+    SPARouter.callback = callback;
     preventDefaultATagLogic({ callback });
 
     window.onpopstate = () => {
