@@ -1,27 +1,36 @@
-import { MainPage } from "./pages/MainPage";
-import { ProfilePage } from "./pages/ProfilePage";
-import { LoginPage } from "./pages/LoginPage";
-import { NotFoundPage } from "./pages/NotFoundPage";
+import { App } from "./App.js";
 
-export function renderApp() {
-  const TargetPage = (() => {
-    switch (window.location.pathname) {
-      case "/":
-        return MainPage;
-      case "/login":
-        return LoginPage;
-      case "/profile":
-        return ProfilePage;
-      default:
-        return NotFoundPage;
-    }
-  })();
-
-  document.querySelector("#root").innerHTML = TargetPage();
-
-  TargetPage?.init?.();
-}
-
+// TODO: Renderer.onDomContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
-  renderApp();
+  App.render();
+});
+
+// TODO: Renderer.onPopState
+window.onpopstate = () => {
+  App.render();
+};
+
+// TODO: Renderer.onPushState / Render.onReplaceState
+["pushState", "replaceState"].forEach((type) => {
+  const originalMethod = window.history[type];
+  window.history[type] = function (state, title, url) {
+    originalMethod.apply(this, arguments);
+    const event = new CustomEvent(type, { detail: { state, title, url } });
+    window.dispatchEvent(event);
+  };
+
+  window.addEventListener(type, () => {
+    App.render();
+  });
+});
+
+// TODO: Renderer.onATagClick
+document.querySelectorAll("a").forEach((link) => {
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    const url = event.target.getAttribute("href");
+    window.history.pushState({}, "", url);
+    App.render();
+  });
 });
