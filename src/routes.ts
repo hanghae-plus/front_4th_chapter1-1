@@ -1,4 +1,4 @@
-import ErrorPage from "./pages/ErrorPage";
+import NotFoundPage from "./pages/NotFoundPage";
 import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -11,5 +11,5 @@ export const routes: Routes = {
   "/": MainPage,
   "/login": LoginPage,
   "/profile": ProfilePage,
-  "*": ErrorPage,
+  "*": NotFoundPage,
 };
