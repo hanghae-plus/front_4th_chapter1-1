@@ -25,7 +25,7 @@ export const ProfilePage = () => `
                   type="text"
                   id="username"
                   name="username"
-                  value="${userService.userProfile.username}"
+                  value="${userService.userProfile.username ?? ""}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -39,7 +39,7 @@ export const ProfilePage = () => `
                   type="email"
                   id="email"
                   name="email"
-                  value="${userService.userProfile.email}"
+                  value="${userService.userProfile.email ?? ""}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -54,7 +54,7 @@ export const ProfilePage = () => `
                   name="bio"
                   rows="4"
                   class="w-full p-2 border rounded"
-                >${userService.userProfile.bio}</textarea>
+                >${userService.userProfile.bio ?? ""}</textarea>
               </div>
               <button
                 type="submit"
