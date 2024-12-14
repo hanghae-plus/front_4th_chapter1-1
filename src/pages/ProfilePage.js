@@ -87,7 +87,6 @@ ProfilePage.init = () => {
     const bio = form.bio.value;
 
     userService.updateProfile({ username, email, bio });
-    Router.callback();
   });
 
   Header.init();

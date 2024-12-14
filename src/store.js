@@ -1,4 +1,4 @@
-import { Router } from "./Router";
+import { App } from "./App.js";
 
 const persistentState = {
   isPersistent: (key) => {
@@ -41,4 +41,4 @@ function createStore(callback = () => {}) {
   };
 }
 
-export const userStore = createStore(() => Router.callback());
+export const userStore = createStore(() => App.render());
