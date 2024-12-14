@@ -6,9 +6,9 @@ export const LoginPage = () => {
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
-      <form>
+      <form id="login-form">
         <div class="mb-4">
-          <input type="text" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
+          <input id="username" type="text" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
         </div>
         <div class="mb-6">
           <input type="password" placeholder="비밀번호" class="w-full p-2 border rounded">
@@ -28,14 +28,14 @@ export const LoginPage = () => {
 };
 
 LoginPage.init = () => {
-  const button = document.querySelector("button[type=submit]");
   const form = document.querySelector("form");
-  button?.addEventListener("click", (e) => {
+  form.addEventListener("submit", (e) => {
     e.preventDefault();
 
     userService.login({
-      email: form.querySelector("input[type=text]").value,
-      password: form.querySelector("input[type=password]").value,
+      username: form.querySelector("input[type=text]").value,
+      // NOTE: password는 현재 테스트 코드 스펙에 포함되어 있지 않습니다.
+      // password: form.querySelector("input[type=password]").value,
     });
 
     Router.push("/");
