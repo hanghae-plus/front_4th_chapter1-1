@@ -1,5 +1,5 @@
 import { userService } from "../services/userService";
-import { SPARouter } from "../SPARouter";
+import { Router } from "../Router";
 
 export const Header = () => {
   return `
@@ -9,8 +9,8 @@ export const Header = () => {
 
     <nav class="bg-white shadow-md p-2 sticky top-14">
     <ul class="flex justify-around">
-      <li><a href="/" class="${SPARouter.pathname === "/" ? "text-blue-600" : "text-gray-600"}">홈</a></li>
-      ${SPARouter.pathname === "profile" || userService.isLogin() ? `<li><a href="/profile" class="${SPARouter.pathname === "/profile" ? "text-blue-600" : "text-gray-600"}">프로필</a></li>` : ""}
+      <li><a href="/" class="${Router.pathname === "/" ? "text-blue-600" : "text-gray-600"}">홈</a></li>
+      ${Router.pathname === "profile" || userService.isLogin() ? `<li><a href="/profile" class="${Router.pathname === "/profile" ? "text-blue-600" : "text-gray-600"}">프로필</a></li>` : ""}
       <li><a href="#" class="text-gray-600">${userService.isLogin() ? "로그아웃" : "로그인"}</a></li>
     </ul>
     </nav>
@@ -27,7 +27,7 @@ Header.init = () => {
     logoutButton.addEventListener("click", (e) => {
       e.preventDefault();
       userService.logout();
-      SPARouter.push("/");
+      Router.push("/");
     });
   }
 
@@ -38,7 +38,7 @@ Header.init = () => {
 
     loginButton.addEventListener("click", (e) => {
       e.preventDefault();
-      SPARouter.push("/login");
+      Router.push("/login");
     });
   }
 };

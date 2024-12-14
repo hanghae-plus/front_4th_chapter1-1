@@ -4,14 +4,14 @@ function preventDefaultATagLogic({ callback = () => {} }) {
       event.preventDefault();
 
       const url = event.target.getAttribute("href");
-      SPARouter.push(url);
+      Router.push(url);
 
       callback();
     });
   });
 }
 
-export const SPARouter = {
+export const Router = {
   callback: null,
   push: (url) => {
     window.history.pushState({}, "", url);
@@ -22,7 +22,7 @@ export const SPARouter = {
   },
 
   init: ({ callback = () => {} }) => {
-    SPARouter.callback = callback;
+    Router.callback = callback;
 
     preventDefaultATagLogic({ callback });
 
