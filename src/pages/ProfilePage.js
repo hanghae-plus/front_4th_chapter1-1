@@ -93,5 +93,6 @@ ProfilePage.init = () => {
     userService.updateProfile({ username, email, bio });
   });
 
-  Header.init();
+  Header.init?.();
+  Footer.init?.();
 };
