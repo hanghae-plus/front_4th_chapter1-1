@@ -1,35 +1,21 @@
-export const userService = (() => {
-  let user =
-    localStorage.getItem("user") != null
-      ? JSON.parse(localStorage.getItem("user"))
-      : null;
-  let userProfile =
-    localStorage.getItem("userProfile") != null
-      ? JSON.parse(localStorage.getItem("userProfile"))
-      : {
-          username: "홍길동",
-          email: "",
-          bio: "",
-        };
+import { userStore } from "../store";
 
+export const userService = (() => {
   return {
     isLogin: () => {
-      return user == null ? false : true;
+      return userStore.get("user") != null;
     },
-    login: (_user) => {
-      user = _user;
-      localStorage.setItem("user", JSON.stringify(user));
+    login: (user) => {
+      userStore.set("user", user, { persistent: true });
     },
     logout: () => {
-      user = null;
-      localStorage.removeItem("user");
+      userStore.remove("user");
     },
     updateProfile: (profile) => {
-      userProfile = profile;
-      localStorage.setItem("userProfile", JSON.stringify(userProfile));
+      userStore.set("userProfile", profile, { persistent: true });
     },
     get userProfile() {
-      return userProfile;
+      return userStore.get("userProfile") ?? {};
     },
   };
 })();
