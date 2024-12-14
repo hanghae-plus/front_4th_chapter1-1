@@ -1,11 +1,8 @@
-import { MainPage } from "./pages/MainPage";
-import { ProfilePage } from "./pages/ProfilePage";
-import { LoginPage } from "./pages/LoginPage";
-import { ErrorPage } from "./pages/ErrorPage";
+import { TestAPage } from "./pages/TestAPage";
+import { TestBPage } from "./pages/TestBPage";
+import { Router } from "./Router";
 
 document.body.innerHTML = `
-  ${MainPage()}
-  ${ProfilePage()}
-  ${LoginPage()}
-  ${ErrorPage()}
+  ${Router.pathname === "/test-a" ? TestAPage() : ""}
+  ${Router.pathname === "/test-b" ? TestBPage() : ""}
 `;
