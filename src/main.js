@@ -1,8 +1,14 @@
 import { TestAPage } from "./pages/TestAPage";
 import { TestBPage } from "./pages/TestBPage";
-import { Router } from "./Router";
+import { SPARouter } from "./SPARouter";
 
-document.body.innerHTML = `
-  ${Router.pathname === "/test-a" ? TestAPage() : ""}
-  ${Router.pathname === "/test-b" ? TestBPage() : ""}
-`;
+function renderApp() {
+  document.body.innerHTML = `
+    ${SPARouter.pathname === "/test-a" || SPARouter.pathname === "/" ? TestAPage() : ""}
+    ${SPARouter.pathname === "/test-b" ? TestBPage() : ""}
+  `;
+
+  SPARouter.init({ callback: renderApp });
+}
+
+renderApp();
