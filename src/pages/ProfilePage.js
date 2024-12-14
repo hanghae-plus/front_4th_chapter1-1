@@ -73,6 +73,11 @@ export const ProfilePage = () => `
 `;
 
 ProfilePage.init = () => {
+  if (!userService.isLogin()) {
+    SPARouter.push("/login");
+    return;
+  }
+
   const form = document.querySelector("form");
   form.addEventListener("submit", (e) => {
     e.preventDefault();
