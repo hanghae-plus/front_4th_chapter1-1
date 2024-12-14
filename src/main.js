@@ -18,7 +18,7 @@ function renderApp() {
     }
   })();
 
-  document.body.innerHTML = TargetPage();
+  document.querySelector("#root").innerHTML = TargetPage();
 
   SPARouter.init({ callback: renderApp });
   TargetPage?.init?.();
