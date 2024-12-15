@@ -28,7 +28,7 @@ export const LoginPage = () => {
     <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
     <form id='login-form'>
       <div class="mb-4">
-        <input type="text" id='username' placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
+        <input type="text" id='username' placeholder="사용자 이름" class="w-full p-2 border rounded">
       </div>
       <div class="mb-6">
         <input type="password" id='password' placeholder="비밀번호" class="w-full p-2 border rounded">
@@ -48,12 +48,18 @@ export const LoginPage = () => {
 
 export const addUserInfo = () => {
   // console.log("addUserInfo");
-  const submitBtn = document.querySelector("#loginSubmit");
+  const submitBtn = document.querySelector("#login-form");
 
-  submitBtn.addEventListener("click", (event) => {
+  if (!submitBtn) return;
+  submitBtn.addEventListener("submit", (event) => {
     event.preventDefault();
 
     const userName = document.querySelector("#username").value;
+
+    if (!userName) {
+      console.log("사용자 이름이 비어 있습니다.");
+      return;
+    }
 
     localStorage.setItem(
       "user",
@@ -103,6 +109,7 @@ export const addUserInfo = () => {
 export const checkUserInfo = () => {
   const user = localStorage.getItem("user");
 
+  if (!user) return false;
   // const password = localStorage.getItem("password");
   // console.log("user", user);
 
@@ -114,9 +121,6 @@ export const checkUserInfo = () => {
       return true;
     }
   }
-
-  console.log("로그인 안됨");
-  return false;
 };
 
 export const deleteUserInfo = () => {

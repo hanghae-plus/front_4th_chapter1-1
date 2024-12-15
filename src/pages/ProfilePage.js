@@ -1,5 +1,9 @@
+import { Navigation } from "../components/Navigation";
+
 export const ProfilePage = () => {
   const userInfo = localStorage.getItem("user");
+
+  if (!userInfo) return;
   const { username, email, bio } = JSON.parse(userInfo);
 
   return `
@@ -10,20 +14,14 @@ export const ProfilePage = () => {
           <h1 class="text-2xl font-bold">항해플러스</h1>
         </header>
 
-        <nav class="bg-white shadow-md p-2 sticky top-14">
-          <ul class="flex justify-around">
-            <li><a href="/" class="text-gray-600">홈</a></li>
-            <li><a href="/profile" class="text-blue-600">프로필</a></li>
-            <li><a href="/login" id='logout' class="text-gray-600">로그아웃</a></li>
-          </ul>
-        </nav>
+     ${Navigation()}
 
         <main class="p-4">
           <div class="bg-white p-8 rounded-lg shadow-md">
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
               내 프로필
             </h2>
-            <form>
+            <form id='profile-form'>
               <div class="mb-4">
                 <label
                   for="username"
@@ -70,7 +68,7 @@ ${bio}</textarea
               </div>
               <button
                 type="submit"
-                id="profile-form"
+            
                 class="w-full bg-blue-600 text-white p-2 rounded font-bold"
               >
                 프로필 업데이트
@@ -95,7 +93,7 @@ export const handleProfileSubmit = () => {
 
   console.log("inin");
 
-  profileBtn.addEventListener("click", (event) => {
+  profileBtn.addEventListener("submit", (event) => {
     event.preventDefault();
 
     const username = document.querySelector("#username").value;
