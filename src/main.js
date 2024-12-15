@@ -6,9 +6,36 @@ import UserStore from "./store/userStore";
 
 function createRouter(routes) {
   return function (path) {
-    const route = routes[path] || routes["404"];
-    return route();
+    path = path ? path : window.location.pathname;
+    let hash = window.location.hash;
+    let route = null;
+    const user = new UserStore().getUser();
+
+    if (hash === "") {
+      if (!user && path === "/profile") path = "/login";
+      if (user && path === "/login") path = "/";
+      route = routes[path] || routes["404"];
+      window.history.pushState(null, "", path);
+    } else {
+      if (!user && hash === "#/profile") hash = "#/login";
+      if (user && hash === "#/login") hash = "#/";
+      route = hashRoutes[hash] || hashRoutes[404];
+      window.history.pushState(null, "", hash);
+    }
+
+    render(route);
   };
+}
+
+function render(route) {
+  const root = document.getElementById("root");
+  console.log(route);
+  root.innerHTML = route();
+
+  const cloneRoot = root.cloneNode(true);
+  cloneRoot.addEventListener("submit", submitEventHandler);
+  cloneRoot.addEventListener("click", clickEventHandler);
+  root.replaceWith(cloneRoot);
 }
 
 const routes = {
@@ -18,26 +45,17 @@ const routes = {
   404: () => NotFoundPage(),
 };
 
-const router = createRouter(routes);
+const hashRoutes = {
+  "#/": () => MainPage(),
+  "#/profile": () => ProfilePage(),
+  "#/login": () => LoginPage(),
+  404: () => NotFoundPage(),
+};
+
+const router = createRouter(routes, true);
 
 function updateContent() {
-  let path = window.location.pathname;
-  render(path);
-}
-
-function render(path) {
-  const user = new UserStore().getUser();
-  if (!user && path === "/profile") path = "/login";
-  if (user && path === "/login") path = "/";
-
-  window.history.pushState(null, "", path);
-  const root = document.getElementById("root");
-  root.innerHTML = router(path);
-
-  const cloneRoot = root.cloneNode(true);
-  cloneRoot.addEventListener("submit", submitEventHandler);
-  cloneRoot.addEventListener("click", clickEventHandler);
-  root.replaceWith(cloneRoot);
+  router();
 }
 
 function submitEventHandler(e) {
@@ -51,7 +69,7 @@ function submitEventHandler(e) {
 
     if (username) {
       new UserStore().setUser({ username, email: "", bio: "" });
-      render("/profile");
+      router("/profile");
     }
   }
 
@@ -61,7 +79,7 @@ function submitEventHandler(e) {
     const bio = formData.get("bio");
 
     new UserStore().setUser({ username, email, bio });
-    render("/profile");
+    router("/profile");
     updateContent();
   }
 }
@@ -77,9 +95,10 @@ function clickEventHandler(e) {
       new UserStore().deleteUser();
       path = "/login";
     }
-    render(path);
+    router(path);
   }
 }
 
 window.addEventListener("popstate", updateContent);
 window.addEventListener("load", updateContent);
+window.addEventListener("hashchange", updateContent);
