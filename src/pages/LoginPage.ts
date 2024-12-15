@@ -16,7 +16,7 @@ const handleLogin = (form: HTMLFormElement) => {
   const formData = new FormData(form);
 
   const loginData = {
-    email: formData.get("email"),
+    username: formData.get("username"),
     password: formData.get("password"),
   };
 
@@ -32,7 +32,7 @@ const LoginPage = () => {
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
       <form id="login-form">
         <div class="mb-4">
-          <input type="text" name="email" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded" required>
+          <input type="text" name="username" placeholder="사용자 이름" class="w-full p-2 border rounded" required>
         </div>
         <div class="mb-6">
           <input type="password" name="password" placeholder="비밀번호" class="w-full p-2 border rounded" required>
