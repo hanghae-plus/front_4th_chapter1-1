@@ -22,18 +22,22 @@ const router = createRouter(routes);
 
 function updateContent() {
   let path = window.location.pathname;
+  render(path);
+}
+
+function render(path) {
   const user = new UserStore().getUser();
   if (!user && path === "/profile") path = "/login";
   if (user && path === "/login") path = "/";
 
-  render(path);
-
+  window.history.pushState(null, "", path);
   const root = document.getElementById("root");
-  root.removeEventListener("submit", submitEventHandler);
-  root.addEventListener("submit", submitEventHandler);
+  root.innerHTML = router(path);
 
-  root.removeEventListener("click", clickEventHandler);
-  root.addEventListener("click", clickEventHandler);
+  const cloneRoot = root.cloneNode(true);
+  cloneRoot.addEventListener("submit", submitEventHandler);
+  cloneRoot.addEventListener("click", clickEventHandler);
+  root.replaceWith(cloneRoot);
 }
 
 function submitEventHandler(e) {
@@ -48,7 +52,6 @@ function submitEventHandler(e) {
     if (username) {
       new UserStore().setUser({ username, email: "", bio: "" });
       render("/profile");
-      updateContent();
     }
   }
 
@@ -66,23 +69,16 @@ function submitEventHandler(e) {
 function clickEventHandler(e) {
   const { id, tagName } = e.target;
 
-  if (id === "logout") {
-    new UserStore().deleteUser();
-    render("/login");
-  }
-
   if (tagName === "A") {
     e.preventDefault();
     const { href } = e.target;
-    const path = href.slice(href.lastIndexOf("/"));
+    let path = href.slice(href.lastIndexOf("/"));
+    if (id === "logout") {
+      new UserStore().deleteUser();
+      path = "/login";
+    }
     render(path);
-    updateContent();
   }
-}
-
-function render(path) {
-  window.history.pushState(null, "", path);
-  document.getElementById("root").innerHTML = router(path);
 }
 
 window.addEventListener("popstate", updateContent);
