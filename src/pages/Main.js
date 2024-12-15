@@ -110,6 +110,4 @@ const MainPage = () => `
   </div>
 `;
 
-document.body.innerHTML = `
-  ${MainPage()}
-  `;
+export default MainPage;
