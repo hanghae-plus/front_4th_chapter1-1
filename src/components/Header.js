@@ -1,6 +1,12 @@
+import UserStore from "../store/userStore";
+
 const Header = () => {
-  const isLogin = !!localStorage.getItem("user");
+  const isLogin = !!new UserStore().getUser();
   const path = window.location.pathname;
+  // 석호님 코드 따라하기
+  const activeStyle = "text-blue-600 font-bold";
+  const deavtiveStyle = "text-gray-600";
+  const activeWhen = (x) => (x === path ? activeStyle : deavtiveStyle);
 
   return `
         <header class="bg-blue-600 text-white p-4 sticky top-0">
@@ -8,8 +14,8 @@ const Header = () => {
         </header>
         <nav class="bg-white shadow-md p-2 sticky top-14">
             <ul class="flex justify-around">
-                <li><a href="/" ${path === "/" ? 'class="text-blue-600 font-bold"' : 'class="text-gary-600"'}>홈</a></li>
-                <li><a href="/profile" ${path === "/profile" ? 'class="text-blue-600 font-bold"' : 'class="text-gary-600"'}>프로필</a></li>
+                <li><a href="/" class="${activeWhen("/")}"}>홈</a></li>
+                <li><a href="/profile" class="${activeWhen("/profile")}">프로필</a></li>
                 <li>
                 ${
                   isLogin
