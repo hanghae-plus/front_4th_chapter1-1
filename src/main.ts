@@ -1,6 +1,8 @@
 import createRouter from "./core/createRouter";
 import { routes } from "./routes";
 
+let router: ReturnType<typeof createRouter>;
+
 document.addEventListener("DOMContentLoaded", () => {
   const container = document.querySelector<HTMLElement>("#root");
 
@@ -8,6 +10,14 @@ document.addEventListener("DOMContentLoaded", () => {
     throw new Error("Couldn't find root element!");
   }
 
-  const { init } = createRouter(container, routes);
-  init();
+  router = createRouter(container, routes);
+  router.init();
 });
+
+export const useRouter = () => {
+  if (!router) {
+    throw new Error("Router not initialized!");
+  }
+
+  return router;
+};
