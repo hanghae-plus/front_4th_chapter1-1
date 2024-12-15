@@ -1,4 +1,6 @@
-class MainPage {
+import Component from "../core/component";
+
+class MainPage extends Component {
   template() {
     return `
     <div class="bg-gray-100 min-h-screen flex justify-center">
@@ -114,4 +116,4 @@ class MainPage {
   }
 }
 
-export default new MainPage();
+export default MainPage;
