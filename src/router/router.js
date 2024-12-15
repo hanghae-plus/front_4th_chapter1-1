@@ -12,5 +12,11 @@ const routes = {
 export const router = () => {
   const path = window.location.pathname;
   const render = routes[path] || ErrorPage;
+
+  if (!localStorage.getItem("user") && path === "/profile") {
+    document.body.innerHTML = LoginPage();
+    return;
+  }
+
   document.body.innerHTML = render();
 };
