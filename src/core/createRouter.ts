@@ -7,6 +7,10 @@ const createRouter = (container: HTMLElement, routes: Routes) => {
       navigate("/login");
       return "/login";
     }
+    if (pathname === "/login" && !!localStorage.getItem("user")) {
+      navigate("/");
+      return "/";
+    }
     return pathname;
   };
 
