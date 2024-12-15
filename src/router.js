@@ -15,7 +15,7 @@ export class Router {
   }
 
   navigate(path) {
-    history.pushState(path);
+    history.pushState(null, "", path);
     this.render(path);
   }
 
