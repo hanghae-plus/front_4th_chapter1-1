@@ -1,3 +1,6 @@
+import { Button } from "../components/Button";
+import { Footer } from "../components/Footer";
+import { Header } from "../components/Header";
 import { Navigation } from "../components/Navigation";
 
 export const ProfilePage = () => {
@@ -10,11 +13,9 @@ export const ProfilePage = () => {
   <div id="profile">
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
-        <header class="bg-blue-600 text-white p-4 sticky top-0">
-          <h1 class="text-2xl font-bold">항해플러스</h1>
-        </header>
 
-     ${Navigation()}
+      ${Header()}
+      ${Navigation()}
 
         <main class="p-4">
           <div class="bg-white p-8 rounded-lg shadow-md">
@@ -66,20 +67,14 @@ export const ProfilePage = () => {
 ${bio}</textarea
                 >
               </div>
-              <button
-                type="submit"
-            
-                class="w-full bg-blue-600 text-white p-2 rounded font-bold"
-              >
-                프로필 업데이트
-              </button>
+             
+              ${Button("프로필 업데이트", "submit")}
             </form>
           </div>
         </main>
 
-        <footer class="bg-gray-200 p-4 text-center">
-          <p>&copy; 2024 항해플러스. All rights reserved.</p>
-        </footer>
+        ${Footer()}
+       
       </div>
     </div>
   </div>
@@ -88,10 +83,6 @@ ${bio}</textarea
 
 export const handleProfileSubmit = () => {
   const profileBtn = document.querySelector("#profile-form");
-
-  // if (!profileBtn) return;
-
-  console.log("inin");
 
   profileBtn.addEventListener("submit", (event) => {
     event.preventDefault();
