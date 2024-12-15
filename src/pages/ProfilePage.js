@@ -1,4 +1,8 @@
-export const ProfilePage = () => `
+export const ProfilePage = () => {
+  const userInfo = localStorage.getItem("user");
+  const { username, email, bio } = JSON.parse(userInfo);
+
+  return `
   <div id="profile">
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
@@ -10,7 +14,7 @@ export const ProfilePage = () => `
           <ul class="flex justify-around">
             <li><a href="/" class="text-gray-600">홈</a></li>
             <li><a href="/profile" class="text-blue-600">프로필</a></li>
-            <li><a href="#" class="text-gray-600">로그아웃</a></li>
+            <li><a href="/login" id='loggedout' class="text-gray-600">로그아웃</a></li>
           </ul>
         </nav>
 
@@ -30,7 +34,7 @@ export const ProfilePage = () => `
                   type="text"
                   id="username"
                   name="username"
-                  value="홍길동"
+                  value="${username}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -44,7 +48,7 @@ export const ProfilePage = () => `
                   type="email"
                   id="email"
                   name="email"
-                  value="hong@example.com"
+                  value="${email}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -59,12 +63,14 @@ export const ProfilePage = () => `
                   name="bio"
                   rows="4"
                   class="w-full p-2 border rounded"
+                  value="${bio}"
                 >
-안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.</textarea
+${bio}</textarea
                 >
               </div>
               <button
                 type="submit"
+                id="profile-form"
                 class="w-full bg-blue-600 text-white p-2 rounded font-bold"
               >
                 프로필 업데이트
@@ -80,3 +86,24 @@ export const ProfilePage = () => `
     </div>
   </div>
 `;
+};
+
+// export const handleProfileSubmit = () => {
+//   const profileBtn = document.querySelector("#profile-form");
+
+//   profileBtn.addEventListener("click", (event) => {
+//     event.preventDefault();
+
+//     const username = document.querySelector("#username").value;
+//     const email = document.querySelector("#email").value;
+//     const bio = document.querySelector("#bio").value;
+
+//     localStorage.setItem(
+//       "user",
+//       JSON.stringify({
+//         username,
+//         email,
+//         bio,
+
+//       }))
+// };

@@ -1,3 +1,5 @@
+// import { router } from "../main";
+
 export const LoginPage = () => {
   // const submitBtn = document.querySelector("#loginSubmit");
 
@@ -22,9 +24,9 @@ export const LoginPage = () => {
   return `<main class="bg-gray-100 flex items-center justify-center min-h-screen">
   <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
     <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
-    <form >
+    <form id='login-form'>
       <div class="mb-4">
-        <input type="text" id='email' placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
+        <input type="text" id='username' placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
       </div>
       <div class="mb-6">
         <input type="password" id='password' placeholder="비밀번호" class="w-full p-2 border rounded">
@@ -43,26 +45,71 @@ export const LoginPage = () => {
 };
 
 export const addUserInfo = () => {
+  console.log("addUserInfo");
   const submitBtn = document.querySelector("#loginSubmit");
 
-  submitBtn.addEventListener("click", () => {
-    const userName = document.querySelector("#email").value;
-    const password = document.querySelector("#password").value;
+  submitBtn.addEventListener("click", (event) => {
+    event.preventDefault();
 
-    localStorage.setItem("user", userName);
-    localStorage.setItem("password", password);
+    const userName = document.querySelector("#username").value;
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        username: userName,
+        email: "",
+        bio: "",
+      }),
+    );
 
     window.history.pushState({}, "", "/");
+    // router();
+    // return;
   });
+
+  //로컬스토리지 비동기 문제 해결
+
+  // return new Promise((resolve) => {
+  //   submitBtn.addEventListener("click", (event) => {
+  //     event.preventDefault();
+
+  //     const userName = document.querySelector("#username").value;
+  //     // const email = document.querySelector("#email").value;
+
+  //     if (userName) {
+  //       localStorage.setItem(
+  //         "user",
+  //         JSON.stringify({
+  //           username: userName,
+  //           // username: "testuser",
+  //           email: "",
+  //           bio: "",
+  //         }),
+  //       );
+
+  //       // console.log("result", localStorage.getItem("user"));
+
+  //       resolve(true);
+  //     } else {
+  //       resolve(false);
+  //     }
+  //   });
+  // });
 };
 
 export const checkUserInfo = () => {
   const user = localStorage.getItem("user");
-  const password = localStorage.getItem("password");
 
-  if (user && password) {
-    console.log("로그인 이미 성공");
-    return true;
+  // const password = localStorage.getItem("password");
+  console.log("user", user);
+
+  if (user) {
+    const userData = JSON.parse(user);
+    if (userData.username !== "") {
+      console.log("로그인 이미 성공", userData);
+
+      return true;
+    }
   }
 
   console.log("로그인 안됨");
@@ -78,9 +125,13 @@ export const deleteUserInfo = () => {
 
   submitBtn.addEventListener("click", () => {
     localStorage.removeItem("user");
-    localStorage.removeItem("password");
+    // localStorage.removeItem("password");
     localStorage.clear();
 
+    // window.history.pushState({}, "", "/login");
+
     console.log("로그아웃 성공");
+
+    // return true;
   });
 };

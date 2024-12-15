@@ -83,6 +83,8 @@ describe("기본과제 테스트", () => {
         new SubmitEvent("submit", { bubbles: true, cancelable: true }),
       );
 
+      console.log("result1234", localStorage.getItem("user"));
+
       expect(localStorage.getItem("user")).toEqual(
         `{"username":"testuser","email":"","bio":""}`,
       );

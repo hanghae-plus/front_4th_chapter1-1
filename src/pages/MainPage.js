@@ -2,11 +2,10 @@
 
 import { checkUserInfo } from "./LoginPage";
 
-export const isValidLoggedIn = checkUserInfo();
+export const MainPage = () => {
+  const isValidLoggedIn = checkUserInfo();
 
-export const MainPage = () => `
-
-  <div class="bg-gray-100 min-h-screen flex justify-center">
+  return ` <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
       <header class="bg-blue-600 text-white p-4 sticky top-0">
         <h1 class="text-2xl font-bold">항해플러스</h1>
@@ -18,14 +17,14 @@ export const MainPage = () => `
           ${
             isValidLoggedIn
               ? ""
-              : `<li><a href="/login" id='loggedin' class="text-blue-600">로그인</a></li>`
+              : `<li><a href="/login"  class="text-blue-600">로그인</a></li>`
           }
           
           ${
             isValidLoggedIn
               ? `<li><a href="/profile" id='profile'  class=" text-gray-600"
    >프로필</a></li> 
-          <li><a href="#" id='loggedout' class="text-gray-600}">로그아웃</a></li>`
+          <li><a href="login" id='loggedout' class="text-gray-600}">로그아웃</a></li>`
               : ""
           }
        </ul>
@@ -125,8 +124,8 @@ export const MainPage = () => `
         <p>&copy; 2024 항해플러스. All rights reserved.</p>
       </footer>
     </div>
-  </div>
-`;
+  </div>`;
+};
 
 // export const handleLoggedOut = () => {
 //   const logoutBtn = document.querySelector("#loggedout");
