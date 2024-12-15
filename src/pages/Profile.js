@@ -1,4 +1,7 @@
-const ProfilePage = () => `
+const ProfilePage = () => {
+  const user = JSON.parse(window.localStorage.getItem("user"));
+  if (!user) return;
+  return `
         <main class="p-4">
           <div class="bg-white p-8 rounded-lg shadow-md">
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
@@ -15,7 +18,7 @@ const ProfilePage = () => `
                   type="text"
                   id="username"
                   name="username"
-                  value="홍길동"
+                  value="${user.username}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -29,7 +32,7 @@ const ProfilePage = () => `
                   type="email"
                   id="email"
                   name="email"
-                  value="hong@example.com"
+                  value="${user.email || ""}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -45,7 +48,7 @@ const ProfilePage = () => `
                   rows="4"
                   class="w-full p-2 border rounded"
                 >
-안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.</textarea
+                ${user.bio || ""}</textarea
                 >
               </div>
               <button
@@ -58,5 +61,6 @@ const ProfilePage = () => `
           </div>
         </main>
 `;
+};
 
 export default ProfilePage;

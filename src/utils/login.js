@@ -1,14 +1,26 @@
+import { render } from "../main";
+
 const login = () => {
   const loginForm = document.querySelector("form");
-  console.log("lf : ", loginForm);
   if (loginForm) {
     loginForm.addEventListener("submit", (event) => {
       event.preventDefault();
 
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
-      console.log("Username:", username);
-      console.log("Password:", password);
+
+      if (!username) {
+        return;
+      }
+      const information = {
+        username: username,
+        password: password,
+        email: "",
+        bio: "",
+      };
+      window.localStorage.setItem("user", JSON.stringify(information));
+      window.history.pushState({}, "", "/");
+      render("/");
     });
   }
 };

@@ -1,7 +1,7 @@
 const checkLogin = () => {
-  const loginInfo = window.localStorage.getItem("loginInfo");
+  const user = window.localStorage.getItem("user");
 
-  if (!loginInfo) {
+  if (!user) {
     return false;
   }
   return true;
