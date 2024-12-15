@@ -17,7 +17,8 @@ const handleLogin = (form: HTMLFormElement) => {
 
   const loginData = {
     username: formData.get("username"),
-    password: formData.get("password"),
+    email: "",
+    bio: "",
   };
 
   localStorage.setItem("user", JSON.stringify(loginData));
@@ -32,7 +33,7 @@ const LoginPage = () => {
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
       <form id="login-form">
         <div class="mb-4">
-          <input type="text" name="username" placeholder="사용자 이름" class="w-full p-2 border rounded" required>
+          <input id="username" type="text" name="username" placeholder="사용자 이름" class="w-full p-2 border rounded" required>
         </div>
         <div class="mb-6">
           <input type="password" name="password" placeholder="비밀번호" class="w-full p-2 border rounded" required>
