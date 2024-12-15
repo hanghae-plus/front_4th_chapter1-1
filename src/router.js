@@ -4,6 +4,8 @@
 // 3. url에 맞는 페이지 렌더
 // 4. 현재 패스에 대한 페이지 렌더링
 
+import { NotFoundPage } from "./pages/NotFoundPage";
+
 export class Router {
   constructor() {
     this.route = {};
@@ -24,7 +26,7 @@ export class Router {
     if (render) {
       render();
     } else {
-      console.log("404");
+      document.body.innerHTML = NotFoundPage();
     }
   }
 
