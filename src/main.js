@@ -20,20 +20,18 @@ const routes = {
 const router = createRouter(routes);
 
 function updateContent() {
-  const path = window.location.pathname;
+  let path = window.location.pathname;
   const user = localStorage.getItem("user");
-  if (!user && path === "/profile") {
-    render("/login");
-    return;
-  }
+  if (!user && path === "/profile") path = "/login";
 
   render(path);
 
-  document.body.removeEventListener("submit", submitEventHandler);
-  document.body.addEventListener("submit", submitEventHandler);
+  const root = document.getElementById("root");
+  root.removeEventListener("submit", submitEventHandler);
+  root.addEventListener("submit", submitEventHandler);
 
-  document.body.removeEventListener("click", clickEventHandler);
-  document.body.addEventListener("click", clickEventHandler);
+  root.removeEventListener("click", clickEventHandler);
+  root.addEventListener("click", clickEventHandler);
 
   if (path === "/profile") {
     const { username, email, bio } = JSON.parse(localStorage.getItem("user"));
@@ -98,7 +96,7 @@ function logout() {
 
 function render(path) {
   window.history.pushState(null, "", path);
-  document.body.innerHTML = router(path);
+  document.getElementById("root").innerHTML = router(path);
 }
 
 window.addEventListener("popstate", updateContent);
