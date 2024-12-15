@@ -7,6 +7,7 @@ const routes = {
   "/": MainPage,
   "/login": LoginPage,
   "/profile": ProfilePage,
+  "/error": ErrorPage,
 };
 
 class Router {
