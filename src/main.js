@@ -11,7 +11,7 @@ const MainPage = () => `
         <ul class="flex justify-around">
           <li><a href="/" class="text-blue-600">홈</a></li>
           <li><a href="/profile" class="text-gray-600">프로필</a></li>
-          <li><a href="#" class="text-gray-600">로그아웃</a></li>
+          <li><a href="#" id="logout" class="text-gray-600">로그아웃</a></li>
         </ul>
       </nav>
 
@@ -132,12 +132,12 @@ const LoginPage = () => `
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
-      <form>
+      <form id="login-form">
         <div class="mb-4">
-          <input type="text" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
+          <input id="username" type="text" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
         </div>
         <div class="mb-6">
-          <input type="password" placeholder="비밀번호" class="w-full p-2 border rounded">
+          <input id="password" type="password" placeholder="비밀번호" class="w-full p-2 border rounded">
         </div>
         <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</button>
       </form>
@@ -164,7 +164,7 @@ const ProfilePage = () => `
           <ul class="flex justify-around">
             <li><a href="/" class="text-gray-600">홈</a></li>
             <li><a href="/profile" class="text-blue-600">프로필</a></li>
-            <li><a href="#" class="text-gray-600">로그아웃</a></li>
+            <li><a href="#" id="logout" class="text-gray-600">로그아웃</a></li>
           </ul>
         </nav>
 
@@ -173,7 +173,7 @@ const ProfilePage = () => `
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
               내 프로필
             </h2>
-            <form>
+            < >
               <div class="mb-4">
                 <label
                   for="username"
@@ -223,7 +223,7 @@ const ProfilePage = () => `
               >
                 프로필 업데이트
               </button>
-            </form>
+            </  >
           </div>
         </main>
 
@@ -246,36 +246,32 @@ const router = new Router(routes);
 router.init();
 
 // 로그인 버튼에 이벤트 등록
-document.body.addEventListener("click", (e) => {
-  if (e.target?.textContent === "로그인") {
+document.body.addEventListener("submit", (e) => {
+  if (e.target?.id === "login-form") {
     e.preventDefault();
 
-    const form = e.target.closest("form");
-    const username = form.querySelector('input[type="text"]').value;
-    const password = form.querySelector('input[type="password"]').value;
+    const usernameInput = document.getElementById("username");
+    const username = usernameInput?.value || "";
 
-    if (!validateUsername(username)) {
-      return;
-    }
+    const user = {
+      username,
+      email: "",
+      bio: "",
+    };
 
-    localStorage.setItem("username", username);
-    localStorage.setItem("password", password);
+    localStorage.setItem("user", JSON.stringify(user));
+    console.log("user", localStorage.getItem("user"));
 
-    location.href = "/profile";
-    localStorage.setItem(
-      "introduction",
-      "안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.",
-    );
+    router.navigate("/profile");
   }
 });
 
 // 로그아웃 버튼에 이벤트 등록
 document.body.addEventListener("click", (e) => {
-  if (e.target?.textContent === "로그아웃") {
+  const target = e.target.closest("#logout"); // closest를 활용해 동적으로 탐색
+  if (target) {
     e.preventDefault();
-    localStorage.removeItem("username");
-    localStorage.removeItem("password");
-    localStorage.removeItem("introduction");
+    localStorage.removeItem("user");
   }
 });
 
@@ -284,27 +280,27 @@ document.body.addEventListener("click", (e) => {
  * @description 이메일 또는 전화번호 형태의 값이 입력되었는지 확인합니다.
  * @param {string} username 사용자 이름
  */
-function validateUsername(username) {
-  if (!username.trim()) {
-    alert("사용자 이름을 입력해주세요.");
-    return false;
-  }
+// function validateUsername(username) {
+//   if (!username.trim()) {
+//     alert("사용자 이름을 입력해주세요.");
+//     return false;
+//   }
 
-  if (!isEmail(username) && !isPhoneNumber(username)) {
-    alert("이메일 또는 전화번호 형식으로 입력해주세요.");
-    return false;
-  }
-  return true;
-}
+//   if (!isEmail(username) && !isPhoneNumber(username)) {
+//     alert("이메일 또는 전화번호 형식으로 입력해주세요.");
+//     return false;
+//   }
+//   return true;
+// }
 
 /**
  * 이메일 정규식
  * @param {*} username
  * @returns boolean
  */
-function isEmail(username) {
-  return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(username);
-}
+// function isEmail(username) {
+//   return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(username);
+// }
 
 /**
  * 전화번호 정규식
@@ -316,6 +312,6 @@ function isEmail(username) {
  * @param {string} username 사용자 이름
  * @returns boolean
  */
-function isPhoneNumber(username) {
-  return /^(010|011|016|017|018|019)-?(\d{3,4})-?(\d{4})$/.test(username);
-}
+// function isPhoneNumber(username) {
+//   return /^(010|011|016|017|018|019)-?(\d{3,4})-?(\d{4})$/.test(username);
+// }

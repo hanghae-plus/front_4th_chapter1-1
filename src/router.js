@@ -5,7 +5,7 @@ export default class Router {
     this.init();
   }
 
-  #navigate(path) {
+  navigate(path) {
     const root = document.getElementById("root");
     const render = this.#routes[path] || this.#routes["/404"];
     root.innerHTML = render();
@@ -14,7 +14,7 @@ export default class Router {
   init() {
     const path = window.location.pathname;
     history.replaceState(null, "", path);
-    this.#navigate(path);
+    this.navigate(path);
 
     // a 태그 새로고침 방지 및 라우팅 처리
     document.body.addEventListener("click", (e) => {
@@ -23,14 +23,14 @@ export default class Router {
         e.preventDefault(); // 기본 동작 차단
         const path = target.getAttribute("href");
         history.pushState(null, "", path);
-        this.#navigate(path);
+        this.navigate(path);
       }
     });
 
     // popstate 이벤트 처리(뒤로가기, 앞으로가기)
     window.addEventListener("popstate", () => {
       const path = window.location.pathname;
-      this.#navigate(path);
+      this.navigate(path);
     });
   }
 }
