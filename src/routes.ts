@@ -1,15 +1,30 @@
 import NotFoundPage from "./pages/NotFoundPage";
-import LoginPage from "./pages/LoginPage";
+import { LoginPage, setupLoginPage } from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 import ProfilePage from "./pages/ProfilePage";
 
 export type Routes = {
-  [key: string]: () => string;
+  [key: string]: {
+    setUp: () => void;
+    component: () => string;
+  };
 };
 
 export const routes: Routes = {
-  "/": MainPage,
-  "/login": LoginPage,
-  "/profile": ProfilePage,
-  "*": NotFoundPage,
+  "/": {
+    setUp: () => {},
+    component: MainPage,
+  },
+  "/login": {
+    setUp: setupLoginPage,
+    component: LoginPage,
+  },
+  "/profile": {
+    setUp: () => {},
+    component: ProfilePage,
+  },
+  "*": {
+    setUp: () => {},
+    component: NotFoundPage,
+  },
 };

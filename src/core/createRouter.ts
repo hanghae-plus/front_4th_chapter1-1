@@ -2,8 +2,9 @@ import { Routes } from "../routes";
 
 const createRouter = (container: HTMLElement, routes: Routes) => {
   const render = (path: string) => {
-    const component = routes[path] || routes["*"];
-    container.innerHTML = component();
+    const route = routes[path] || routes["*"];
+    container.innerHTML = route.component();
+    route.setUp();
   };
 
   const navigate = (path: string) => {
