@@ -56,6 +56,7 @@ export const ProfilePage = () => `
                 >
               </div>
               <button
+                id="profile-form"
                 type="submit"
                 class="w-full bg-blue-600 text-white p-2 rounded font-bold"
               >
