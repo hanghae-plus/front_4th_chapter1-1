@@ -11,6 +11,7 @@ export const ROUTES = {
 function createRouter(options = {}) {
   const routes = options.routes || {};
 
+  // 로그인 상태에 따라 라우트 보호
   function protectRoute(path) {
     const isLogin = UserStore.getValue("isLogin");
 
@@ -37,6 +38,7 @@ function createRouter(options = {}) {
     }
     const protectedPath = protectRoute(path);
     const page = routes[protectedPath];
+
     // 페이지 컴포넌트 생성하고 render 메서드 호출
     const pageInstance = page();
     if (typeof pageInstance.render === "function") {
