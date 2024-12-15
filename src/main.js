@@ -244,3 +244,24 @@ const routes = {
 
 const router = new Router(routes);
 router.init();
+
+// 로그인 버튼에 이벤트 등록
+document.body.addEventListener("click", (e) => {
+  if (e.target?.textContent === "로그인") {
+    e.preventDefault();
+    localStorage.setItem("사용자", "홍길동");
+    localStorage.setItem(
+      "소개",
+      "안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.",
+    );
+  }
+});
+
+// 로그아웃 버튼에 이벤트 등록
+document.body.addEventListener("click", (e) => {
+  if (e.target?.textContent === "로그아웃") {
+    e.preventDefault();
+    localStorage.removeItem("사용자");
+    localStorage.removeItem("소개");
+  }
+});
