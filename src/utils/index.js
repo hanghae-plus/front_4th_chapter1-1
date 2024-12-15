@@ -10,18 +10,11 @@ export const Storage = (function () {
 
   function load(key) {
     try {
-      return localStorage.getItem(key);
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : null;
     } catch (error) {
       console.log(error);
       return null;
-    }
-  }
-
-  function remove(key) {
-    try {
-      localStorage.removeItem(key);
-    } catch (error) {
-      console.log(error);
     }
   }
 
@@ -36,7 +29,6 @@ export const Storage = (function () {
   return {
     save,
     load,
-    remove,
     clear,
   };
 })();

@@ -12,38 +12,28 @@ export const Header = () => {
     {
       path: "/",
       name: "홈",
+      id: "home",
       isShow: true,
     },
     {
       path: "/profile",
       name: "프로필",
+      id: "profile",
       isShow: true,
     },
     {
       path: "/login",
       name: "로그인",
+      id: "login",
       isShow: !isLogin,
     },
     {
       path: "/login",
       name: "로그아웃",
       isShow: isLogin,
+      id: "logout",
     },
   ];
-
-  // 로그아웃 핸들러
-  const setupLogoutHandler = () => {
-    const loginLink = document.querySelector('nav a[href="/login"]');
-    if (loginLink && isLogin) {
-      loginLink.addEventListener("click", (e) => {
-        e.preventDefault();
-        UserStore.clearState();
-        window.location.href = "/login";
-      });
-    }
-  };
-
-  setTimeout(setupLogoutHandler, 0);
 
   return `
   <header class="bg-blue-600 text-white p-4 sticky top-0">
@@ -58,6 +48,7 @@ export const Header = () => {
         (menu) => `
         <li>
           <a 
+            id="${menu.id}"
             href="${menu.path}" 
             class="${activeClass(menu.path)}"
           >

@@ -4,10 +4,12 @@ import { UserStore } from "@stores";
 export const LoginPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { username, password } = e.target.elements;
-    if (!username.value || !password.value) {
-      return alert("아이디와 비밀번호를 입력해주세요.");
-    }
+    const { username } = e.target.elements;
+    // 로그인 유효성 검사 필요
+    // if (!username.value || !password.value) {
+    //   return alert("아이디와 비밀번호를 입력해주세요.");
+    // }
+    if (!username.value) return alert("아이디를 입력해주세요.");
     const userInfo = {
       username: username.value,
       email: "",

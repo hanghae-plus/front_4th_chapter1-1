@@ -60,6 +60,15 @@ function createRouter(options = {}) {
   function handleLinkClick(e) {
     const target = e.target.closest("a");
     if (!target) return;
+
+    // 로그아웃
+    if (target.id === "logout") {
+      e.preventDefault();
+      UserStore.clearState();
+      navigate(ROUTES.LOGIN);
+      return;
+    }
+
     if (target.href.startsWith(window.location.origin)) {
       e.preventDefault();
       const path = target.getAttribute("href");
