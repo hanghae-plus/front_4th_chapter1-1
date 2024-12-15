@@ -1,11 +1,14 @@
-import { initRouter } from "./router/router";
+import Router from "./router/Router";
 import createPageFactory from "./pages";
 
 document.addEventListener("DOMContentLoaded", () => {
-  initRouter();
-
   const $app = document.querySelector(".App");
   const pages = createPageFactory($app);
 
-  pages.main();
+  const router = new Router($app);
+  router.addRoute("/", pages.main);
+  router.addRoute("/profile", pages.profile);
+  router.addRoute("/login", pages.login);
+  router.addRoute("*", pages.error);
+  router.handleRoute();
 });

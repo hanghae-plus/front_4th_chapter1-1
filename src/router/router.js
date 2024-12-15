@@ -1,44 +1,57 @@
-import LoginPage from "../pages/Login";
-import MainPage from "../pages/Main";
-import ProfilePage from "../pages/Profile";
-import ErrorPage from "../pages/Error";
-import {
-  LOGIN_ROUTE,
-  MAIN_ROUTE,
-  NOT_FOUND_ROUTE,
-  PROFILE_ROUTE,
-} from "./routes";
+import Component from "../core/component";
 
-export const routes = {
-  [MAIN_ROUTE]: MainPage,
-  [PROFILE_ROUTE]: ProfilePage,
-  [LOGIN_ROUTE]: LoginPage,
-  [NOT_FOUND_ROUTE]: ErrorPage,
-};
+class Router extends Component {
+  init() {
+    this.state = {
+      routes: [],
+    };
+    document.body.addEventListener("click", this.onClickLink.bind(this));
+    window.addEventListener("popstate", this.handleRoute.bind(this));
+  }
 
-export function initRouter() {
-  window.addEventListener("popstate", handleLocation);
-  document.body.addEventListener("click", onClickLink);
-}
+  // 라우트 추가
+  addRoute(fragment, page) {
+    // 기존 라우트와 중복되는 라우트 무시 처리
+    if (this.state.routes.some((route) => route.fragment === fragment)) {
+      return;
+    }
 
-function handleLocation() {
-  const path = window.location.pathname;
-  const page = routes[path] || ErrorPage;
+    this.state.routes.push({ fragment, page });
+  }
 
-  const $app = document.querySelector(".App");
-  if ($app) {
-    $app.innerHTML = page.template();
+  navigate(url) {
+    history.pushState(null, null, url);
+    this.handleRoute();
+  }
+
+  handleRoute() {
+    const fragment = window.location.pathname;
+    const currentRoute = this.state.routes.find(
+      (route) => route.fragment === fragment,
+    );
+
+    if (!currentRoute) {
+      this.handleError();
+      return;
+    }
+
+    currentRoute.page();
+  }
+
+  handleError() {
+    const errorRoute = this.state.routes.find(
+      (route) => route.fragment === "/error",
+    );
+
+    errorRoute.page();
+  }
+
+  onClickLink(e) {
+    if (e.target.matches("[data-link]")) {
+      e.preventDefault();
+      this.navigate(e.target.href);
+    }
   }
 }
 
-function onClickLink(e) {
-  if (e.target.matches("[data-link]")) {
-    e.preventDefault();
-    navigate(e.target.href);
-  }
-}
-
-export function navigate(url) {
-  history.pushState(null, null, url);
-  handleLocation();
-}
+export default Router;
