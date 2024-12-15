@@ -1,19 +1,28 @@
+import { authGuard } from "./guard/authGuard";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { Router } from "./router";
 
 const route = new Router();
-const renderHomePage = () => {
-  document.body.innerHTML = HomePage();
-};
 
 const renderLoginPage = () => {
   document.body.innerHTML = LoginPage();
 };
 
+const renderHomePage = () => {
+  document.body.innerHTML = HomePage();
+};
+
 const renderProfilePage = () => {
-  document.body.innerHTML = ProfilePage();
+  authGuard(
+    () => {
+      document.body.innerHTML = ProfilePage();
+    },
+    () => {
+      document.body.innerHTML = LoginPage();
+    },
+  );
 };
 
 //라우팅 등록
@@ -24,7 +33,7 @@ route.registerRoute("/profile", renderProfilePage);
 //현재 패스에 대한 페이지 렌더
 route.setting(location.pathname);
 
-// 전역 이벤트 리스너 추가
+// 전역 click 이벤트 리스너 추가
 document.body.addEventListener("click", (event) => {
   const target = event.target;
 
