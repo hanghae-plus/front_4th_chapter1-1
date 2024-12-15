@@ -87,4 +87,4 @@ class ProfilePage extends Component {
   }
 }
 
-export default new ProfilePage();
+export default ProfilePage;

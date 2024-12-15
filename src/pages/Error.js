@@ -19,4 +19,4 @@ class ErrorPage extends Component {
   }
 }
 
-export default new ErrorPage();
+export default ErrorPage;
