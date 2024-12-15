@@ -65,11 +65,16 @@ export const checkUserInfo = () => {
     return true;
   }
 
+  console.log("로그인 안됨");
   return false;
 };
 
 export const deleteUserInfo = () => {
-  const submitBtn = document.querySelector("#loginSubmit"); //여기 로그아웃 버튼으로 바꿔야 함
+  const isValidLoggedIn = checkUserInfo();
+
+  const submitBtn = document.querySelector("#loggedout"); //여기 로그아웃 버튼으로 바꿔야 함
+
+  if (!isValidLoggedIn) return;
 
   submitBtn.addEventListener("click", () => {
     localStorage.removeItem("user");

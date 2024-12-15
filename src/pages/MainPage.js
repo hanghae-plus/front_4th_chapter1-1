@@ -1,4 +1,11 @@
+// import { checkUserInfo, deleteUserInfo } from "./LoginPage";
+
+import { checkUserInfo } from "./LoginPage";
+
+export const isValidLoggedIn = checkUserInfo();
+
 export const MainPage = () => `
+
   <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
       <header class="bg-blue-600 text-white p-4 sticky top-0">
@@ -8,9 +15,20 @@ export const MainPage = () => `
       <nav class="bg-white shadow-md p-2 sticky top-14">
         <ul class="flex justify-around">
           <li><a href="/" class="text-blue-600">홈</a></li>
-          <li><a href="/profile" class="text-gray-600">프로필</a></li>
-          <li><a href="#" class="text-gray-600">로그아웃</a></li>
-        </ul>
+          ${
+            isValidLoggedIn
+              ? ""
+              : `<li><a href="/login" id='loggedin' class="text-blue-600">로그인</a></li>`
+          }
+          
+          ${
+            isValidLoggedIn
+              ? `<li><a href="/profile" id='profile'  class=" text-gray-600"
+   >프로필</a></li> 
+          <li><a href="#" id='loggedout' class="text-gray-600}">로그아웃</a></li>`
+              : ""
+          }
+       </ul>
       </nav>
 
       <main class="p-4">
@@ -109,3 +127,16 @@ export const MainPage = () => `
     </div>
   </div>
 `;
+
+// export const handleLoggedOut = () => {
+//   const logoutBtn = document.querySelector("#loggedout");
+
+//   logoutBtn.addEventListener("click", () => {
+//     const isStillLoggedIn = checkUserInfo();
+
+//     if (isStillLoggedIn) {
+//       console.log("로그아웃");
+//       deleteUserInfo();
+//     }
+//   });
+// };
