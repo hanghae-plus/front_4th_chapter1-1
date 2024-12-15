@@ -1,7 +1,7 @@
 import MainPage from "./pages/MainPage";
 import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/LoginPage";
-import ErrorPage from "./pages/ErrorPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function createRouter(routes) {
   return function (path) {
@@ -14,7 +14,7 @@ const routes = {
   "/": () => MainPage(),
   "/profile": () => ProfilePage(),
   "/login": () => LoginPage(),
-  404: () => ErrorPage(),
+  404: () => NotFoundPage(),
 };
 
 const router = createRouter(routes);
