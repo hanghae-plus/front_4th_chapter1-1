@@ -1,5 +1,5 @@
-import { Header } from "../common/Header";
-import { Footer } from "../common/Footer";
+import Header from "../common/Header";
+import Footer from "../common/Footer";
 
 export const ProfilePage = () => `
   <div id="root">
