@@ -83,7 +83,7 @@ describe("기본과제 테스트", () => {
         new SubmitEvent("submit", { bubbles: true, cancelable: true }),
       );
 
-      console.log("result1234", localStorage.getItem("user"));
+      // console.log("result1234", localStorage.getItem("user"));
 
       expect(localStorage.getItem("user")).toEqual(
         `{"username":"testuser","email":"","bio":""}`,
@@ -116,6 +116,8 @@ describe("기본과제 테스트", () => {
     });
 
     it("로그인한 사용자의 이름과 소개가 표시된다", () => {
+      console.log("result 121212", document.getElementById("email").value);
+
       expect(document.getElementById("username").value).toBe("testuser");
       expect(document.getElementById("email").value).toContain("");
       expect(document.getElementById("bio").value).toContain("");

@@ -24,7 +24,7 @@ export const MainPage = () => {
             isValidLoggedIn
               ? `<li><a href="/profile" id='profile'  class=" text-gray-600"
    >프로필</a></li> 
-          <li><a href="login" id='loggedout' class="text-gray-600}">로그아웃</a></li>`
+          <li><a href="login" id='logout' class="text-gray-600}">로그아웃</a></li>`
               : ""
           }
        </ul>

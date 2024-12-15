@@ -1,5 +1,7 @@
 // import { router } from "../main";
 
+import { router } from "../main";
+
 export const LoginPage = () => {
   // const submitBtn = document.querySelector("#loginSubmit");
 
@@ -45,7 +47,7 @@ export const LoginPage = () => {
 };
 
 export const addUserInfo = () => {
-  console.log("addUserInfo");
+  // console.log("addUserInfo");
   const submitBtn = document.querySelector("#loginSubmit");
 
   submitBtn.addEventListener("click", (event) => {
@@ -64,6 +66,7 @@ export const addUserInfo = () => {
 
     window.history.pushState({}, "", "/");
     // router();
+    router();
     // return;
   });
 
@@ -101,12 +104,12 @@ export const checkUserInfo = () => {
   const user = localStorage.getItem("user");
 
   // const password = localStorage.getItem("password");
-  console.log("user", user);
+  // console.log("user", user);
 
   if (user) {
     const userData = JSON.parse(user);
     if (userData.username !== "") {
-      console.log("로그인 이미 성공", userData);
+      // console.log("로그인 이미 성공", userData);
 
       return true;
     }
@@ -119,9 +122,10 @@ export const checkUserInfo = () => {
 export const deleteUserInfo = () => {
   const isValidLoggedIn = checkUserInfo();
 
-  const submitBtn = document.querySelector("#loggedout"); //여기 로그아웃 버튼으로 바꿔야 함
+  const submitBtn = document.querySelector("#logout"); //여기 로그아웃 버튼으로 바꿔야 함
 
   if (!isValidLoggedIn) return;
+  if (!submitBtn) return;
 
   submitBtn.addEventListener("click", () => {
     localStorage.removeItem("user");

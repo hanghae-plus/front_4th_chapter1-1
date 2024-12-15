@@ -8,7 +8,7 @@ import {
   // reCheckUserInfo,
 } from "./pages/LoginPage";
 import { MainPage } from "./pages/MainPage";
-import { ProfilePage } from "./pages/ProfilePage";
+import { handleProfileSubmit, ProfilePage } from "./pages/ProfilePage";
 
 const routers = {
   //1. 함수를 실행하면 안되는 이유
@@ -17,7 +17,9 @@ const routers = {
   "/profile": ProfilePage,
 };
 
-const router = () => {
+//렌더 함수만 따로 빼보기
+
+export const router = () => {
   const path = window.location.pathname;
   // const isValidLoggedIn = checkUserInfo();
 
@@ -56,6 +58,8 @@ const router = () => {
     if (checkUserInfo()) {
       deleteUserInfo();
       // router();
+
+      handleProfileSubmit();
     }
 
     if (!checkUserInfo()) {

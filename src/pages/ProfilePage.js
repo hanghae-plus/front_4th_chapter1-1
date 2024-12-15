@@ -14,7 +14,7 @@ export const ProfilePage = () => {
           <ul class="flex justify-around">
             <li><a href="/" class="text-gray-600">홈</a></li>
             <li><a href="/profile" class="text-blue-600">프로필</a></li>
-            <li><a href="/login" id='loggedout' class="text-gray-600">로그아웃</a></li>
+            <li><a href="/login" id='logout' class="text-gray-600">로그아웃</a></li>
           </ul>
         </nav>
 
@@ -88,22 +88,31 @@ ${bio}</textarea
 `;
 };
 
-// export const handleProfileSubmit = () => {
-//   const profileBtn = document.querySelector("#profile-form");
+export const handleProfileSubmit = () => {
+  const profileBtn = document.querySelector("#profile-form");
 
-//   profileBtn.addEventListener("click", (event) => {
-//     event.preventDefault();
+  // if (!profileBtn) return;
 
-//     const username = document.querySelector("#username").value;
-//     const email = document.querySelector("#email").value;
-//     const bio = document.querySelector("#bio").value;
+  console.log("inin");
 
-//     localStorage.setItem(
-//       "user",
-//       JSON.stringify({
-//         username,
-//         email,
-//         bio,
+  profileBtn.addEventListener("click", (event) => {
+    event.preventDefault();
 
-//       }))
-// };
+    const username = document.querySelector("#username").value;
+    const email = document.querySelector("#email").value;
+    const bio = document.querySelector("#bio").value;
+
+    console.log("프로필 서브밋", username, email, bio);
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        username: username,
+        email: email,
+        bio: bio,
+      }),
+    );
+
+    alert("프로필이 업데이트 되었습니다.");
+  });
+};
