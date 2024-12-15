@@ -52,7 +52,7 @@ const hashRoutes = {
   404: () => NotFoundPage(),
 };
 
-const router = createRouter(routes, true);
+const router = createRouter(routes);
 
 function updateContent() {
   router();
