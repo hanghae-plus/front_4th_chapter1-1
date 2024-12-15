@@ -1,6 +1,6 @@
 const Header = () => {
   const isLoggedIn = !!localStorage.getItem("user");
-  const activeColor = "text-blue-600";
+  const activeColor = "text-blue-600 font-bold";
   const deactiveColor = "text-gray-600";
   const getNavColor = (path: string) => {
     return window.location.pathname === path ? activeColor : deactiveColor;
