@@ -9,29 +9,26 @@
 // 1. history.pushState() 스택에 추가
 // 1. history.relaceState() 스택 최근 데이터로 대체
 
-export const Router = (function () {
-  const routes = {};
+export const Router = {
+  initialized: false,
+  push: (url) => {
+    !Router.initialized && Router.init();
 
-  function addRoute(path, component) {
-    routes[path] = component;
-    console.log("routes", routes);
-  }
+    window.history.pushState(null, null, url);
+  },
+  replace: (url) => {
+    !Router.initialized && Router.init();
 
-  function navigate(path) {
-    const component = routes[path] || routes["404"];
-    document.getElementById("root").innerHTML = component();
-  }
-
-  function init() {
-    window.addEventListener("hashchange", () => {
-      navigate(window.location.hash.slice(1));
-    });
-    navigate(window.location.pathname || "/");
-  }
-
-  return {
-    addRoute,
-    navigate,
-    init,
-  };
-})();
+    window.history.replaceState(null, null, url);
+  },
+  init: () => {
+    Router.initialized = true;
+    // Q: onPopState와 hashChange가 무엇이 다른거지?
+    window.onpopstate = (event) => {
+      console.log("URL 변경 감지:", event.state);
+    };
+  },
+  get pathname() {
+    return window.location.pathname;
+  },
+};

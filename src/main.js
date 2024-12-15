@@ -6,10 +6,11 @@ import { LoginPage } from "./pages/login";
 import { ProfilePage } from "./pages/profile";
 
 const render = () => {
-  Router.addRoute("/", HomePage);
-  Router.addRoute("/login", LoginPage);
-  Router.addRoute("/profile", ProfilePage);
-  Router.addRoute("/404", Error404Page);
+  document.getElementById("root").innerHTML = `
+  ${Router.pathname === "/" ? HomePage() : ""}
+  ${Router.pathname === "/login" ? LoginPage() : ""}
+  ${Router.pathname === "/profile" ? ProfilePage() : ""}
+  ${Router.pathname === "/404" ? Error404Page() : ""}`;
 
   Router.init();
 };

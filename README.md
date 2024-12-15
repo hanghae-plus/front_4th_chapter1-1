@@ -17,7 +17,7 @@
 
 https://developer.mozilla.org/ko/docs/Web/API/History
 
-이해가 필요한 문서 내용 : https://developer.mozilla.org/ko/docs/Web/API/History/pushState#%EC%84%A4%EB%AA%85
+이해가 필요한 문서 내용 : https://developer.mozilla.org/ko/docs/Web/API/History/pushState#%EC%84%A4%EB%AA%85ㅎ
 
 ### 2. 사용자 관리 기능
 
