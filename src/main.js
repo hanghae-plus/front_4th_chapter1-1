@@ -1,3 +1,4 @@
+import AuthManager from "./authManager";
 import Router from "./router";
 
 const MainPage = () => `
@@ -245,73 +246,4 @@ const routes = {
 const router = new Router(routes);
 router.init();
 
-// 로그인 버튼에 이벤트 등록
-document.body.addEventListener("submit", (e) => {
-  if (e.target?.id === "login-form") {
-    e.preventDefault();
-
-    const usernameInput = document.getElementById("username");
-    const username = usernameInput?.value || "";
-
-    const user = {
-      username,
-      email: "",
-      bio: "",
-    };
-
-    localStorage.setItem("user", JSON.stringify(user));
-    console.log("user", localStorage.getItem("user"));
-
-    router.navigate("/profile");
-  }
-});
-
-// 로그아웃 버튼에 이벤트 등록
-document.body.addEventListener("click", (e) => {
-  const target = e.target.closest("#logout"); // closest를 활용해 동적으로 탐색
-  if (target) {
-    e.preventDefault();
-    localStorage.removeItem("user");
-  }
-});
-
-/**
- * 사용자 이름 입력 및 검증
- * @description 이메일 또는 전화번호 형태의 값이 입력되었는지 확인합니다.
- * @param {string} username 사용자 이름
- */
-// function validateUsername(username) {
-//   if (!username.trim()) {
-//     alert("사용자 이름을 입력해주세요.");
-//     return false;
-//   }
-
-//   if (!isEmail(username) && !isPhoneNumber(username)) {
-//     alert("이메일 또는 전화번호 형식으로 입력해주세요.");
-//     return false;
-//   }
-//   return true;
-// }
-
-/**
- * 이메일 정규식
- * @param {*} username
- * @returns boolean
- */
-// function isEmail(username) {
-//   return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(username);
-// }
-
-/**
- * 전화번호 정규식
- * @description
- * - 앞 세자리: 010 / 011 / 016 / 017 / 018 / 019,
- * - 두번째 네자리: 3자리 또는 4자리,
- * - 마지막 네자리: 4자리.
- * - 중간 구분자는 - 또는 없음
- * @param {string} username 사용자 이름
- * @returns boolean
- */
-// function isPhoneNumber(username) {
-//   return /^(010|011|016|017|018|019)-?(\d{3,4})-?(\d{4})$/.test(username);
-// }
+new AuthManager(router);
