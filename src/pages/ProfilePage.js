@@ -1,7 +1,11 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import UserStore from "../store/userStore";
 
-const ProfilePage = () => `
+const ProfilePage = () => {
+  const { username, email, bio } = new UserStore().getUser();
+
+  return `
   <div id="root">
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
@@ -23,7 +27,7 @@ const ProfilePage = () => `
                   type="text"
                   id="username"
                   name="username"
-                  value="홍길동"
+                  value="${username}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -37,7 +41,7 @@ const ProfilePage = () => `
                   type="email"
                   id="email"
                   name="email"
-                  value="hong@example.com"
+                  value="${email}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -52,8 +56,7 @@ const ProfilePage = () => `
                   name="bio"
                   rows="4"
                   class="w-full p-2 border rounded"
-                >
-                자기소개입니다.</textarea
+                >${bio}</textarea
                 >
               </div>
               <button
@@ -71,5 +74,6 @@ const ProfilePage = () => `
     </div>
   </div>
 `;
+};
 
 export default ProfilePage;

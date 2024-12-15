@@ -2,6 +2,7 @@ import MainPage from "./pages/MainPage";
 import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import UserStore from "./store/userStore";
 
 function createRouter(routes) {
   return function (path) {
@@ -21,7 +22,7 @@ const router = createRouter(routes);
 
 function updateContent() {
   let path = window.location.pathname;
-  const user = localStorage.getItem("user");
+  const user = new UserStore().getUser();
   if (!user && path === "/profile") path = "/login";
   if (user && path === "/login") path = "/";
 
@@ -33,14 +34,6 @@ function updateContent() {
 
   root.removeEventListener("click", clickEventHandler);
   root.addEventListener("click", clickEventHandler);
-
-  if (path === "/profile") {
-    const { username, email, bio } = JSON.parse(localStorage.getItem("user"));
-
-    document.getElementById("username").value = username;
-    document.getElementById("email").value = email;
-    document.getElementById("bio").value = bio;
-  }
 }
 
 function submitEventHandler(e) {
@@ -53,11 +46,7 @@ function submitEventHandler(e) {
     const username = formData.get("username");
 
     if (username) {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ username, email: "", bio: "" }),
-      );
-
+      new UserStore().setUser({ username, email: "", bio: "" });
       render("/profile");
       updateContent();
     }
@@ -68,7 +57,7 @@ function submitEventHandler(e) {
     const email = formData.get("email");
     const bio = formData.get("bio");
 
-    localStorage.setItem("user", JSON.stringify({ username, email, bio }));
+    new UserStore().setUser({ username, email, bio });
     render("/profile");
     updateContent();
   }
@@ -78,7 +67,8 @@ function clickEventHandler(e) {
   const { id, tagName } = e.target;
 
   if (id === "logout") {
-    logout();
+    new UserStore().deleteUser();
+    render("/login");
   }
 
   if (tagName === "A") {
@@ -88,11 +78,6 @@ function clickEventHandler(e) {
     render(path);
     updateContent();
   }
-}
-
-function logout() {
-  localStorage.removeItem("user");
-  render("/login");
 }
 
 function render(path) {

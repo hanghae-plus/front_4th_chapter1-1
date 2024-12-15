@@ -1,6 +1,5 @@
 const Header = () => {
   const isLogin = !!localStorage.getItem("user");
-  console.log(isLogin);
   const path = window.location.pathname;
 
   return `
