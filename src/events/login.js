@@ -6,7 +6,7 @@ export const handleLogin = () => {
     return;
   }
 
-  const id = document.getElementById("userId").value;
+  const id = document.getElementById("username").value;
   const password = document.getElementById("password").value;
 
   const userInfo = { username: "testuser", email: "", bio: "" };
