@@ -18,7 +18,7 @@ const Header = () => {
        isLoggedIn
          ? `
        <li><a href="/profile" class="${getNavColor("/profile")}" data-link>프로필</a></li>
-       <li><a href="#" class="${deactiveColor}" data-action="logout">로그아웃</a></li>
+       <li><a id="logout" href="#" class="${deactiveColor}" data-action="logout">로그아웃</a></li>
      `
          : `
        <li><a href="/login" class="${getNavColor("/login")}" data-link>로그인</a></li>
