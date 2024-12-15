@@ -4,7 +4,7 @@ import { Footer } from "../common/Footer";
 export const MainPage = () => `
   <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
-      ${Header()}
+      ${Header(localStorage.getItem("user"))}
 
       <main class="p-4">
         <div class="mb-4 bg-white rounded-lg shadow p-4">
