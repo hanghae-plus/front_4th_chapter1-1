@@ -18,7 +18,7 @@ const createRouter = (container: HTMLElement, routes: Routes) => {
     const checkedPath = checkAuth(pathname);
     const route = routes[checkedPath] || routes["*"];
     container.innerHTML = route.component();
-    route.setUp();
+    route.setUp && route.setUp();
   };
 
   const navigate = (pathname: string) => {
@@ -36,10 +36,20 @@ const createRouter = (container: HTMLElement, routes: Routes) => {
     document.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
 
-      if (target.matches("[data-link]")) {
+      const linkElement = target.closest("[data-link]");
+      if (linkElement instanceof HTMLElement) {
         e.preventDefault();
-        const pathname = target.getAttribute("href") || "/";
+        const pathname = linkElement.getAttribute("href") || "/";
         navigate(pathname);
+        return;
+      }
+
+      const logoutButton = target.closest('[data-action="logout"]');
+      if (logoutButton) {
+        e.preventDefault();
+        localStorage.removeItem("user");
+        navigate("/login");
+        return;
       }
     });
   };

@@ -1,20 +1,3 @@
-import { useRouter } from "../../main";
-
-const handleLogout = () => {
-  const router = useRouter();
-  localStorage.removeItem("user");
-  router.navigate("/login");
-};
-
-const setupHeader = () => {
-  const logoutButton = document.getElementById("logout-button");
-  if (logoutButton) {
-    logoutButton.addEventListener("click", () => {
-      handleLogout();
-    });
-  }
-};
-
 const Header = () => {
   const isLoggedIn = !!localStorage.getItem("user");
   const activeColor = "text-blue-600";
@@ -35,7 +18,7 @@ const Header = () => {
        isLoggedIn
          ? `
        <li><a href="/profile" class="${getNavColor("/profile")}" data-link>프로필</a></li>
-       <li><a id="logout-button" class="${deactiveColor}">로그아웃</a></li>
+       <li><a id="logout-button" class="${deactiveColor}"  data-action="logout">로그아웃</a></li>
      `
          : `
        <li><a href="/login" class="${getNavColor("/login")}" data-link>로그인</a></li>
@@ -46,4 +29,4 @@ const Header = () => {
 `;
 };
 
-export { Header, setupHeader };
+export default Header;
