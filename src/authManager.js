@@ -41,6 +41,21 @@ export default class AuthManager {
 
   // 이벤트 리스너 초기화
   #init() {
+    this.router.beforeEnter((path) => {
+      const AUTH_REQUIRED_PAGES = ["/profile"];
+      if (AUTH_REQUIRED_PAGES.includes(path) && !this.isLogin()) {
+        alert("로그인이 필요한 페이지입니다.");
+        this.router.navigate("/login");
+        return false;
+      }
+      if (path === "/login" && this.isLogin()) {
+        alert("이미 로그인되어 있습니다.");
+        this.router.navigate("/");
+        return false;
+      }
+      return true;
+    });
+
     document.body.addEventListener("submit", (e) => {
       if (e.target?.id === "login-form") {
         e.preventDefault();
