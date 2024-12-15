@@ -1,7 +1,35 @@
 import Footer from "../shared/components/Footer";
 import { Header } from "../shared/components/Header";
 
-const ProfilePage = () => `
+const setUpProfilePage = () => {
+  const form = document.getElementById("profile-form") as HTMLFormElement;
+  if (form) {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      handleProfile(form);
+    });
+  }
+};
+
+const handleProfile = (form: HTMLFormElement) => {
+  const formData = new FormData(form);
+  const userData = {
+    username: formData.get("username"),
+    email: formData.get("email"),
+    bio: formData.get("bio"),
+  };
+
+  const originUser = JSON.parse(localStorage.getItem("user") || "{}");
+  localStorage.setItem(
+    "user",
+    JSON.stringify({
+      ...originUser,
+      ...userData,
+    }),
+  );
+};
+
+const ProfilePage = () => /* html */ `
   <div id="root">
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
@@ -12,13 +40,12 @@ const ProfilePage = () => `
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
               내 프로필
             </h2>
-            <form>
+            <form id="profile-form">
               <div class="mb-4">
                 <label
                   for="username"
                   class="block text-gray-700 text-sm font-bold mb-2"
-                  >사용자 이름</label
-                >
+                  >사용자 이름</label>
                 <input
                   type="text"
                   id="username"
@@ -31,8 +58,7 @@ const ProfilePage = () => `
                 <label
                   for="email"
                   class="block text-gray-700 text-sm font-bold mb-2"
-                  >이메일</label
-                >
+                  >이메일</label>
                 <input
                   type="email"
                   id="email"
@@ -45,8 +71,7 @@ const ProfilePage = () => `
                 <label
                   for="bio"
                   class="block text-gray-700 text-sm font-bold mb-2"
-                  >자기소개</label
-                >
+                  >자기소개</label>
                 <textarea
                   id="bio"
                   name="bio"
@@ -72,4 +97,4 @@ const ProfilePage = () => `
   </div>
 `;
 
-export default ProfilePage;
+export { ProfilePage, setUpProfilePage };

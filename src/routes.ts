@@ -1,7 +1,7 @@
 import NotFoundPage from "./pages/NotFoundPage";
 import { LoginPage, setupLoginPage } from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
-import ProfilePage from "./pages/ProfilePage";
+import { ProfilePage, setUpProfilePage } from "./pages/ProfilePage";
 import { setupHeader } from "./shared/components/Header";
 
 export type Routes = {
@@ -25,6 +25,7 @@ export const routes: Routes = {
   "/profile": {
     setUp: () => {
       setupHeader();
+      setUpProfilePage();
     },
     component: ProfilePage,
   },
