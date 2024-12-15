@@ -16,9 +16,10 @@ const router = () => {
 };
 
 const handleNavigation = (e) => {
-  if (e.target.tagName === "a" && e.target.getAttribute("href")) {
+  const selected = e.target.closest("a");
+  if (selected && selected.getAttribute("href")) {
     e.preventDefault();
-    const path = e.target.getAttribute("href");
+    const path = selected.getAttribute("href");
     history.pushState({}, "", path);
     router();
   }
