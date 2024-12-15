@@ -1,3 +1,5 @@
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 import ErrorPage from "./pages/Error";
 import routes from "./routes";
 
@@ -6,7 +8,17 @@ import routes from "./routes";
  */
 const render = (path) => {
   const root = document.getElementById("root");
-  root.innerHTML = routes[path] || ErrorPage();
+  const allowConditions = ["/", "/profile"];
+
+  root.innerHTML = `
+   <div class="bg-gray-100 min-h-screen flex justify-center">
+      <div class="max-w-md w-full">
+        ${allowConditions.includes(path) ? Header() : ""}
+        ${routes[path] || ErrorPage()}
+        ${allowConditions.includes(path) ? Footer() : ""}
+      </div>
+    </div>
+  `;
 };
 
 const navigateTo = (path) => {
