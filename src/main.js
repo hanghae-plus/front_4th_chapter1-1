@@ -1,3 +1,6 @@
+const TestPage = () => `
+  <div class="test">test1 <br>test2</div>
+`;
 const MainPage = () => `
   <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
@@ -234,6 +237,7 @@ const ProfilePage = () => `
 `;
 
 document.body.innerHTML = `
+  ${TestPage()}
   ${MainPage()}
   ${ProfilePage()}
   ${LoginPage()}
