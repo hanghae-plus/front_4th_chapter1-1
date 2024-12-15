@@ -8,6 +8,7 @@ export type Routes = {
   [key: string]: {
     setUp: () => void;
     component: () => string;
+    isProtectedRoute?: boolean;
   };
 };
 
@@ -17,10 +18,12 @@ export const routes: Routes = {
       setupHeader();
     },
     component: MainPage,
+    isProtectedRoute: false,
   },
   "/login": {
     setUp: setupLoginPage,
     component: LoginPage,
+    isProtectedRoute: false,
   },
   "/profile": {
     setUp: () => {
@@ -28,9 +31,11 @@ export const routes: Routes = {
       setUpProfilePage();
     },
     component: ProfilePage,
+    isProtectedRoute: true,
   },
   "*": {
     setUp: () => {},
     component: NotFoundPage,
+    isProtectedRoute: false,
   },
 };
