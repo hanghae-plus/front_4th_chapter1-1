@@ -15,6 +15,10 @@
 > History API Interface 찾아보기.
 > 라우트 가드가 무엇인지 명확히 이해하기. 페이지 별 권한 관리 차원의 라우트 입장 방지를 의미하는건가?
 
+https://developer.mozilla.org/ko/docs/Web/API/History
+
+이해가 필요한 문서 내용 : https://developer.mozilla.org/ko/docs/Web/API/History/pushState#%EC%84%A4%EB%AA%85
+
 ### 2. 사용자 관리 기능
 
 - LocalStorage를 사용한 간단한 사용자 데이터 관리
