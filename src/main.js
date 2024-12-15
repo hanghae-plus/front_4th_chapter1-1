@@ -23,3 +23,17 @@ route.registerRoute("/profile", renderProfilePage);
 
 //현재 패스에 대한 페이지 렌더
 route.setting(location.pathname);
+
+// 전역 이벤트 리스너 추가
+document.body.addEventListener("click", (event) => {
+  const target = event.target;
+
+  if (target.tagName === "A") {
+    event.preventDefault();
+    const path = target.getAttribute("href");
+
+    if (path) {
+      route.navigate(path);
+    }
+  }
+});
