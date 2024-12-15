@@ -29,7 +29,6 @@ function createRouter(routes) {
 
 function render(route) {
   const root = document.getElementById("root");
-  console.log(route);
   root.innerHTML = route();
 
   const cloneRoot = root.cloneNode(true);
