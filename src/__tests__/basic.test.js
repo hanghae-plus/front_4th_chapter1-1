@@ -82,7 +82,6 @@ describe("기본과제 테스트", () => {
       loginForm.dispatchEvent(
         new SubmitEvent("submit", { bubbles: true, cancelable: true }),
       );
-
       expect(localStorage.getItem("user")).toEqual(
         `{"username":"testuser","email":"","bio":""}`,
       );

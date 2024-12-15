@@ -1,6 +1,7 @@
 import { LoginPage, MainPage, ProfilePage, NotFoundPage } from "@pages";
+import { UserStore } from "@stores";
 
-const ROUTES = {
+export const ROUTES = {
   HOME: "/",
   LOGIN: "/login",
   ERROR: "/404",
@@ -10,9 +11,31 @@ const ROUTES = {
 function createRouter(options = {}) {
   const routes = options.routes || {};
 
+  function protectRoute(path) {
+    const isLogin = UserStore.getValue("isLogin");
+
+    if (path === ROUTES.PROFILE && !isLogin) {
+      history.replaceState(null, "", ROUTES.LOGIN);
+      return ROUTES.LOGIN;
+    }
+    if (path === ROUTES.LOGIN && isLogin) {
+      history.replaceState(null, "", ROUTES.HOME);
+      return ROUTES.HOME;
+    }
+
+    return path;
+  }
+
   function renderPage(path) {
-    const page = routes[path] || routes[ROUTES.ERROR];
-    console.log(page());
+    // 유효한 라우트인지 확인
+    if (!routes[path]) {
+      history.replaceState(null, "", ROUTES.ERROR);
+      const rootElement = document.getElementById("root");
+      rootElement.innerHTML = NotFoundPage();
+      return;
+    }
+    const protectedPath = protectRoute(path);
+    const page = routes[protectedPath];
     const rootElement = document.getElementById("root");
     rootElement.innerHTML = page();
   }
@@ -61,7 +84,7 @@ function createRouter(options = {}) {
   };
 }
 
-const Router = createRouter({
+export const Router = createRouter({
   routes: {
     [ROUTES.HOME]: MainPage,
     [ROUTES.PROFILE]: ProfilePage,
@@ -69,5 +92,3 @@ const Router = createRouter({
     [ROUTES.NOT_FOUND]: NotFoundPage,
   },
 });
-
-export default Router;

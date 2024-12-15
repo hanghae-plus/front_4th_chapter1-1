@@ -1,3 +1,3 @@
-import Router from "@routers";
+import { Router } from "@routers";
 
 Router.init();
