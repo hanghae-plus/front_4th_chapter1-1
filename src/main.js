@@ -1,5 +1,6 @@
 import Router from "./router/Router";
 import createPageFactory from "./pages";
+import { getAuth } from "./auth/auth";
 
 document.addEventListener("DOMContentLoaded", () => {
   const $app = document.querySelector(".App");
@@ -10,5 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
   router.addRoute("/profile", pages.profile);
   router.addRoute("/login", pages.login);
   router.addRoute("*", pages.error);
-  router.handleRoute();
+  if (!getAuth()) {
+    router.navigateTo("/login");
+  } else {
+    router.navigateTo("/");
+  }
 });

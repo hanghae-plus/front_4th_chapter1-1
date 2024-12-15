@@ -19,7 +19,7 @@ class Router extends Component {
     this.state.routes.push({ fragment, page });
   }
 
-  navigate(url) {
+  navigateTo(url) {
     history.pushState(null, null, url);
     this.handleRoute();
   }
@@ -49,7 +49,7 @@ class Router extends Component {
   onClickLink(e) {
     if (e.target.matches("[data-link]")) {
       e.preventDefault();
-      this.navigate(e.target.href);
+      this.navigateTo(e.target.href);
     }
   }
 }

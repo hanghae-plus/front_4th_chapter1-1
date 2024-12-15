@@ -1,6 +1,26 @@
 import Component from "../core/component";
+import { login } from "../auth/auth";
+import Router from "../router/Router";
 
 class LoginPage extends Component {
+  setEvent() {
+    this.$target.addEventListener("click", (e) => {
+      if (e.target.type === "submit") {
+        e.preventDefault();
+        const username = this.$target.querySelector(".username").value.trim();
+        const password = this.$target.querySelector(".password").value.trim();
+
+        if (!username || !password) {
+          return;
+        }
+
+        login(username);
+        const router = new Router();
+        router.navigateTo("/");
+      }
+    });
+  }
+
   template() {
     return `
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
@@ -8,10 +28,10 @@ class LoginPage extends Component {
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
       <form id="loginForm">
         <div class="mb-4">
-          <input type="text" id="id" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
+          <input type="text" placeholder="이메일 또는 전화번호" class="username w-full p-2 border rounded">
         </div>
         <div class="mb-6">
-          <input type="password" id="password" placeholder="비밀번호" class="w-full p-2 border rounded">
+          <input type="password"placeholder="비밀번호" class="password w-full p-2 border rounded">
         </div>
         <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</button>
       </form>

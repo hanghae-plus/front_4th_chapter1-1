@@ -5,6 +5,7 @@ class Component {
   constructor($target) {
     this.$target = $target;
     this.init();
+    this.setEvent();
     this.render();
   }
 
@@ -22,6 +23,8 @@ class Component {
     this.state = { ...this.state, ...newState };
     this.render;
   }
+
+  setEvent() {}
 }
 
 export default Component;

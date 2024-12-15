@@ -1,5 +1,5 @@
-export function login(id) {
-  localStorage.setItem("user", id);
+export function login(username) {
+  localStorage.setItem("user", username);
 }
 
 export function logout() {
