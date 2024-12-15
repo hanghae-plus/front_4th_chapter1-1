@@ -23,6 +23,7 @@ function updateContent() {
   let path = window.location.pathname;
   const user = localStorage.getItem("user");
   if (!user && path === "/profile") path = "/login";
+  if (user && path === "/login") path = "/";
 
   render(path);
 
