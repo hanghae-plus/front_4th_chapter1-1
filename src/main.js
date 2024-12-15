@@ -249,9 +249,21 @@ router.init();
 document.body.addEventListener("click", (e) => {
   if (e.target?.textContent === "로그인") {
     e.preventDefault();
-    localStorage.setItem("사용자", "홍길동");
+
+    const form = e.target.closest("form");
+    const username = form.querySelector('input[type="text"]').value;
+    const password = form.querySelector('input[type="password"]').value;
+
+    if (!validateUsername(username)) {
+      return;
+    }
+
+    localStorage.setItem("username", username);
+    localStorage.setItem("password", password);
+
+    location.href = "/profile";
     localStorage.setItem(
-      "소개",
+      "introduction",
       "안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.",
     );
   }
@@ -261,7 +273,49 @@ document.body.addEventListener("click", (e) => {
 document.body.addEventListener("click", (e) => {
   if (e.target?.textContent === "로그아웃") {
     e.preventDefault();
-    localStorage.removeItem("사용자");
-    localStorage.removeItem("소개");
+    localStorage.removeItem("username");
+    localStorage.removeItem("password");
+    localStorage.removeItem("introduction");
   }
 });
+
+/**
+ * 사용자 이름 입력 및 검증
+ * @description 이메일 또는 전화번호 형태의 값이 입력되었는지 확인합니다.
+ * @param {string} username 사용자 이름
+ */
+function validateUsername(username) {
+  if (!username.trim()) {
+    alert("사용자 이름을 입력해주세요.");
+    return false;
+  }
+
+  if (!isEmail(username) && !isPhoneNumber(username)) {
+    alert("이메일 또는 전화번호 형식으로 입력해주세요.");
+    return false;
+  }
+  return true;
+}
+
+/**
+ * 이메일 정규식
+ * @param {*} username
+ * @returns boolean
+ */
+function isEmail(username) {
+  return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(username);
+}
+
+/**
+ * 전화번호 정규식
+ * @description
+ * - 앞 세자리: 010 / 011 / 016 / 017 / 018 / 019,
+ * - 두번째 네자리: 3자리 또는 4자리,
+ * - 마지막 네자리: 4자리.
+ * - 중간 구분자는 - 또는 없음
+ * @param {string} username 사용자 이름
+ * @returns boolean
+ */
+function isPhoneNumber(username) {
+  return /^(010|011|016|017|018|019)-?(\d{3,4})-?(\d{4})$/.test(username);
+}
