@@ -1,3 +1,5 @@
+import Router from "./router";
+
 const MainPage = () => `
   <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
@@ -240,40 +242,5 @@ const routes = {
   "/404": ErrorPage,
 };
 
-/**
- * navigate 함수 (라우팅 및 렌더링)
- * @param {string} path
- */
-function navigate(path) {
-  const root = document.getElementById("root");
-  const render = routes[path] || routes["/404"];
-  root.innerHTML = render();
-}
-
-/**
- * 초기 렌더링 함수
- */
-function init() {
-  const path = window.location.pathname;
-  history.replaceState(null, "", path);
-  navigate(path);
-}
-
-init();
-
-// a 태그 새로고침 방지 및 라우팅 처리
-document.body.addEventListener("click", (e) => {
-  const target = e.target.closest("a");
-  if (target) {
-    e.preventDefault(); // 기본 동작 차단
-    const path = target.getAttribute("href");
-    history.pushState(null, "", path);
-    navigate(path);
-  }
-});
-
-// popstate 이벤트 처리(뒤로가기, 앞으로가기)
-window.addEventListener("popstate", () => {
-  const path = window.location.pathname;
-  navigate(path);
-});
+const router = new Router(routes);
+router.init();
