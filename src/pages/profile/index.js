@@ -1,6 +1,7 @@
 import { Header, Footer } from "@components/common";
 
-export const ProfilePage = () => `
+export const ProfilePage = () => {
+  const template = `
   <div id="root">
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
@@ -71,3 +72,12 @@ export const ProfilePage = () => `
     </div>
   </div>
 `;
+
+  const render = () => {
+    document.getElementById("root").innerHTML = template;
+  };
+
+  return {
+    render,
+  };
+};

@@ -1,30 +1,23 @@
-import { Router, ROUTES } from "@routers";
+import { Router, ROUTES } from "@routes";
 import { UserStore } from "@stores";
 
 export const LoginPage = () => {
-  const setupLoginHandler = () => {
-    const loginForm = document.getElementById("login-form");
-    if (loginForm) {
-      loginForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const { username, password } = e.target.elements;
-        if (!username.value || !password.value) {
-          return alert("아이디와 비밀번호를 입력해주세요.");
-        }
-        const userInfo = {
-          username: username.value,
-          email: "",
-          bio: "",
-        };
-        localStorage.setItem("user", JSON.stringify(userInfo));
-        UserStore.setState({ user: userInfo, isLogin: true });
-        console.log("이게 뭐야", localStorage.getItem("user"));
-        Router.navigate(ROUTES.PROFILE);
-      });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { username, password } = e.target.elements;
+    if (!username.value || !password.value) {
+      return alert("아이디와 비밀번호를 입력해주세요.");
     }
+    const userInfo = {
+      username: username.value,
+      email: "",
+      bio: "",
+    };
+    UserStore.setState({ user: userInfo, isLogin: true });
+    Router.navigate(ROUTES.PROFILE);
   };
-  setTimeout(setupLoginHandler, 0);
-  return ` <main class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+  const template = `<main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
       <form id="login-form">
@@ -46,4 +39,15 @@ export const LoginPage = () => {
     </div>
   </main>
 `;
+
+  const render = () => {
+    document.getElementById("root").innerHTML = template;
+    document
+      .getElementById("login-form")
+      .addEventListener("submit", handleSubmit);
+  };
+
+  return {
+    render,
+  };
 };

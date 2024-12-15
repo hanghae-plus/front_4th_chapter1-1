@@ -3,8 +3,8 @@ import { UserStore } from "@stores";
 
 export const MainPage = () => {
   const USER = UserStore.getState();
-  return `
-  <div class="bg-gray-100 min-h-screen flex justify-center">
+
+  const template = `<div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
       
       ${Header(USER.isLogin)}
@@ -98,9 +98,16 @@ export const MainPage = () => {
           </div>
         </div>
       </main>
-
       ${Footer()}
     </div>
   </div>
 `;
+
+  const render = () => {
+    document.getElementById("root").innerHTML = template;
+  };
+
+  return {
+    render,
+  };
 };

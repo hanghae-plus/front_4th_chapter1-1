@@ -31,13 +31,17 @@ function createRouter(options = {}) {
     if (!routes[path]) {
       history.replaceState(null, "", ROUTES.ERROR);
       const rootElement = document.getElementById("root");
-      rootElement.innerHTML = NotFoundPage();
+      const notFoundPage = NotFoundPage();
+      notFoundPage.render(rootElement);
       return;
     }
     const protectedPath = protectRoute(path);
     const page = routes[protectedPath];
-    const rootElement = document.getElementById("root");
-    rootElement.innerHTML = page();
+    // 페이지 컴포넌트 생성하고 render 메서드 호출
+    const pageInstance = page();
+    if (typeof pageInstance.render === "function") {
+      pageInstance.render();
+    }
   }
 
   // 페이지 이동
