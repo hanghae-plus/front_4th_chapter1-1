@@ -71,6 +71,28 @@
 
 <!-- 과제에 대한 회고를 작성해주세요 -->
 
+1. 첫 문제 : 히스토리 API 로 페이지 랜더링을 실시한다
+path 별로 반응하는 addRoute 이벤트에 모듈화한 페이지를 할당 한다
+그런데 첫 페이지 랜더링 하는 상황에 문제가 발생했다
+
+여러 해결 방법을 탐색 중이다..
+
+콘솔을 찍어보니 navigateTo 와 handlePopState 부터 콘솔이 찍히지 않는다 왜일까?
+두 함수가 선언되는 시점을 살펴보니,
+
+navigateTo 함수는 수동으로 혹은 이벤트를 통한 능동적으로 path가 수정되었을 경우에 호출되고
+handlePopState 함수는 popState 가 호출하는 흐름인데 즉 뒤로가기 앞으로 가기 때에 호출 되는 함수라고 볼 수 있다다
+
+결론 : 채택한 해결방안은, router.addRoute 에 각 path 를 추가한 후에 router.navigationTo 로 window.location.pathname 를 넘겨주는 방식이다
+
+2. 두 문제 : 각 탭을 눌러서 이벤트를 호출했을 경우에 이미 클릭 된 이벤트가 다시 호출 될 필요는 없다고 생각하여
+
+```javascript
+if (e.target.pathname !== window.location.pathname) router.navigateTo(e.target.pathname);
+```
+
+로 단일화 처리 해주었다
+
 ### 기술적 성장
 <!-- 예시
 - 새로 학습한 개념
