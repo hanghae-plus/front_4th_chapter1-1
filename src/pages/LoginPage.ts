@@ -1,8 +1,34 @@
-const LoginPage = () => `
+import { useRouter } from "../main";
+
+const setupLoginPage = () => {
+  const form = document.getElementById("login-form");
+  if (form) {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      handleLogin(form);
+    });
+  }
+};
+
+const handleLogin = (form: HTMLElement) => {
+  const router = useRouter();
+  const email = (form.querySelector('input[type="text"]') as HTMLInputElement)
+    ?.value;
+  const password = (
+    form.querySelector('input[type="password"]') as HTMLInputElement
+  )?.value;
+
+  localStorage.setItem("user", JSON.stringify({ email, password }));
+
+  router.navigate("/");
+};
+
+const LoginPage = () => {
+  return /* html */ `
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
-      <form>
+      <form id="login-form">
         <div class="mb-4">
           <input type="text" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
         </div>
@@ -21,5 +47,6 @@ const LoginPage = () => `
     </div>
   </main>
 `;
+};
 
-export default LoginPage;
+export { LoginPage, setupLoginPage };
