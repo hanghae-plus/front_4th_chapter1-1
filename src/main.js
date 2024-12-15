@@ -23,6 +23,7 @@ const renderProfilePage = () => {
     },
     () => {
       document.body.innerHTML = LoginPage();
+      route.navigate("/login");
     },
   );
 };
@@ -43,6 +44,12 @@ document.body.addEventListener("click", (event) => {
     event.preventDefault();
     const path = target.getAttribute("href");
 
+    if (path === "#") {
+      auth.logOut();
+      route.navigate("/");
+      return;
+    }
+
     if (path) {
       route.navigate(path);
     }
@@ -52,22 +59,19 @@ document.body.addEventListener("click", (event) => {
 // 전역 submit 이벤트 리스너 추가
 document.body.addEventListener("submit", (event) => {
   event.preventDefault();
-
   const form = event.target;
-  const id = event.submitter.id;
+  const formData = new FormData(form);
+  const { id } = form;
+
+  console.log(id);
   if (id === "login-form") {
-    loginHandler(form);
+    loginHandler(formData);
   }
 });
 
-function loginHandler(form) {
-  const idInput = form.querySelector("input[type='text']");
-  const passwordInput = form.querySelector("input[type='password']");
+function loginHandler(formData) {
+  const username = formData.get("username");
 
-  const id = idInput.value;
-  const password = passwordInput.value;
-
-  const info = { id: id, password: password };
-  auth.login(info);
-  route.navigate("/");
+  auth.login({ username, email: "", bio: "" });
+  route.navigate("/profile");
 }

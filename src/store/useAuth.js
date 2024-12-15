@@ -1,25 +1,24 @@
 export class useAuth {
   login(auth) {
-    localStorage.setItem("auth", JSON.stringify(auth));
-    this.getAuth();
+    localStorage.setItem("user", JSON.stringify(auth));
   }
 
   getAuth() {
-    const info = JSON.parse(localStorage.getItem("auth"));
+    const info = JSON.parse(localStorage.getItem("user"));
     if (!info) {
       return null;
     }
 
-    const { id, password } = info;
+    const { username, email, bio } = info;
 
-    return { id, password };
+    return { username, email, bio };
   }
 
   isLogin() {
     const auth = this.getAuth();
-    return auth && auth.id && auth.password ? true : false;
+    return auth && auth.username ? true : false;
   }
   logOut() {
-    localStorage.removeItem("auth");
+    localStorage.removeItem("user");
   }
 }
