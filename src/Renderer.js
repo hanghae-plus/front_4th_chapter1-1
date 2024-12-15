@@ -32,8 +32,6 @@ export const Renderer = {
     });
   },
   onHashChange: (callback) => {
-    window.onhashchange = () => {
-      callback();
-    };
+    window.addEventListener("hashchange", () => callback());
   },
 };
