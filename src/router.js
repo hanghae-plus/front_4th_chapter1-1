@@ -1,5 +1,5 @@
 import { ErrorPage } from "./pages/ErrorPage";
-import { LoginPage } from "./pages/LoginPage";
+import { addUserInfo, checkUserInfo, LoginPage } from "./pages/LoginPage";
 import { MainPage } from "./pages/MainPage";
 import { ProfilePage } from "./pages/ProfilePage";
 
@@ -41,7 +41,11 @@ const router = () => {
   //     return;
   //   }
 
-  app.innerHTML = render;
+  app.innerHTML = render; //렌더링이 되고나서
+
+  if (path === "/login") {
+    addUserInfo(); //해당 함수 실행
+  }
 };
 
 const navigate = (event) => {
@@ -62,6 +66,36 @@ const navigate = (event) => {
 
 const initRouter = () => {
   window.addEventListener("popstate", router); //뒤로가기, 앞으로가기
+
+  const isValidLoggedIn = checkUserInfo();
+
+  const currentPath = window.location.pathname;
+
+  // console.log(window.history);
+  //   if (isValidLoggedIn && !window.history.state) {
+  //     console.log(window.history);
+  //     window.history.pushState({}, "", "/"); //로그인이 되어있으면 바로 홈으로 리다이렉트
+  //   } else {
+  //     window.history.pushState({}, "", "/login"); //처음에 로그인 페이지로 이동
+  //   }
+
+  //   if (!window.history.state) {
+  //     if (isValidLoggedIn) {
+  //       window.history.replaceState({ isLoggedIn: true }, "", "/"); // 홈 페이지로 이동
+  //     }
+  //   } else {
+  //     window.history.replaceState({ isLoggedIn: false }, "", "/login"); // 홈 페이지로 이동
+  //   }
+
+  //   if (isValidLoggedIn && currentPath !== "/") {
+  //     //기타 다른 페이지는 허용해야 함
+  //     // window.history.replaceState({ isLoggedIn: true }, "", "/");
+  //   } else if (!isValidLoggedIn && currentPath !== "/login") {
+
+  //   }
+
+  if (!isValidLoggedIn && currentPath !== "/login")
+    window.history.replaceState({ isLoggedIn: false }, "", "/login");
 
   document.addEventListener("click", (event) => {
     console.log("event", event.target);
