@@ -55,22 +55,28 @@ function submitEventHandler(e) {
   const { id } = form;
 
   if (id === "login-form") {
-    const username = formData.get("username");
-
-    if (username) {
-      new UserStore().setUser({ username, email: "", bio: "" });
-      router("/profile");
-    }
+    login(formData);
   }
 
   if (id === "profile-form") {
-    const username = formData.get("username");
-    const email = formData.get("email");
-    const bio = formData.get("bio");
+    updateProfile(formData);
+  }
+}
 
-    new UserStore().setUser({ username, email, bio });
+function login(formData) {
+  const username = formData.get("username");
+  if (username) {
+    new UserStore().setUser({ username, email: "", bio: "" });
     router("/profile");
   }
+}
+
+function updateProfile(formData) {
+  const username = formData.get("username");
+  const email = formData.get("email");
+  const bio = formData.get("bio");
+  new UserStore().setUser({ username, email, bio });
+  router("/profile");
 }
 
 function clickEventHandler(e) {
