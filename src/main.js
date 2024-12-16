@@ -26,7 +26,6 @@ const render = () => {
     document.body.innerHTML = router("/login");
     return;
   }
-
   document.body.innerHTML = router(path);
 };
 
