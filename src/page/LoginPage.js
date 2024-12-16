@@ -1,20 +1,21 @@
+import router from "../router/Router";
+
 class LoginPage {
   constructor() {
     this.root = document.querySelector("#root");
-    this.render();
-    this.attachEventListeners();
   }
+
   render() {
     this.root.innerHTML = `
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
-      <form >
+      <form id="login-form">
         <div class="mb-4">
-          <input name="id" type="text" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
+          <input id="username" name="username" type="text" placeholder="사용자 이름" class="w-full p-2 border rounded">
         </div>
         <div class="mb-6">
-          <input name="password" type="password" placeholder="비밀번호" class="w-full p-2 border rounded">
+          <input id="password" name="password" type="password" placeholder="비밀번호" class="w-full p-2 border rounded">
         </div>
         <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</button>
       </form>
@@ -28,17 +29,26 @@ class LoginPage {
     </div>
   </main>
 `;
+
+    this.attachEventListeners();
   }
 
   attachEventListeners() {
-    document.addEventListener("submit", (e) => {
+    document.querySelector("#login-form").addEventListener("submit", (e) => {
       e.preventDefault();
 
-      const id = e.target.id.value;
-      const password = e.target.password.value;
+      const username = document.querySelector("#username").value;
 
-      if (id && password) {
-        localStorage.setItem("id", id);
+      if (username) {
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            username: username,
+            email: "",
+            bio: "",
+          }),
+        );
+        router.navigateTo("/profile");
       }
     });
   }
