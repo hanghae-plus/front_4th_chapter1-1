@@ -2,10 +2,12 @@ import { Footer } from "../widgets/Footer";
 import { Header } from "../widgets/Header";
 
 export const MainPage = () => {
-  const MainPage = `
+  const { view: headerView, init: initHeader } = Header();
+
+  const view = `
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
-       ${Header()}
+       ${headerView}
         <main class="p-4">
           <div class="mb-4 bg-white rounded-lg shadow p-4">
             <textarea class="w-full p-2 border rounded" placeholder="무슨 생각을 하고 계신가요?"></textarea>
@@ -100,5 +102,9 @@ export const MainPage = () => {
     </div>
   `;
 
-  return MainPage;
+  const init = () => {
+    initHeader();
+  };
+
+  return { view, init };
 };
