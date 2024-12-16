@@ -4,21 +4,6 @@ import { Footer } from "../components/Footer";
 export const ProfilePage = () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
-  document.addEventListener("submit", (e) => {
-    if (e.target.id === "profile-form") {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const username = formData.get("username") || user.username;
-      const email = formData.get("email") || user.email;
-      const bio = formData.get("bio") || user.bio;
-
-      localStorage.setItem("user", JSON.stringify({ username, email, bio }));
-
-      window.history.pushState({}, "", "/profile");
-      window.dispatchEvent(new PopStateEvent("popstate"));
-    }
-  });
-
   return `          
   <div id="root">
     <div class="bg-gray-100 min-h-screen flex justify-center">

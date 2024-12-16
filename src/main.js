@@ -1,4 +1,4 @@
-import Router from "./router/router";
+import { createRouter } from "./router/router";
 
 const root = document.getElementById("root");
-new Router(root);
+createRouter(root);

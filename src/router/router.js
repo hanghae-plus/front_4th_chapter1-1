@@ -10,45 +10,78 @@ const routes = {
   "/error": ErrorPage,
 };
 
-class Router {
-  constructor(root) {
-    this.root = root;
-    this.init();
-  }
-
-  init() {
-    window.addEventListener("popstate", () => this.handleRoute());
-    document.addEventListener("click", (e) => {
-      if (e.target.matches("[data-link]")) {
-        e.preventDefault();
-        this.navigate(e.target.getAttribute("href"));
-      }
-    });
-    this.handleRoute();
-  }
-
-  handleRoute() {
+export const createRouter = (root) => {
+  const handleRoute = () => {
     const path = window.location.pathname;
 
-    // 라우트 가드
     if (path === "/profile" && !localStorage.getItem("user")) {
-      this.navigate("/login");
+      navigate("/login");
       return;
     }
 
     if (path === "/login" && localStorage.getItem("user")) {
-      this.navigate("/");
+      navigate("/");
       return;
     }
 
     const page = routes[path] || ErrorPage;
-    this.root.innerHTML = page();
-  }
+    root.innerHTML = page();
+  };
 
-  navigate(path) {
+  const navigate = (path) => {
     window.history.pushState({}, "", path);
-    this.handleRoute();
-  }
-}
+    handleRoute();
+  };
 
-export default Router;
+  // 전역 이벤트 리스너 등록
+  document.addEventListener("click", (e) => {
+    if (e.target.id === "logout") {
+      e.preventDefault();
+      localStorage.removeItem("user");
+      navigate("/login");
+      return;
+    }
+
+    if (e.target.matches("[data-link]")) {
+      e.preventDefault();
+      navigate(e.target.getAttribute("href"));
+    }
+  });
+
+  document.addEventListener("submit", (e) => {
+    if (e.target.id === "profile-form") {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const updatedUser = {
+        username: formData.get("username") || user.username,
+        email: formData.get("email") || user.email,
+        bio: formData.get("bio") || user.bio,
+      };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      navigate("/profile");
+    }
+
+    if (e.target.id === "login-form") {
+      e.preventDefault();
+      const username = e.target.querySelector("#username").value;
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          username,
+          email: "",
+          bio: "",
+        }),
+      );
+      navigate("/");
+    }
+  });
+
+  window.addEventListener("popstate", handleRoute);
+  handleRoute();
+
+  return {
+    navigate,
+    handleRoute,
+  };
+};
