@@ -234,11 +234,25 @@ const ProfilePage = () => `
 const state = {
   isLoggedIn: JSON.parse(localStorage.getItem("isLoggedIn")) || false,
   userData: JSON.parse(localStorage.getItem("userData")) || {
-    username: "",
-    email: "",
-    bio: "",
+    username: "testuser",
+    email: "test@email.com",
+    bio: "test",
   },
 };
+
+if (!localStorage.getItem("isLoggedIn")) {
+  localStorage.setItem("isLoggedIn", JSON.stringify(true));
+}
+if (!localStorage.getItem("userData")) {
+  localStorage.setItem(
+    "userdata",
+    JSON.stringify({
+      username: "testuser",
+      email: "test@email.com",
+      bio: "test",
+    }),
+  );
+}
 
 const updateLogin = (isLoggedIn) => {
   state.isLoggedIn = isLoggedIn;
