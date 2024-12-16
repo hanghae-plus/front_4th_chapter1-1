@@ -243,22 +243,19 @@ const state = {
 
 const renderNav = () => {
   const nav = document.querySelector("nav ul");
-  if (!nav) {
-    console.log("nav element not found");
-    return;
-  }
-
-  if (state.isLoggedIn) {
-    nav.innerHTML = `
-      <li><a href="/" class="text-gray-600">홈</a></li>
-      <li><a href="/profile" class="text-blue-600">프로필</a></li>
-      <li><a href="/login" id="logoutBtn" class="text-gray-600">로그아웃</a></li>
-    `;
-  } else {
-    nav.innerHTML = `
-      <li><a href="/" class="text-gray-600">홈</a></li>
-      <li><a href="/login" class="text-gray-600">로그인</a></li>
-    `;
+  if (nav) {
+    if (state.isLoggedIn) {
+      nav.innerHTML = `
+        <li><a href="/" class="text-gray-600">홈</a></li>
+        <li><a href="/profile" class="text-blue-600">프로필</a></li>
+        <li><a href="/login" id="logoutBtn" class="text-gray-600">로그아웃</a></li>
+      `;
+    } else {
+      nav.innerHTML = `
+        <li><a href="/" class="text-gray-600">홈</a></li>
+        <li><a href="/login" class="text-gray-600">로그인</a></li>
+      `;
+    }
   }
 
   const logoutBtn = document.querySelector("#logoutBtn");
