@@ -257,8 +257,12 @@ const navigation = (path) => {
 const saveProfile = (userData) => {
   state.userData = { ...state.userData, ...userData };
   localStorage.setItem("userData", JSON.stringify(state.userData));
+
+  const { username, email, bio } = state.userData;
+  document.querySelector("#username").value = username;
+  document.querySelector("#email").value = email;
+  document.querySelector("#bio").value = bio;
   console.log("Updated userData:", state.userData);
-  renderPage(window.location.pathname);
   alert("프로필이 업데이트되었습니다.");
 };
 
@@ -274,11 +278,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const updateProfile = document.querySelector("#profileForm");
   if (updateProfile) {
-    const { username, email, bio } = state.userData;
-    document.querySelector("#username").value = username || "";
-    document.querySelector("#email").value = email || "";
-    document.querySelector("#bio").value = bio || "";
-
     updateProfile.addEventListener("submit", (e) => {
       e.preventDefault();
       const username = document.querySelector("#username").value;
