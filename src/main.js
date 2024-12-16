@@ -9,10 +9,16 @@ const routes = {
   "/profile": () => renderProfilePage(),
 };
 
-const router = (path = window.location.hash.slice(1) || "/") => {
+const router = (path = window.location.pathname || "/") => {
+  const isLogin = !!localStorage.getItem("user");
   const route = routes[path];
 
   if (route) {
+    if (path === "/profile" && !isLogin) {
+      history.pushState(null, "", "/login");
+      return router("/login");
+    }
+
     history.pushState(null, "", path);
     route();
   } else {
@@ -29,6 +35,20 @@ const renderMainPage = () => {
 
 const renderLoginPage = () => {
   document.body.innerHTML = `${LoginPage()}`;
+
+  const loginForm = document.querySelector("#login-form");
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const username = form[0].value;
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify({ username, email: "", bio: "" }),
+    );
+
+    router("/");
+  });
 };
 
 const renderProfilePage = () => {
@@ -47,6 +67,7 @@ function clickEventHandler(e) {
     let path = href.slice(href.lastIndexOf("/"));
 
     if (id === "logout") {
+      localStorage.removeItem("user");
       path = "/login";
     }
 
@@ -54,6 +75,12 @@ function clickEventHandler(e) {
   }
 }
 
-window.addEventListener("load", () => router());
-window.addEventListener("hashchange", () => router());
-window.addEventListener("popstate", () => router());
+window.addEventListener("load", () => {
+  const initialPath = window.location.pathname;
+  router(initialPath);
+});
+
+window.addEventListener("popstate", () => {
+  const currentPath = window.location.pathname;
+  router(currentPath);
+});

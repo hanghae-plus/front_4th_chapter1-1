@@ -1,11 +1,14 @@
 const Header = () => {
   const pathname = window.location.pathname;
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  const navList = [
-    { text: "홈", href: "/", id: "home" },
-    { text: "프로필", href: "/profile", id: "profile" },
-    { text: "로그아웃", href: "#", id: "logout" },
-  ];
+  const navList = [{ text: "홈", href: "/", id: "home" }];
+  if (user) {
+    navList.push({ text: "프로필", href: "/profile", id: "profile" });
+    navList.push({ text: "로그아웃", href: "#", id: "logout" });
+  } else {
+    navList.push({ text: "로그인", href: "/login", id: "login" });
+  }
 
   return `
   <header class="bg-blue-600 text-white p-4 sticky top-0">
