@@ -9,20 +9,20 @@ const route = new Router();
 const auth = new useAuth();
 
 const renderLoginPage = () => {
-  document.body.innerHTML = LoginPage();
+  document.getElementById("root").innerHTML = LoginPage();
 };
 
 const renderHomePage = () => {
-  document.body.innerHTML = HomePage();
+  document.getElementById("root").innerHTML = HomePage();
 };
 
 const renderProfilePage = () => {
   authGuard(
     () => {
-      document.body.innerHTML = ProfilePage();
+      document.getElementById("root").innerHTML = ProfilePage();
     },
     () => {
-      document.body.innerHTML = LoginPage();
+      document.getElementById("root").innerHTML = LoginPage();
       route.navigate("/login");
     },
   );
@@ -46,7 +46,7 @@ document.body.addEventListener("click", (event) => {
 
     if (path === "#") {
       auth.logOut();
-      route.navigate("/");
+      route.navigate("/login");
       return;
     }
 

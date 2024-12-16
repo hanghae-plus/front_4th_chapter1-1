@@ -26,7 +26,7 @@ export class Router {
     if (render) {
       render();
     } else {
-      document.body.innerHTML = NotFoundPage();
+      document.getElementById("root").innerHTML = NotFoundPage();
     }
   }
 

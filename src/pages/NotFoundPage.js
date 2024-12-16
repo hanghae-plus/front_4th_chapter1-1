@@ -1,1 +1,3 @@
-export const NotFoundPage = () => `<span>404</span>`;
+import { NotFound } from "../components/NotFound";
+
+export const NotFoundPage = () => `${NotFound()}`;
