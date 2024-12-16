@@ -3,7 +3,7 @@ import { useAuth } from "../store/useAuth";
 export const Header = () => {
   const auth = new useAuth();
   const currentPath = location.pathname;
-  const activeMenu = "text-blue-600";
+  const activeMenu = "text-blue-600 font-bold";
   const inActiveMenu = "text-gray-600";
 
   const isActive = (path) => {
@@ -16,7 +16,7 @@ export const Header = () => {
 
       <nav class="bg-white shadow-md p-2 sticky top-14">
         <ul class="flex justify-around">
-          <li><a href="/" class=${isActive("/")}>홈</a></li>
+          <li><a href="/" class="${isActive("/")}">홈</a></li>
           <li><a href="/profile" class=${isActive("/profile")}>프로필</a></li>
           ${
             auth.isLogin()

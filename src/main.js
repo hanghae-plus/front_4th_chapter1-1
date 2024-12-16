@@ -10,6 +10,15 @@ const auth = new useAuth();
 
 const renderLoginPage = () => {
   document.getElementById("root").innerHTML = LoginPage();
+  authGuard(
+    () => {
+      document.getElementById("root").innerHTML = HomePage();
+      route.navigate("/");
+    },
+    () => {
+      document.getElementById("root").innerHTML = LoginPage();
+    },
+  );
 };
 
 const renderHomePage = () => {
