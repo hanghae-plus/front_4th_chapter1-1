@@ -8,7 +8,7 @@ type Router = {
 
 const createBaseRouter = (
   container: HTMLElement,
-  getPath: () => string,
+  getCurrentPath: () => string,
   updatePath: (path: string) => void,
 ): Router => {
   const checkAuth = (pathname: string) => {
@@ -37,7 +37,7 @@ const createBaseRouter = (
   };
 
   const init = () => {
-    render(getPath());
+    render(getCurrentPath());
 
     document.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
@@ -77,21 +77,25 @@ const createRouter = (container: HTMLElement): Router => {
 
   const config = isHashRouter
     ? {
-        getPath: () => window.location.hash,
+        getCurrentPath: () => window.location.hash,
         updatePath: (pathname: string) => (window.location.hash = pathname),
         event: "hashchange",
       }
     : {
-        getPath: () => window.location.pathname,
+        getCurrentPath: () => window.location.pathname,
         updatePath: (pathname: string) =>
           window.history.pushState({}, "", pathname),
         event: "popstate",
       };
 
-  const router = createBaseRouter(container, config.getPath, config.updatePath);
+  const router = createBaseRouter(
+    container,
+    config.getCurrentPath,
+    config.updatePath,
+  );
 
   window.addEventListener(config.event, () => {
-    router.render(config.getPath());
+    router.render(config.getCurrentPath());
   });
 
   return router;
