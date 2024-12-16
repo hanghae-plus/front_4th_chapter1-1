@@ -9,7 +9,7 @@ const MainPage = () => `
         <ul class="flex justify-around">
           <li><a href="/" class="text-blue-600">홈</a></li>
           <li><a href="/profile" class="text-gray-600">프로필</a></li>
-          <li><a href="#" class="text-gray-600">로그아웃</a></li>
+          <li><a href="/login" id="loginBtn" class="text-gray-600">로그인</a></li>
         </ul>
       </nav>
 
@@ -137,7 +137,7 @@ const LoginPage = () => `
         <div class="mb-6">
           <input type="password" placeholder="비밀번호" class="w-full p-2 border rounded">
         </div>
-        <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</button>
+        <button type="submit" id="loginConfirm" class="w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</button>
       </form>
       <div class="mt-4 text-center">
         <a href="#" class="text-blue-600 text-sm">비밀번호를 잊으셨나요?</a>
@@ -162,7 +162,7 @@ const ProfilePage = () => `
           <ul class="flex justify-around">
             <li><a href="/" class="text-gray-600">홈</a></li>
             <li><a href="/profile" class="text-blue-600">프로필</a></li>
-            <li><a href="#" class="text-gray-600">로그아웃</a></li>
+            <li><a href="/login" id="logoutBtn" class="text-gray-600">로그아웃</a></li>
           </ul>
         </nav>
 
@@ -171,7 +171,7 @@ const ProfilePage = () => `
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
               내 프로필
             </h2>
-            <form>
+            <form id="profileForm">
               <div class="mb-4">
                 <label
                   for="username"
@@ -196,7 +196,7 @@ const ProfilePage = () => `
                   type="email"
                   id="email"
                   name="email"
-                  value="hong@example.com"
+                  value=""
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -212,8 +212,7 @@ const ProfilePage = () => `
                   rows="4"
                   class="w-full p-2 border rounded"
                 >
-안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.</textarea
-                >
+                </textarea>
               </div>
               <button
                 type="submit"
@@ -233,6 +232,131 @@ const ProfilePage = () => `
   </div>
 `;
 
-document.body.innerHTML = `
-  ${MainPage()}
-`;
+const state = {
+  isLoggedIn: JSON.parse(localStorage.getItem("isLoggedIn")) || false,
+  userData: JSON.parse(localStorage.getItem("userData")) || {
+    username: "",
+    email: "",
+    bio: "",
+  },
+};
+
+const renderNav = () => {
+  const nav = document.querySelector("nav ul");
+  if (!nav) {
+    console.log("nav element not found");
+    return;
+  }
+
+  if (state.isLoggedIn) {
+    nav.innerHTML = `
+      <li><a href="/" class="text-gray-600">홈</a></li>
+      <li><a href="/profile" class="text-blue-600">프로필</a></li>
+      <li><a href="/login" id="logoutBtn" class="text-gray-600">로그아웃</a></li>
+    `;
+  } else {
+    nav.innerHTML = `
+      <li><a href="/" class="text-gray-600">홈</a></li>
+      <li><a href="/login" class="text-gray-600">로그인</a></li>
+    `;
+  }
+
+  const logoutBtn = document.querySelector("#logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      updateLogin(false);
+      navigation("/login");
+    });
+  }
+};
+
+const updateLogin = (isLoggedIn) => {
+  state.isLoggedIn = isLoggedIn;
+  localStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn));
+  renderNav();
+};
+
+const saveProfile = (userData) => {
+  state.userData = userData;
+  localStorage.setItem("userData", JSON.stringify(userData));
+};
+
+// eventListener
+const pageEventListeners = () => {
+  document.body.addEventListener("click", (e) => {
+    if (e.target.tagName === "A" && e.target.getAttribute("href")) {
+      e.preventDefault();
+      const path = e.target.getAttribute("href");
+      if (path === "/login" && !state.isLoggedIn) {
+        updateLogin(false);
+        navigation("/login");
+      } else {
+        navigation(path);
+      }
+    }
+  });
+
+  const loginBtn = document.querySelector("#loginBtn");
+  if (loginBtn) {
+    loginBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      navigation("/login");
+    });
+  }
+
+  const loginConfirm = document.querySelector("#loginConfirm");
+  if (loginConfirm) {
+    loginConfirm.addEventListener("click", (e) => {
+      e.preventDefault();
+      updateLogin(true);
+      navigation("/profile");
+    });
+  }
+
+  // profile update
+  const updateProfile = document.querySelector("#profileForm");
+  if (updateProfile) {
+    updateProfile.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const username = document.querySelector("#username").value;
+      const email = document.querySelector("#email").value;
+      const bio = document.querySelector("#bio").value;
+
+      saveProfile({ username, email, bio });
+      alert("프로필이 업데이트되었습니다.");
+    });
+
+    document.querySelector("#username").value = state.userData.username;
+    document.querySelector("#email").value = state.userData.email;
+    document.querySelector("#bio").value = state.userData.bio;
+  }
+};
+
+const navigation = (path) => {
+  window.history.pushState({}, path, window.location.origin + path);
+  renderPage(path);
+  renderNav();
+};
+
+// go back
+window.addEventListener("popstate", () => {
+  renderPage(window.location.pathname);
+});
+
+const routes = {
+  "/": MainPage,
+  "/login": LoginPage,
+  "/profile": ProfilePage,
+  "/404": ErrorPage,
+};
+
+const renderPage = (path) => {
+  const page = routes[path] || routes["/404"];
+  document.body.innerHTML = page();
+
+  renderNav();
+  pageEventListeners();
+};
+
+renderPage(window.location.pathname);
