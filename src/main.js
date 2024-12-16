@@ -1,18 +1,34 @@
-import { Router } from "./shared/router";
-
 import { Error404Page } from "./pages/404";
-import { HomePage } from "./pages/home";
+import { HomePage } from "./pages/home/home-page";
 import { LoginPage } from "./pages/login";
 import { ProfilePage } from "./pages/profile";
 
-const render = () => {
-  document.getElementById("root").innerHTML = `
-  ${Router.pathname === "/" ? HomePage() : ""}
-  ${Router.pathname === "/login" ? LoginPage() : ""}
-  ${Router.pathname === "/profile" ? ProfilePage() : ""}
-  ${Router.pathname === "/404" ? Error404Page() : ""}`;
+function createRouter(routes) {
+  return (path) => {
+    const route = routes[path] || routes["404"];
+    return route();
+  };
+}
 
-  Router.init();
+const routes = {
+  "/": () => HomePage(),
+  "/profile": () => ProfilePage(),
+  "/login": () => LoginPage(),
+  404: () => Error404Page(),
 };
 
-render();
+const router = createRouter(routes);
+
+const render = () => {
+  const path = window.location.pathname;
+  const user = localStorage.getItem("user");
+  if (!user && path === "/profile") {
+    document.body.innerHTML = router("/login");
+    return;
+  }
+
+  document.body.innerHTML = router(path);
+};
+
+window.addEventListener("popstate", render);
+window.addEventListener("load", render);
