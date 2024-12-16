@@ -1,17 +1,24 @@
-import { Main } from "./main.js";
-import { LoginPage } from "./pages/loginPage.js";
+import { MainPage } from "./pages/mainPage.js";
+import { attachLoginHandler, LoginPage } from "./pages/loginPage.js";
 import { ProfilePage } from "./pages/profilePage.js";
 import { ErrorPage } from "./pages/errorPage.js";
 
-document.body.innerHTML = Main();
-
 const routes = {
-  "/": () => Main(),
+  "/": () => MainPage(),
   "/login": () => LoginPage(),
   "/profile": () => ProfilePage(),
 };
 
-// 라우터 함수
+const routeHandlers = () => {
+  document.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const href = link.getAttribute("href");
+      navigateTo(href);
+    });
+  });
+};
+
 const router = () => {
   const path = window.location.pathname;
   const route = routes[path];
@@ -20,21 +27,17 @@ const router = () => {
   } else {
     document.body.innerHTML = ErrorPage();
   }
+
+  if (path === "/login") {
+    attachLoginHandler();
+  }
   routeHandlers();
 };
 
-window.addEventListener("hashchange", router);
-window.addEventListener("load", router);
-
-const routeHandlers = () => {
-  document.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      const href = link.getAttribute("href");
-      window.history.pushState(null, null, href);
-      router();
-    });
-  });
+export const navigateTo = (path) => {
+  window.history.pushState(null, null, path);
+  router();
 };
 
-routeHandlers();
+window.addEventListener("popstate", router);
+window.addEventListener("load", router);
