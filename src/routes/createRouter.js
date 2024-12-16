@@ -9,6 +9,7 @@ export class CreateRouter {
     this.popstateListener();
     this.linkEventListeners();
     this.navigate(window.location.pathname);
+    Object.values(this.routes).forEach((route) => route.setRouter(this));
   }
 
   navigate(currentPath) {
@@ -19,10 +20,12 @@ export class CreateRouter {
       const userInfo = JSON.parse(localStorage.getItem("user"));
       if (!userInfo) {
         this.redirectionToLogin();
+        this.pushHistoryState(path.LOGIN);
         return this.routes[path.LOGIN].render();
       }
     }
 
+    this.pushHistoryState(currentPath);
     return template.render();
   }
 
@@ -51,5 +54,9 @@ export class CreateRouter {
       window.location.origin + path.LOGIN,
     );
     this.navigate(path.LOGIN);
+  }
+
+  pushHistoryState(path) {
+    window.history.pushState({}, path, window.location.origin + path);
   }
 }

@@ -2,6 +2,7 @@ import { Header } from "../components/Header.js";
 import { Footer } from "../components/Footer.js";
 import { Component } from "../utils/component.js";
 import { path } from "../utils/const/path.js";
+import { userStore } from "../store/user/userStore.js";
 
 class MainPage extends Component {
   constructor() {
@@ -9,7 +10,7 @@ class MainPage extends Component {
   }
 
   render() {
-    document.getElementById("root").innerHTML = MainTemplate();
+    document.getElementById("root").innerHTML = MainTemplate(this.isLogin());
 
     this.logoutEventListener();
   }
@@ -21,9 +22,13 @@ class MainPage extends Component {
       this.router.navigate(path.LOGIN);
     });
   }
+
+  isLogin() {
+    return userStore.getState() !== null;
+  }
 }
 
-const MainTemplate = () => `
+const MainTemplate = (isLogin) => `
   <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
       ${Header()}
@@ -31,8 +36,12 @@ const MainTemplate = () => `
       <nav class="bg-white shadow-md p-2 sticky top-14">
         <ul class="flex justify-around">
           <li><a href="/" class="text-blue-600">홈</a></li>
-          <li><a href="/profile" class="text-gray-600">프로필</a></li>
-          <li><button id="logout"  class="text-gray-600">로그아웃</button></li>
+          ${
+            isLogin
+              ? `<li><a href="/profile" class="text-gray-600">프로필</a></li>
+<li><button id="logout"  class="text-gray-600">로그아웃</button></li>`
+              : `<li><button id="logout"  class="text-gray-600">로그인</button></li>`
+          }
         </ul>
       </nav>
 
