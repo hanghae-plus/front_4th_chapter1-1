@@ -46,18 +46,10 @@ function createRouter() {
 function initializeView(route) {
   const root = document.getElementById("root");
   render(route, root);
-  attachEventListeners(root);
 }
 
 function render(route, root) {
   root.innerHTML = route();
-}
-
-function attachEventListeners(root) {
-  const cloneRoot = root.cloneNode(true);
-  cloneRoot.addEventListener("submit", submitEventHandler);
-  cloneRoot.addEventListener("click", clickEventHandler);
-  root.replaceWith(cloneRoot);
 }
 
 function submitEventHandler(e) {
@@ -100,6 +92,8 @@ function clickEventHandler(e) {
   }
 }
 
+document.body.addEventListener("submit", submitEventHandler);
+document.body.addEventListener("click", clickEventHandler);
 window.addEventListener("popstate", () => router());
 window.addEventListener("load", () => router());
 window.addEventListener("hashchange", () => router());
