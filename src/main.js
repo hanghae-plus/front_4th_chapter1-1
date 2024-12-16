@@ -23,14 +23,21 @@ function createRouter(routes) {
       window.history.pushState(null, "", hash);
     }
 
-    render(route);
+    initializeView(route);
   };
 }
 
-function render(route) {
+function initializeView(route) {
   const root = document.getElementById("root");
-  root.innerHTML = route();
+  render(route, render);
+  attachEventListeners(root);
+}
 
+function render(route, root) {
+  root.innerHTML = route();
+}
+
+function attachEventListeners(root) {
   const cloneRoot = root.cloneNode(true);
   cloneRoot.addEventListener("submit", submitEventHandler);
   cloneRoot.addEventListener("click", clickEventHandler);
