@@ -1,22 +1,22 @@
-import { Routes } from "../routes";
+import { ROUTES, Routes } from "../routes";
 
 const createRouter = (container: HTMLElement, routes: Routes) => {
   const checkAuth = (pathname: string) => {
     const route = routes[pathname];
     if (route?.isProtectedRoute && !localStorage.getItem("user")) {
-      navigate("/login");
-      return "/login";
+      navigate(ROUTES.LOGIN);
+      return ROUTES.LOGIN;
     }
-    if (pathname === "/login" && !!localStorage.getItem("user")) {
-      navigate("/");
-      return "/";
+    if (pathname === ROUTES.LOGIN && !!localStorage.getItem("user")) {
+      navigate(ROUTES.HOME);
+      return ROUTES.HOME;
     }
     return pathname;
   };
 
   const render = (pathname: string) => {
     const checkedPath = checkAuth(pathname);
-    const route = routes[checkedPath] || routes["*"];
+    const route = routes[checkedPath] || routes[ROUTES.NOT_FOUND];
     container.innerHTML = route.component();
     route.setUp && route.setUp();
   };
@@ -39,7 +39,7 @@ const createRouter = (container: HTMLElement, routes: Routes) => {
       const linkElement = target.closest("[data-link]");
       if (linkElement instanceof HTMLElement) {
         e.preventDefault();
-        const pathname = linkElement.getAttribute("href") || "/";
+        const pathname = linkElement.getAttribute("href") || ROUTES.HOME;
         navigate(pathname);
         return;
       }
@@ -48,7 +48,7 @@ const createRouter = (container: HTMLElement, routes: Routes) => {
       if (logoutButton) {
         e.preventDefault();
         localStorage.removeItem("user");
-        navigate("/login");
+        navigate(ROUTES.LOGIN);
         return;
       }
     });
