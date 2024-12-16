@@ -1,3 +1,8 @@
+export const PROFILE_FORM_ID = "profile-form";
+export const USER_NAME_INPUT = "username";
+export const EMAIL_INPUT = "email";
+export const BIO_TEXTAREA = "bio";
+
 export const Profile = () => {
   return `
         <main class="p-4">
@@ -5,7 +10,7 @@ export const Profile = () => {
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
               내 프로필
             </h2>
-            <form>
+            <form id="${PROFILE_FORM_ID}">
               <div class="mb-4">
                 <label
                   for="username"
@@ -14,9 +19,9 @@ export const Profile = () => {
                 >
                 <input
                   type="text"
-                  id="username"
-                  name="username"
-                  value="홍길동"
+                  id="${USER_NAME_INPUT}"
+                  name="${USER_NAME_INPUT}"
+                  value=""
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -28,9 +33,9 @@ export const Profile = () => {
                 >
                 <input
                   type="email"
-                  id="email"
-                  name="email"
-                  value="hong@example.com"
+                  id="${EMAIL_INPUT}"
+                  name="${EMAIL_INPUT}"
+                  value=""
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -41,12 +46,11 @@ export const Profile = () => {
                   >자기소개</label
                 >
                 <textarea
-                  id="bio"
-                  name="bio"
+                  id="${BIO_TEXTAREA}"
+                  name="${BIO_TEXTAREA}"
                   rows="4"
                   class="w-full p-2 border rounded"
-                >
-안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.</textarea
+                ></textarea
                 >
               </div>
               <button

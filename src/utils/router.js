@@ -1,6 +1,7 @@
 import { Home } from "../components/HomePage";
 import { Login } from "../components/LoginPage";
 import { Profile } from "../components/ProfilePage";
+import { customLogoutEvent } from "../main";
 import { generatePage } from "./functions";
 
 export const PATHNAME_COMPONENT_MAP = Object.freeze({
@@ -12,7 +13,15 @@ export const PATHNAME_COMPONENT_MAP = Object.freeze({
 export const router = () => {
   const handleReplace = (e) => {
     e.preventDefault();
-    history.pushState({}, "", e.target.href);
+    const href = e.target.href;
+
+    if (href.includes("#")) {
+      window.dispatchEvent(customLogoutEvent);
+
+      return;
+    }
+
+    history.pushState({}, "", href);
   };
 
   return {
