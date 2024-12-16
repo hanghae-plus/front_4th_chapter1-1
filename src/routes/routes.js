@@ -1,12 +1,12 @@
 import { path } from "../utils/const/path.js";
-import { MainPage } from "../pages/MainPage.js";
-import { ProfilePage } from "../pages/ProfilePage.js";
-import { LoginPage } from "../pages/LoginPage.js";
-import { NotFoundPage } from "../pages/NotFoundPage.js";
+import { mainPage } from "../pages/MainPage.js";
+import { profilePage } from "../pages/ProfilePage.js";
+import { loginPage } from "../pages/LoginPage.js";
+import { notFoundPage } from "../pages/NotFoundPage.js";
 
 export const routes = {
-  [path.MAIN]: MainPage,
-  [path.PROFILE]: ProfilePage,
-  [path.LOGIN]: LoginPage,
-  [path.NOT_FOUND]: NotFoundPage,
+  [path.MAIN]: mainPage,
+  [path.PROFILE]: profilePage,
+  [path.LOGIN]: loginPage,
+  [path.NOT_FOUND]: notFoundPage,
 };

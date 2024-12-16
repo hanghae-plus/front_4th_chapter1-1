@@ -1,5 +1,18 @@
-export const ProfilePage = () => `
-  <div id="root">
+import { Component } from "../utils/component.js";
+
+class ProfilePage extends Component {
+  constructor(template) {
+    super();
+
+    this.template = template;
+  }
+
+  render() {
+    document.getElementById("root").innerHTML = this.template();
+  }
+}
+
+export const ProfileTemplate = () => `
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
         <header class="bg-blue-600 text-white p-4 sticky top-0">
@@ -78,5 +91,6 @@ export const ProfilePage = () => `
         </footer>
       </div>
     </div>
-  </div>
 `;
+
+export const profilePage = new ProfilePage(ProfileTemplate);

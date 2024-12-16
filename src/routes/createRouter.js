@@ -12,19 +12,18 @@ export class CreateRouter {
   }
 
   navigate(currentPath) {
-    const handler = this.routes[currentPath] || this.routes.error;
+    const template = this.routes[currentPath] || this.routes.error;
 
     // 프로필로 이동 시 로그인 정보가 없을 때 로그인 페이지로 리다이렉트
     if (currentPath === path.PROFILE) {
       const userInfo = JSON.parse(localStorage.getItem("user"));
       if (!userInfo) {
         this.redirectionToLogin();
-        return (document.getElementById("root").innerHTML =
-          this.routes[path.LOGIN]());
+        return this.routes[path.LOGIN].render();
       }
     }
 
-    return (document.getElementById("root").innerHTML = handler());
+    return template.render();
   }
 
   linkEventListeners() {
