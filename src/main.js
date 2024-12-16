@@ -242,6 +242,101 @@ const state = {
   },
 };
 
+const updateLogin = (isLoggedIn) => {
+  state.isLoggedIn = isLoggedIn;
+  localStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn));
+  renderNav();
+};
+
+const navigation = (path) => {
+  window.history.pushState({}, "", path);
+  router();
+};
+
+// profile save / update
+const saveProfile = (userData) => {
+  try {
+    state.userData = { ...state.userData, ...userData };
+    localStorage.setItem("userData", JSON.stringify(state.userData));
+  } catch (e) {
+    console.error("Error saving to localStorage", e);
+  }
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const updateProfile = document.querySelector("#profileForm");
+  if (updateProfile) {
+    document.querySelector("#username").value = state.userData.username;
+    document.querySelector("#email").value = state.userData.email;
+    document.querySelector("#bio").value = state.userData.bio;
+
+    updateProfile.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const username = document.querySelector("#username").value;
+      const email = document.querySelector("#email").value;
+      const bio = document.querySelector("#bio").value.trim();
+
+      const profileData = { username, email, bio };
+
+      saveProfile(profileData);
+      alert("프로필이 업데이트되었습니다.");
+      router();
+      navigation("/profile");
+    });
+  }
+});
+
+// page eventListener
+const pageEventListeners = () => {
+  document.body.addEventListener("click", (e) => {
+    if (e.target.tagName === "A" && e.target.getAttribute("href")) {
+      e.preventDefault();
+      const path = e.target.getAttribute("href");
+      if (path === "/login" && !state.isLoggedIn) {
+        updateLogin(false);
+        navigation("/login");
+      } else {
+        navigation(path);
+      }
+    }
+  });
+};
+
+// router
+const router = () => {
+  const path = window.location.pathname;
+  let page = "";
+
+  if (path === "/profile") {
+    page = ProfilePage();
+  } else if (path === "/login") {
+    page = LoginPage();
+  } else {
+    page = MainPage();
+  }
+
+  document.body.innerHTML = page;
+  renderNav();
+  pageEventListeners();
+
+  const loginForm = document.querySelector("#loginForm");
+  if (loginForm) {
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const userId = document.querySelector("#userId").value;
+      const password = document.querySelector("#password").value;
+
+      if (userId && password) {
+        updateLogin(true);
+        navigation("/profile");
+      } else {
+        alert("아이디와 비밀번호를 입력해주세요");
+      }
+    });
+  }
+};
+
+// navigation render
 const renderNav = () => {
   const nav = document.querySelector("nav ul");
   if (nav) {
@@ -269,89 +364,6 @@ const renderNav = () => {
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  const loginForm = document.querySelector("#loginForm");
-  if (loginForm) {
-    loginForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const userId = document.querySelector("#userId").value;
-      const password = document.querySelector("#password").value;
-
-      if (userId && password) {
-        updateLogin(true);
-        navigation("/profile");
-      } else {
-        alert("아이디와 비밀번호를 입력해주세요");
-      }
-    });
-  }
-});
-
-const updateLogin = (isLoggedIn) => {
-  state.isLoggedIn = isLoggedIn;
-  localStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn));
-  renderNav();
-};
-
-const navigation = (path) => {
-  window.history.pushState({}, "", window.location.origin + path);
-  renderPage(path);
-  renderNav();
-};
-
-const saveProfile = (userData) => {
-  state.userData = { ...state.userData, ...userData };
-  localStorage.setItem("userData", JSON.stringify(userData));
-};
-
-// eventListener
-const pageEventListeners = () => {
-  document.body.addEventListener("click", (e) => {
-    if (e.target.tagName === "A" && e.target.getAttribute("href")) {
-      e.preventDefault();
-      const path = e.target.getAttribute("href");
-      if (path === "/login" && !state.isLoggedIn) {
-        updateLogin(false);
-        navigation("/login");
-      } else {
-        navigation(path);
-      }
-    }
-  });
-
-  // profile update
-  const updateProfile = document.querySelector("#profileForm");
-  if (updateProfile) {
-    updateProfile.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const username = document.querySelector("#username").value;
-      const email = document.querySelector("#email").value;
-      const bio = document.querySelector("#bio").value;
-
-      const profileData = { username, email, bio };
-
-      saveProfile(profileData);
-      alert("프로필이 업데이트되었습니다.");
-    });
-
-    document.querySelector("#username").value = state.userData.username;
-    document.querySelector("#email").value = state.userData.email;
-    document.querySelector("#bio").value = state.userData.bio;
-  }
-};
-
-// go back
-window.addEventListener("popstate", () => {
-  renderPage(window.location.pathname);
-});
-
-const routes = {
-  "/": MainPage,
-  "/login": LoginPage,
-  "/profile": ProfilePage,
-  "/404": ErrorPage,
-};
-
 const renderPage = (path) => {
   // !login -> /profile = /login
   if (path === "/profile" && !state.isLoggedIn) {
@@ -372,4 +384,15 @@ const renderPage = (path) => {
   pageEventListeners();
 };
 
+// go back
+window.addEventListener("popstate", () => router());
+
+const routes = {
+  "/": MainPage,
+  "/login": LoginPage,
+  "/profile": ProfilePage,
+  "/404": ErrorPage,
+};
+
 renderPage(window.location.pathname);
+router();
