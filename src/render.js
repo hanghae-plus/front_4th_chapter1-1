@@ -1,6 +1,6 @@
 import routes from "./routes/routes";
 import navigate from "./routes/navigate";
-import ErrorPage from "./pages/ErrorPage";
+import NotFoundPage from "./pages/NotFoundPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import isLogin from "./utils/isLogin";
@@ -17,7 +17,7 @@ const render = (path) => {
 
   const header = path === "/" || path === "/profile" ? Header() : "";
   const footer = path === "/" || path === "/profile" ? Footer() : "";
-  const component = routes[path] || ErrorPage();
+  const component = routes[path] || NotFoundPage();
 
   root.innerHTML = `
       <div class="bg-gray-100 min-h-screen flex justify-center">

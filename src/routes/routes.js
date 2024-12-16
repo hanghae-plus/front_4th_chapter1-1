@@ -1,9 +1,9 @@
-import MainPage from "../pages/MainPage";
+import HomePage from "../pages/HomePage";
 import ProfilePage from "../pages/ProfilePage";
 import LoginPage from "../pages/LoginPage";
 
 const routes = {
-  "/": MainPage(),
+  "/": HomePage(),
   "/profile": ProfilePage(),
   "/login": LoginPage(),
 };
