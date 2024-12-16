@@ -1,11 +1,6 @@
-import { MainPage } from "./pages/MainPage.js";
-import { ProfilePage } from "./pages/ProfilePage.js";
-import { LoginPage } from "./pages/LoginPage.js";
-import { NotFoundPage } from "./pages/NotFoundPage.js";
+import { CreateRouter } from "./routes/createRouter.js";
+import { routes } from "./routes/routes.js";
 
-document.getElementById("root").innerHTML = `
-  ${MainPage()}
-  ${ProfilePage()}
-  ${LoginPage()}
-  ${NotFoundPage()}
-`;
+const createRouter = new CreateRouter(routes);
+
+createRouter.init();
