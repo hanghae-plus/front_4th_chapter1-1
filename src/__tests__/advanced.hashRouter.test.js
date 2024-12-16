@@ -4,7 +4,11 @@ beforeAll(async () => {
   // DOM 초기화
   window.alert = vi.fn();
   document.body.innerHTML = '<div id="root"></div>';
-  await import("../main.hash.js");
+
+  import.meta.env.VITE_ROUTER_MODE = "hash";
+
+  await import("../main.hash.ts");
+  document.dispatchEvent(new Event("DOMContentLoaded"));
 });
 
 afterAll(() => {

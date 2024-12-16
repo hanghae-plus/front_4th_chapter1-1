@@ -13,6 +13,9 @@ beforeAll(async () => {
   // DOM 초기화
   window.alert = vi.fn();
   document.body.innerHTML = '<div id="root"></div>';
+
+  import.meta.env.VITE_ROUTER_MODE = "history";
+
   await import("../main.ts");
   document.dispatchEvent(new Event("DOMContentLoaded"));
 });

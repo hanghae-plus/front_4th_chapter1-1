@@ -65,8 +65,12 @@ const createBaseRouter = (
 
 const createRouter = (container: HTMLElement): Router => {
   const isHashRouter = import.meta.env.VITE_ROUTER_MODE === "hash";
-
-  if (isHashRouter && window.location.pathname !== "/index.hash.html") {
+  console.log(import.meta.env.TEST);
+  if (
+    isHashRouter &&
+    window.location.pathname !== "/index.hash.html" &&
+    !import.meta.env.TEST
+  ) {
     window.location.href = `/index.hash.html${window.location.hash || "#/"}`;
     return createBaseRouter(
       container,
