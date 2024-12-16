@@ -1,7 +1,6 @@
 export default class AuthManager {
   constructor(router) {
     this.router = router;
-    this.#init();
   }
 
   isLogin() {
@@ -10,6 +9,10 @@ export default class AuthManager {
 
   get user() {
     return this.isLogin ? JSON.parse(localStorage.getItem("user")) : null;
+  }
+
+  set user(user) {
+    localStorage.setItem("user", JSON.stringify(user));
   }
 
   login({ username, email = "", bio = "" }) {
@@ -44,7 +47,7 @@ export default class AuthManager {
   }
 
   // 이벤트 리스너 초기화
-  #init() {
+  init() {
     this.router.beforeEnter((path) => {
       const AUTH_REQUIRED_PAGES = ["/profile"];
       if (AUTH_REQUIRED_PAGES.includes(path) && !this.isLogin()) {

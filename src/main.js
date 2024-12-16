@@ -175,7 +175,7 @@ const ProfilePage = () => `
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
               내 프로필
             </h2>
-            < >
+            <form id="profile-form">
               <div class="mb-4">
                 <label
                   for="username"
@@ -221,7 +221,7 @@ const ProfilePage = () => `
               >
                 프로필 업데이트
               </button>
-            </  >
+            </form>
           </div>
         </main>
 
@@ -244,6 +244,7 @@ const router = new Router(routes);
 router.init();
 
 const auth = new AuthManager(router);
+auth.init();
 
 const userProfile = new UserProfile(auth, router);
 userProfile.init();
