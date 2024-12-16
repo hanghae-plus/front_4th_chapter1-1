@@ -235,7 +235,4 @@ const ProfilePage = () => `
 
 document.body.innerHTML = `
   ${MainPage()}
-  ${ProfilePage()}
-  ${LoginPage()}
-  ${ErrorPage()}
 `;
