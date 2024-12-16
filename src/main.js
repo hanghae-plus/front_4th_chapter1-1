@@ -56,6 +56,17 @@ const renderProfilePage = () => {
   document
     .querySelector("nav")
     .addEventListener("click", (e) => clickEventHandler(e));
+
+  const profileForm = document.querySelector("#profile-form");
+  profileForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const username = form[0].value;
+    const email = form[1].value;
+    const bio = form[2].value;
+
+    localStorage.setItem("user", JSON.stringify({ username, email, bio }));
+  });
 };
 
 function clickEventHandler(e) {
