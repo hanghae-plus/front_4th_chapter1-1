@@ -22,25 +22,24 @@ const router = (path = window.location.pathname || "/") => {
     history.pushState(null, "", path);
     route();
   } else {
-    document.body.innerHTML = `${NotFoundPage()}`;
+    document.getElementById("root").innerHTML = `${NotFoundPage()}`;
   }
 };
 
 const renderMainPage = () => {
-  document.body.innerHTML = `${MainPage()}`;
+  document.getElementById("root").innerHTML = `${MainPage()}`;
   document
     .querySelector("nav")
     .addEventListener("click", (e) => clickEventHandler(e));
 };
 
 const renderLoginPage = () => {
-  document.body.innerHTML = `${LoginPage()}`;
+  document.getElementById("root").innerHTML = `${LoginPage()}`;
 
   const loginForm = document.querySelector("#login-form");
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const form = e.target;
-    const username = form[0].value;
+    const username = e.target.querySelector('input[type="text"]').value;
 
     localStorage.setItem(
       "user",
@@ -52,7 +51,7 @@ const renderLoginPage = () => {
 };
 
 const renderProfilePage = () => {
-  document.body.innerHTML = `${ProfilePage()}`;
+  document.getElementById("root").innerHTML = `${ProfilePage()}`;
   document
     .querySelector("nav")
     .addEventListener("click", (e) => clickEventHandler(e));
@@ -60,10 +59,9 @@ const renderProfilePage = () => {
   const profileForm = document.querySelector("#profile-form");
   profileForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const form = e.target;
-    const username = form[0].value;
-    const email = form[1].value;
-    const bio = form[2].value;
+    const username = e.target.querySelector("#username").value;
+    const email = e.target.querySelector("#email").value;
+    const bio = e.target.querySelector("#bio").value;
 
     localStorage.setItem("user", JSON.stringify({ username, email, bio }));
   });
@@ -86,12 +84,5 @@ function clickEventHandler(e) {
   }
 }
 
-window.addEventListener("load", () => {
-  const initialPath = window.location.pathname;
-  router(initialPath);
-});
-
-window.addEventListener("popstate", () => {
-  const currentPath = window.location.pathname;
-  router(currentPath);
-});
+window.addEventListener("load", () => router());
+window.addEventListener("popstate", () => router());
