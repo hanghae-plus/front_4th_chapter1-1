@@ -53,10 +53,6 @@ const hashRoutes = {
 
 const router = createRouter(routes);
 
-function updateContent() {
-  router();
-}
-
 function submitEventHandler(e) {
   e.preventDefault();
   const form = e.target;
@@ -79,7 +75,6 @@ function submitEventHandler(e) {
 
     new UserStore().setUser({ username, email, bio });
     router("/profile");
-    updateContent();
   }
 }
 
@@ -98,6 +93,6 @@ function clickEventHandler(e) {
   }
 }
 
-window.addEventListener("popstate", updateContent);
-window.addEventListener("load", updateContent);
-window.addEventListener("hashchange", updateContent);
+window.addEventListener("popstate", () => router());
+window.addEventListener("load", () => router());
+window.addEventListener("hashchange", () => router());
