@@ -304,6 +304,11 @@ const pageEventListeners = () => {
 const router = () => {
   const path = window.location.pathname;
   let page = "";
+  // !login -> /profile = /login
+  if (path === "/profile" && !state.isLoggedIn) {
+    navigation("/login");
+    return;
+  }
 
   if (path === "/profile") {
     page = ProfilePage();
@@ -366,12 +371,6 @@ const renderNav = () => {
 };
 
 const renderPage = (path) => {
-  // !login -> /profile = /login
-  if (path === "/profile" && !state.isLoggedIn) {
-    navigation("/login");
-    return;
-  }
-
   let pageContent = routes[path] || routes["/404"];
   if (path !== "/login" && path !== "/404") {
     pageContent = `
