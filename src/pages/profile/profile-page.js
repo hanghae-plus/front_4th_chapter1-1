@@ -1,4 +1,5 @@
-export const ProfilePage = () => `
+export const ProfilePage = () => {
+  return `
   <div id="root">
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
@@ -80,3 +81,4 @@ export const ProfilePage = () => `
     </div>
   </div>
 `;
+};
