@@ -1,4 +1,4 @@
-import { userStore } from "../store/user/userStore.js";
+import { UserStore } from "../store/user/userStore.js";
 import { path } from "../utils/const/path.js";
 import { Component } from "../utils/component.js";
 
@@ -8,6 +8,11 @@ class LoginPage extends Component {
   }
 
   render() {
+    if (new UserStore().getState() !== null) {
+      this.router.navigate(path.MAIN);
+      return;
+    }
+
     document.getElementById("root").innerHTML = LoginTemplate();
 
     this.loginEventListener();
@@ -18,11 +23,7 @@ class LoginPage extends Component {
       e.preventDefault();
       const username = document.getElementById("username").value;
 
-      userStore.setState({ username: username, email: "", bio: "" });
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ username: username, email: "", bio: "" }),
-      );
+      new UserStore().setState({ username: username, email: "", bio: "" });
 
       this.router.navigate(path.MAIN);
     });
@@ -35,7 +36,7 @@ export const LoginTemplate = () => `
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
       <form id="login-form">
         <div class="mb-4">
-          <input id="username" type="text" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
+          <input id="username" type="text" placeholder="사용자 이름" class="w-full p-2 border rounded">
         </div>
         <div class="mb-6">
           <input type="password" placeholder="비밀번호" class="w-full p-2 border rounded">

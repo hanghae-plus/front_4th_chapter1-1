@@ -1,8 +1,8 @@
 import { Header } from "../components/Header.js";
 import { Footer } from "../components/Footer.js";
+import { UserStore } from "../store/user/userStore.js";
 import { Component } from "../utils/component.js";
 import { path } from "../utils/const/path.js";
-import { userStore } from "../store/user/userStore.js";
 
 class MainPage extends Component {
   constructor() {
@@ -19,14 +19,15 @@ class MainPage extends Component {
     if (this.isLogin()) {
       document.getElementById("logout").addEventListener("click", (e) => {
         e.preventDefault();
-        localStorage.removeItem("user");
+
+        new UserStore().removeUser();
         this.router.navigate(path.LOGIN);
       });
     }
   }
 
   isLogin() {
-    return userStore.getState() !== null;
+    return new UserStore().getState() !== null;
   }
 }
 
@@ -41,7 +42,7 @@ const MainTemplate = (isLogin) => `
           ${
             isLogin
               ? `<li><a href="/profile" class="text-gray-600">프로필</a></li>
-<li><button id="logout" class="text-gray-600">로그아웃</button></li>
+<li><a id="logout" href="#" class="text-gray-600">로그아웃</a></li>
 `
               : `<li><a href="/login" class="text-gray-600">로그인</a></li>`
           }

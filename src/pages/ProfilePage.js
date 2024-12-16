@@ -1,6 +1,6 @@
 import { Header } from "../components/Header.js";
 import { Footer } from "../components/Footer.js";
-import { userStore } from "../store/user/userStore.js";
+import { UserStore } from "../store/user/userStore.js";
 import { Component } from "../utils/component.js";
 import { path } from "../utils/const/path.js";
 
@@ -12,6 +12,11 @@ class ProfilePage extends Component {
   }
 
   render() {
+    if (!new UserStore().getState()) {
+      this.router.navigate(path.LOGIN);
+      return;
+    }
+
     document.getElementById("root").innerHTML = this.template();
 
     this.editEventListeners();
@@ -27,14 +32,13 @@ class ProfilePage extends Component {
       const email = document.getElementById("email").value;
       const bio = document.getElementById("bio").value;
 
-      userStore.setState({ username, email, bio });
-      localStorage.setItem("user", JSON.stringify({ username, email, bio }));
+      new UserStore().setState({ username, email, bio });
       this.updateProfileTemplate();
     });
   }
 
   updateProfileTemplate() {
-    const { username, email, bio } = userStore.getState();
+    const { username, email, bio } = new UserStore().getState();
 
     document.getElementById("username").value = username;
     document.getElementById("email").value = email;
@@ -44,7 +48,7 @@ class ProfilePage extends Component {
   logoutEventListener() {
     document.getElementById("logout").addEventListener("click", (e) => {
       e.preventDefault();
-      localStorage.removeItem("user");
+      new UserStore().removeUser();
       this.router.navigate(path.LOGIN);
     });
   }
@@ -109,7 +113,7 @@ export const ProfileTemplate = () => `
                   rows="4"
                   class="w-full p-2 border rounded"
                 >
-안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.</textarea
+${new UserStore().getState().bio}</textarea
                 >
               </div>
               <button
