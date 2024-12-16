@@ -1,6 +1,9 @@
+import { routerConfig } from "./lib/config";
 import { useRouter } from "./lib/hooks";
 import { routes } from "./routes";
-function initRouter(rootElement) {
+
+function initRouter(rootElement, mode = "history") {
+  routerConfig.mode = mode;
   const router = useRouter();
 
   const handleLocation = () => {
@@ -15,12 +18,20 @@ function initRouter(rootElement) {
     if (!(event.target instanceof HTMLAnchorElement)) return;
 
     event.preventDefault();
-    router.navigate(event.target.href);
+    const path = event.target.getAttribute("href");
+    if (path) {
+      if (routerConfig.mode === "hash") {
+        router.navigate(path.replace("#", ""));
+      } else {
+        router.navigate(path);
+      }
+    }
   };
 
-  window.onpopstate = handleLocation;
-  window.addEventListener("pushstate", handleLocation);
+  window.addEventListener("hashchange", handleLocation);
   window.addEventListener("popstate", handleLocation);
+  window.addEventListener("pushstate", handleLocation);
+  window.addEventListener("load", handleLocation);
 
   window.route = handleRoute;
 
