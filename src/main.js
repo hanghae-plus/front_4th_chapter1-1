@@ -28,9 +28,7 @@ const MainPage = (user) => `
           <textarea class="w-full p-2 border rounded" placeholder="무슨 생각을 하고 계신가요?"></textarea>
           <button class="mt-2 bg-blue-600 text-white px-4 py-2 rounded">게시</button>
         </div>
-
         <div class="space-y-4">
-
           <div class="bg-white rounded-lg shadow p-4">
             <div class="flex items-center mb-2">
               <img src="https://via.placeholder.com/40" alt="프로필" class="rounded-full mr-2">
@@ -46,7 +44,6 @@ const MainPage = (user) => `
               <button>공유</button>
             </div>
           </div>
-
           <div class="bg-white rounded-lg shadow p-4">
             <div class="flex items-center mb-2">
               <img src="https://via.placeholder.com/40" alt="프로필" class="rounded-full mr-2">
@@ -189,11 +186,9 @@ const ProfilePage = (user) => `
 
         <main class="p-4">
           <div class="bg-white p-8 rounded-lg shadow-md">
-            <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
-            내 프로필
-            </h2>
+            <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">내 프로필</h2>
             <form id="profile-form">
-              <div class="mb-4">
+              <div class="mb-2">
                 <label
                   for="username"
                   class="block text-gray-700 text-sm font-bold mb-2"
@@ -233,7 +228,7 @@ const ProfilePage = (user) => `
                   rows="4"
                   class="w-full p-2 border rounded"
                 >
-                    "${user?.bio || ""}"
+                    ${user?.bio || ""}
                 </textarea
                 >
               </div>
