@@ -4,23 +4,19 @@ import { setState } from "../store/store.js";
 export const handleLogin = (e) => {
   e.preventDefault();
 
-  const loginBtn = document.querySelector("#login-form");
+  const id = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
 
-  if (loginBtn) {
-    const id = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+  const userInfo = { username: "testuser", email: "", bio: "" };
 
-    const userInfo = { username: "testuser", email: "", bio: "" };
+  if (id && password) {
+    setState({ user: userInfo }); // 상태 업데이트
 
-    if (id && password) {
-      setState({ user: userInfo }); // 상태 업데이트
-
-      localStorage.setItem("user", JSON.stringify(userInfo));
-      history.pushState({}, "", "/");
-      router();
-    } else {
-      alert("아이디 혹은 비밀번호를 확인해주세요.");
-    }
+    localStorage.setItem("user", JSON.stringify(userInfo));
+    history.pushState({}, "", "/");
+    router();
+  } else {
+    alert("아이디 혹은 비밀번호를 확인해주세요.");
   }
 };
 
