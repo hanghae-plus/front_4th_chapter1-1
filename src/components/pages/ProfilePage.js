@@ -1,12 +1,11 @@
 import Header from "../common/Header";
 import Footer from "../common/Footer";
 
-export const ProfilePage = () => `
+export const ProfilePage = (userInfo) => `
   <div id="root">
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
-       ${Header(localStorage.getItem("user"))}
-
+       ${Header(userInfo)}
         <main class="p-4">
           <div class="bg-white p-8 rounded-lg shadow-md">
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">

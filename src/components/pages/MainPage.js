@@ -1,11 +1,10 @@
 import Header from "../common/Header";
 import Footer from "../common/Footer";
 
-export const MainPage = () => `
+export const MainPage = (userInfo) => `
   <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
-      ${Header(localStorage.getItem("user"))}
-
+      ${Header(userInfo)}
       <main class="p-4">
         <div class="mb-4 bg-white rounded-lg shadow p-4">
           <textarea class="w-full p-2 border rounded" placeholder="무슨 생각을 하고 계신가요?"></textarea>
