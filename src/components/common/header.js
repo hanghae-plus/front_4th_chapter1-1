@@ -2,10 +2,10 @@ import { UserStore } from "@stores";
 
 export const Header = () => {
   const isLogin = UserStore.getValue("isLogin");
-  const isHashMode = window.location.pathname.endsWith("hash.html");
+  const isHashMode = () => window.location.pathname.endsWith("hash.html");
 
   // 현재 경로 가져오기를 해시모드에 맞게 수정
-  const currentPath = isHashMode
+  const currentPath = isHashMode()
     ? window.location.hash.slice(1) || "/"
     : window.location.pathname;
 
@@ -15,7 +15,7 @@ export const Header = () => {
 
   // 메뉴의 path를 해시모드에 맞게 수정
   const getPath = (path) => {
-    return isHashMode ? `#${path}` : path;
+    return isHashMode() ? `#${path}` : path;
   };
 
   const menus = [

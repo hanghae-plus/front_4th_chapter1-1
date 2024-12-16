@@ -11,16 +11,16 @@ export const ROUTES = {
 
 function createRouter(options = {}) {
   const routes = options.routes || {};
-  const isHashMode = window.location.pathname.endsWith("hash.html");
+  const isHashMode = () => window.location.pathname.endsWith("hash.html");
 
   function getPath() {
-    return isHashMode
+    return isHashMode()
       ? window.location.hash.slice(1) || "/"
       : window.location.pathname;
   }
 
   function updatePath(path) {
-    if (isHashMode) {
+    if (isHashMode()) {
       window.location.hash = path;
     } else {
       history.pushState(null, "", path);
@@ -28,7 +28,7 @@ function createRouter(options = {}) {
   }
 
   function replacePath(path) {
-    if (isHashMode) {
+    if (isHashMode()) {
       window.location.replace(`#${path}`);
     } else {
       history.replaceState(null, "", path);
@@ -52,28 +52,32 @@ function createRouter(options = {}) {
 
   function renderPage(path) {
     const rootElement = document.getElementById("root");
+    // DOM을 완전히 초기화
+    while (rootElement.firstChild) {
+      rootElement.removeChild(rootElement.firstChild);
+    }
 
-    // 페이지 렌더링 전에 root 엘리먼트 초기화
-    rootElement.innerHTML = "";
+    // 유효하지 않은 경로 처리
     if (!routes[path]) {
       replacePath(ROUTES.ERROR);
-      const rootElement = document.getElementById("root");
       const notFoundPage = NotFoundPage();
       notFoundPage.render(rootElement);
       return;
     }
 
+    // 라우트 보호 처리
     const protectedPath = protectRoute(path);
     const page = routes[protectedPath];
     const pageInstance = page();
 
+    // 페이지 렌더링
     if (typeof pageInstance.render === "function") {
-      const rootElement = document.getElementById("root");
       pageInstance.render(rootElement);
     }
   }
 
   function navigate(path) {
+    console.log("이거 뭐냐 navigate", path);
     updatePath(path);
     renderPage(path);
   }
@@ -86,7 +90,7 @@ function createRouter(options = {}) {
   function handleLinkClick(e) {
     const target = e.target.closest("a");
     if (!target) return;
-
+    console.log("이거 뭐냐 handleLinkClick", target);
     if (target.id === "logout") {
       e.preventDefault();
       UserStore.clearState();
@@ -95,19 +99,30 @@ function createRouter(options = {}) {
     }
 
     const href = target.getAttribute("href");
-    if (href?.startsWith("/")) {
-      e.preventDefault();
-      navigate(href);
+    // 해시 모드일 때와 아닐 때의 링크 처리
+    if (isHashMode()) {
+      // 해시 모드에서는 '#'으로 시작하는 링크도 처리
+      if (href?.startsWith("#") || href?.startsWith("/")) {
+        e.preventDefault();
+        // '#'으로 시작하면 '#' 제거, 아니면 그대로 사용
+        const path = href.startsWith("#") ? href.slice(1) : href;
+        navigate(path);
+      }
+    } else {
+      // 히스토리 모드에서는 '/'로 시작하는 링크만 처리
+      if (href?.startsWith("/")) {
+        e.preventDefault();
+        navigate(href);
+      }
     }
   }
-
   function init() {
-    if (isHashMode) {
+    if (isHashMode()) {
       window.addEventListener("hashchange", handleRouteChange);
-      if (!window.location.hash) {
-        window.location.hash = "/";
-        return;
-      }
+      // if (!window.location.hash) {
+      //   window.location.hash = "/";
+      //   return;
+      // }
     } else {
       window.addEventListener("popstate", handleRouteChange);
     }
@@ -116,11 +131,11 @@ function createRouter(options = {}) {
     handleRouteChange();
 
     return () => {
-      if (isHashMode) {
-        window.removeEventListener("hashchange", handleRouteChange);
-      } else {
-        window.removeEventListener("popstate", handleRouteChange);
-      }
+      // if (isHashMode()) {
+      window.removeEventListener("hashchange", handleRouteChange);
+      // } else {
+      window.removeEventListener("popstate", handleRouteChange);
+      // }
       document.removeEventListener("click", handleLinkClick);
     };
   }
