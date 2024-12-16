@@ -319,25 +319,7 @@ const pageEventListeners = () => {
     }
   });
 
-  // const loginBtn = document.querySelector("#loginBtn");
-  // if (loginBtn) {
-  //   loginBtn.addEventListener("click", (e) => {
-  //     e.preventDefault();
-  //     navigation("/login");
-  //   });
-  // }
-
-  // const loginConfirm = document.querySelector("#loginConfirm");
-  // if (loginConfirm) {
-  //   loginConfirm.addEventListener("click", (e) => {
-  //     e.preventDefault();
-  //     updateLogin(true);
-  //     navigation("/profile");
-  //   });
-  // }
-
   // profile update
-
   const updateProfile = document.querySelector("#profileForm");
   if (updateProfile) {
     updateProfile.addEventListener("submit", (e) => {
