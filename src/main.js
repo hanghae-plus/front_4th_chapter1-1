@@ -3,11 +3,13 @@ import Footer from "./components/Footer";
 import ErrorPage from "./pages/Error";
 import routes from "./routes";
 import checkLogin from "./utils/checkLogin";
+import login from "./utils/login";
+import logout from "./utils/logout";
 
 /**
  * @description path에 따라 렌더해주는 함수. routes내 허용되는 값이 아닌 경우 에러페이지로 라우팅
  */
-const render = (path) => {
+export const render = (path) => {
   const root = document.getElementById("root");
   const allowConditions = ["/", "/profile"];
 
@@ -27,6 +29,17 @@ const render = (path) => {
       </div>
     </div>
   `;
+
+  if (path === "/login") {
+    login();
+  }
+
+  const logoutButton = document.getElementById("logout");
+  logoutButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    logout();
+  });
+  console.log("lg : ", logoutButton);
 };
 
 const navigateTo = (path) => {
