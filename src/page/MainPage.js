@@ -1,24 +1,17 @@
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import router from "../router/Router";
+
 class MainPage {
   constructor() {
     this.root = document.querySelector("#root");
-    this.render();
-    this.attachEventListeners();
   }
   render() {
     this.root.innerHTML = `
   <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
-      <header class="bg-blue-600 text-white p-4 sticky top-0">
-        <h1 class="text-2xl font-bold">항해플러스</h1>
-      </header>
-
-      <nav class="bg-white shadow-md p-2 sticky top-14">
-        <ul class="flex justify-around">
-          <li><a href="/" class="text-blue-600">홈</a></li>
-          <li><a href="/profile" class="text-gray-600">프로필</a></li>
-          <li><a href="/login" class="text-gray-600">로그인</a></li>
-        </ul>
-      </nav>
+      
+      ${Header()}
 
       <main class="p-4">
         <div class="mb-4 bg-white rounded-lg shadow p-4">
@@ -110,15 +103,23 @@ class MainPage {
         </div>
       </main>
 
-      <footer class="bg-gray-200 p-4 text-center">
-        <p>&copy; 2024 항해플러스. All rights reserved.</p>
-      </footer>
+    ${Footer()}
     </div>
   </div>
 `;
+
+    this.attachEventListeners();
   }
 
-  attachEventListeners() {}
+  attachEventListeners() {
+    const logout = document.querySelector("#logout");
+
+    if (logout)
+      logout.addEventListener("click", () => {
+        localStorage.clear();
+        router.navigateTo("/login");
+      });
+  }
 }
 
 export default MainPage;
