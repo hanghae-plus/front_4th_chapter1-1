@@ -4,7 +4,23 @@ import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import UserStore from "./store/userStore";
 
-function createRouter(routes) {
+const routes = {
+  "/": () => MainPage(),
+  "/profile": () => ProfilePage(),
+  "/login": () => LoginPage(),
+  404: () => NotFoundPage(),
+};
+
+const hashRoutes = {
+  "#/": () => MainPage(),
+  "#/profile": () => ProfilePage(),
+  "#/login": () => LoginPage(),
+  404: () => NotFoundPage(),
+};
+
+const router = createRouter();
+
+function createRouter() {
   return function (path) {
     path = path ? path : window.location.pathname;
     let hash = window.location.hash;
@@ -29,7 +45,7 @@ function createRouter(routes) {
 
 function initializeView(route) {
   const root = document.getElementById("root");
-  render(route, render);
+  render(route, root);
   attachEventListeners(root);
 }
 
@@ -43,22 +59,6 @@ function attachEventListeners(root) {
   cloneRoot.addEventListener("click", clickEventHandler);
   root.replaceWith(cloneRoot);
 }
-
-const routes = {
-  "/": () => MainPage(),
-  "/profile": () => ProfilePage(),
-  "/login": () => LoginPage(),
-  404: () => NotFoundPage(),
-};
-
-const hashRoutes = {
-  "#/": () => MainPage(),
-  "#/profile": () => ProfilePage(),
-  "#/login": () => LoginPage(),
-  404: () => NotFoundPage(),
-};
-
-const router = createRouter(routes);
 
 function submitEventHandler(e) {
   e.preventDefault();
