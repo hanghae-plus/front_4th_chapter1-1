@@ -1,15 +1,25 @@
-const MainPage = () => `
+const MainPage = (user) => `
   <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
       <header class="bg-blue-600 text-white p-4 sticky top-0">
         <h1 class="text-2xl font-bold">항해플러스</h1>
       </header>
 
-      <nav class="bg-white shadow-md p-2 sticky top-14">
-        <ul class="flex justify-around">
-          <li><a href="/" class="text-blue-600">홈</a></li>
-          <li><a href="/profile" class="text-gray-600">프로필</a></li>
-          <li><a href="#" class="text-gray-600">로그아웃</a></li>
+      <nav aria-label="navigation" class="bg-white shadow-md p-2 sticky top-14">
+        <ul id="main-link" class="flex justify-around">
+          <li><a id="home-link" href="/" class="text-blue-600">홈</a></li>
+            ${
+              user
+                ? `
+              
+                <li><a id="profile-link" href="/profile" className="text-blue-600">프로필</a></li>
+                <li><a id="logout" href="/login" className="text-gray-600">로그아웃</a></li>
+              
+            `
+                : `
+                <li><a id="login" href="/login" aria-label="로그인" className="text-gray-600">로그인</a></li>
+            `
+            }
         </ul>
       </nav>
 
@@ -130,14 +140,15 @@ const LoginPage = () => `
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
-      <form>
+      <form id="login-form">
         <div class="mb-4">
-          <input type="text" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
+          <input id="username" type="text" placeholder="사용자 이름" class="w-full p-2 border rounded">
         </div>
         <div class="mb-6">
-          <input type="password" placeholder="비밀번호" class="w-full p-2 border rounded">
+          <input id="password" type="password" placeholder="비밀번호" class="w-full p-2 border rounded">
         </div>
-        <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</button>
+        <button aria-label="로그인" type="submit" class="w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</button>
+<!--        <a type="submit" class="w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</a>-->
       </form>
       <div class="mt-4 text-center">
         <a href="#" class="text-blue-600 text-sm">비밀번호를 잊으셨나요?</a>
@@ -150,28 +161,38 @@ const LoginPage = () => `
   </main>
 `;
 
-const ProfilePage = () => `
-  <div id="root">
+const ProfilePage = (user) => `
+  <div>
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
         <header class="bg-blue-600 text-white p-4 sticky top-0">
           <h1 class="text-2xl font-bold">항해플러스</h1>
         </header>
 
-        <nav class="bg-white shadow-md p-2 sticky top-14">
+        <nav aria-label="navigation" class="bg-white shadow-md p-2 sticky top-14">
           <ul class="flex justify-around">
-            <li><a href="/" class="text-gray-600">홈</a></li>
-            <li><a href="/profile" class="text-blue-600">프로필</a></li>
-            <li><a href="#" class="text-gray-600">로그아웃</a></li>
+            <li><a id="home-link" href="/" class="text-gray-600">홈</a></li>
+            ${
+              user
+                ? `
+              
+                <li><a id="profile-link" href="/profile" className="text-blue-600">프로필</a></li>
+                <li><a id="logout" href="/login" className="text-gray-600">로그아웃</a></li>
+              
+            `
+                : `
+                <li><a id="login" aria-label="로그인" href="/login" className="text-gray-600">로그인</a></li>
+            `
+            }
           </ul>
         </nav>
 
         <main class="p-4">
           <div class="bg-white p-8 rounded-lg shadow-md">
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
-              내 프로필
+            내 프로필
             </h2>
-            <form>
+            <form id="profile-form">
               <div class="mb-4">
                 <label
                   for="username"
@@ -182,8 +203,8 @@ const ProfilePage = () => `
                   type="text"
                   id="username"
                   name="username"
-                  value="홍길동"
                   class="w-full p-2 border rounded"
+                  value="${user?.username || ""}"
                 />
               </div>
               <div class="mb-4">
@@ -196,7 +217,7 @@ const ProfilePage = () => `
                   type="email"
                   id="email"
                   name="email"
-                  value="hong@example.com"
+                  value="${user?.email || ""}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -212,7 +233,8 @@ const ProfilePage = () => `
                   rows="4"
                   class="w-full p-2 border rounded"
                 >
-안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.</textarea
+                    "${user?.bio || ""}"
+                </textarea
                 >
               </div>
               <button
@@ -233,9 +255,160 @@ const ProfilePage = () => `
   </div>
 `;
 
-document.body.innerHTML = `
-  ${MainPage()}
-  ${ProfilePage()}
-  ${LoginPage()}
-  ${ErrorPage()}
-`;
+// 함수 선언
+
+function createRouter() {
+  const routes = {};
+
+  function addRoute(path, handler) {
+    routes[path] = handler;
+  }
+
+  function getRoutesList() {
+    return Object.keys(routes);
+  }
+
+  function getRouterPage(path) {
+    if (routes[path]) {
+      return routes[path]();
+    }
+    return;
+  }
+
+  function navigateTo(path) {
+    console.log("path", path);
+    history.pushState(null, "", path);
+    handleRoute(path);
+  }
+
+  function handlePopState() {
+    handleRoute(window.location.pathname);
+  }
+
+  function handleRoute(path) {
+    const handler = routes[path];
+    if (handler) {
+      document.getElementById("root").innerHTML = handler(); // 적절한 컴포넌트 렌더링
+    } else {
+      document.getElementById("root").innerHTML = ErrorPage(); // 404 처리
+    }
+    registerEventListeners(); // 이벤트 리스너 재등록
+  }
+  window.addEventListener("popstate", handlePopState);
+  return {
+    addRoute,
+    navigateTo,
+    getRoutesList,
+    getRouterPage,
+  };
+}
+
+// Router 설정
+const router = createRouter();
+router.addRoute("/", () => {
+  return MainPage(JSON.parse(localStorage.getItem("user")) || "");
+});
+router.addRoute("/profile", () => {
+  if (localStorage.getItem("user")) {
+    return ProfilePage(JSON.parse(localStorage.getItem("user")));
+  } else {
+    return LoginPage();
+  }
+});
+router.addRoute("/login", () => LoginPage());
+// 첫 화면
+const curPath = window.location.pathname;
+
+console.log("curPath", curPath);
+if (!router.getRoutesList().includes(curPath)) {
+  document.getElementById("root").innerHTML = `
+    ${ErrorPage()}
+  `;
+} else {
+  const userInfo = JSON.parse(localStorage.getItem("user")) || {};
+  document.getElementById("root").innerHTML = `
+    ${router.getRouterPage(curPath, userInfo)}
+  `;
+  if (curPath === "/profile") {
+    document.getElementById("username").value = userInfo?.username || "";
+    document.getElementById("email").value = userInfo?.email || "";
+    document.getElementById("bio").value = userInfo?.bio || "";
+  }
+}
+registerEventListeners();
+
+// 페이지 이동 이벤트를 담는 함수
+function registerEventListeners() {
+  document
+    .querySelector("#profile-link")
+    ?.addEventListener("click", (event) => {
+      event.preventDefault();
+      // document.body.innerHTML = `${ProfilePage()}`
+      router.navigateTo("/profile");
+      const userInfo = JSON.parse(localStorage.getItem("user")) || {};
+      document.getElementById("username").value = userInfo?.username || "";
+      document.getElementById("email").value = userInfo?.email || "";
+      document.getElementById("bio").value = userInfo?.bio || "";
+    });
+  document.querySelector("#home-link")?.addEventListener("click", (event) => {
+    event.preventDefault();
+    // document.body.innerHTML = `
+    //   ${MainPage()}
+    // `;
+    router.navigateTo("/");
+  });
+
+  document.querySelector("#logout")?.addEventListener("click", (event) => {
+    event.preventDefault();
+    localStorage.removeItem("user");
+    router.navigateTo("/login");
+  });
+
+  document.querySelector("#login")?.addEventListener("click", (event) => {
+    event.preventDefault();
+    localStorage.removeItem("user");
+    router.navigateTo("/login");
+  });
+
+  // 사용자 로그인
+  document.getElementById("login-form")?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    console.log("dfsdfsdf");
+    const email = document.getElementById("username").value;
+    // const password = document.getElementById("password").value;
+    // if (email && password) {
+    const userInfo = JSON.parse(localStorage.getItem("user")) || {};
+    userInfo.username = email;
+    userInfo.email = "";
+    userInfo.bio = "";
+    localStorage.setItem("user", JSON.stringify(userInfo));
+    router.navigateTo("/profile");
+    document.getElementById("username").value = userInfo.username;
+    document.getElementById("email").value = userInfo?.email || "";
+    document.getElementById("bio").value = userInfo?.bio || "";
+    // alert("로그인 정보가 저장되었습니다")
+    // } else {
+    //   // alert("이메일과 비번을 입력하세요")
+    // }
+  });
+
+  // 사용자 프로필 저장하기
+  document
+    .getElementById("profile-form")
+    ?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const username = document.getElementById("username").value;
+      const email = document.getElementById("email").value;
+      const bio = document.getElementById("bio").value;
+      if (username) {
+        const userInfo = JSON.parse(localStorage.getItem("user")) || {};
+        userInfo.username = username;
+        userInfo.email = email;
+        userInfo.bio = bio;
+        localStorage.setItem("user", JSON.stringify(userInfo));
+      } else {
+        alert("프로필이 업데이트 되었습니다");
+        console.log("저장되었습니다");
+      }
+    });
+}
