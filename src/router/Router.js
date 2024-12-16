@@ -22,6 +22,11 @@ class Router {
     this.handleRoute(path);
   }
 
+  replaceTo(path, state = null) {
+    history.replaceState(state, "", path);
+    this.handleRoute(path);
+  }
+
   /**
    * popstate 이벤트 발생시 호출
    * handleRoute를 통해 페이지 랜더링 진행
@@ -51,11 +56,13 @@ class Router {
       document.querySelector("nav").addEventListener("click", (e) => {
         if (e.target.tagName === "A") {
           e.preventDefault();
-          this.navigateTo(e.target.pathname);
+          router.navigateTo(e.target.pathname);
         }
       });
     }
   }
 }
 
-export default new Router();
+const router = new Router();
+
+export default router;
