@@ -63,9 +63,10 @@ document.body.addEventListener("submit", (event) => {
   const formData = new FormData(form);
   const { id } = form;
 
-  console.log(id);
   if (id === "login-form") {
     loginHandler(formData);
+  } else if (id === "profile-form") {
+    updateProfileHandler(formData);
   }
 });
 
@@ -74,4 +75,12 @@ function loginHandler(formData) {
 
   auth.login({ username, email: "", bio: "" });
   route.navigate("/profile");
+}
+
+function updateProfileHandler(formData) {
+  const username = formData.get("username");
+  const email = formData.get("email");
+  const bio = formData.get("bio");
+
+  auth.login({ username, email, bio });
 }
