@@ -182,7 +182,8 @@ const ProfilePage = () => `
                   type="text"
                   id="username"
                   name="username"
-                  value="${state.userData.username || ""}"
+                  value="${state.userData.username}"
+                  autocomplete="username"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -196,7 +197,8 @@ const ProfilePage = () => `
                   type="email"
                   id="email"
                   name="email"
-                  value="${state.userData.email || ""}"
+                  value="${state.userData.email}"
+                  autocomplete="email"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -211,7 +213,7 @@ const ProfilePage = () => `
                   name="bio"
                   rows="4"
                   class="w-full p-2 border rounded"
-                >${state.userData.bio || ""}</textarea>
+                >${state.userData.bio}</textarea>
               </div>
               <button
                 type="submit"
@@ -240,20 +242,6 @@ const state = {
   },
 };
 
-if (!localStorage.getItem("isLoggedIn")) {
-  localStorage.setItem("isLoggedIn", JSON.stringify(true));
-}
-if (!localStorage.getItem("userData")) {
-  localStorage.setItem(
-    "userdata",
-    JSON.stringify({
-      username: "testuser",
-      email: "test@email.com",
-      bio: "test",
-    }),
-  );
-}
-
 const updateLogin = (isLoggedIn) => {
   state.isLoggedIn = isLoggedIn;
   localStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn));
@@ -267,20 +255,29 @@ const navigation = (path) => {
 
 // profile save / update
 const saveProfile = (userData) => {
-  try {
-    state.userData = { ...state.userData, ...userData };
-    localStorage.setItem("userData", JSON.stringify(state.userData));
-  } catch (e) {
-    console.error("Error saving to localStorage", e);
+  state.userData = { ...state.userData, ...userData };
+  localStorage.setItem("userData", JSON.stringify(state.userData));
+  console.log("Updated userData:", state.userData);
+  renderPage(window.location.pathname);
+  alert("프로필이 업데이트되었습니다.");
+};
+
+const loadProfile = () => {
+  const savedData = localStorage.getItem("userData");
+  if (savedData) {
+    state.userData = JSON.parse(savedData);
   }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  loadProfile();
+
   const updateProfile = document.querySelector("#profileForm");
   if (updateProfile) {
-    document.querySelector("#username").value = state.userData.username;
-    document.querySelector("#email").value = state.userData.email;
-    document.querySelector("#bio").value = state.userData.bio;
+    const { username, email, bio } = state.userData;
+    document.querySelector("#username").value = username || "";
+    document.querySelector("#email").value = email || "";
+    document.querySelector("#bio").value = bio || "";
 
     updateProfile.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -291,9 +288,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const profileData = { username, email, bio };
 
       saveProfile(profileData);
-      alert("프로필이 업데이트되었습니다.");
-      router();
-      navigation("/profile");
     });
   }
 });
@@ -318,6 +312,13 @@ const pageEventListeners = () => {
 const router = () => {
   const path = window.location.pathname;
   let page = "";
+
+  // login -> /login = /
+  if (path === "/login" && state.isLoggedIn) {
+    navigation("/");
+    return;
+  }
+
   // !login -> /profile = /login
   if (path === "/profile" && !state.isLoggedIn) {
     navigation("/login");
@@ -338,6 +339,7 @@ const router = () => {
   document.body.innerHTML = page;
   renderNav();
   pageEventListeners();
+  renderPage(path);
 
   const loginForm = document.querySelector("#loginForm");
   if (loginForm) {
@@ -385,12 +387,16 @@ const renderNav = () => {
 };
 
 const renderPage = (path) => {
-  let pageContent = routes[path] || routes["/404"];
-  if (path !== "/login" && path !== "/404") {
-    pageContent = `
-      ${pageContent}
-      <footer></footer>
-    `;
+  let pageContent = routes[path] ? routes[path]() : routes["/404"]();
+
+  if (path === "/profile" && state.isLoggedIn) {
+    const usernameData = document.querySelector("#username");
+    const emailData = document.querySelector("#email");
+    const bioData = document.querySelector("#bio");
+
+    if (usernameData) usernameData.value = state.userData.username;
+    if (emailData) emailData.value = state.userData.email;
+    if (bioData) bioData.value = state.userData.bio;
   }
 
   document.body.innerHTML = pageContent;
