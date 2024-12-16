@@ -1,3 +1,4 @@
+import { userStore } from "../store/user/userStore.js";
 import { path } from "../utils/const/path.js";
 import { Component } from "../utils/component.js";
 
@@ -17,6 +18,7 @@ class LoginPage extends Component {
       e.preventDefault();
       const username = document.getElementById("username").value;
 
+      userStore.setState({ username: username, email: "", bio: "" });
       localStorage.setItem(
         "user",
         JSON.stringify({ username: username, email: "", bio: "" }),

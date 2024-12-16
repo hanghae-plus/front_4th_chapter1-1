@@ -1,4 +1,6 @@
+import { userStore } from "../store/user/userStore.js";
 import { Component } from "../utils/component.js";
+import { path } from "../utils/const/path.js";
 
 class ProfilePage extends Component {
   constructor(template) {
@@ -9,6 +11,40 @@ class ProfilePage extends Component {
 
   render() {
     document.getElementById("root").innerHTML = this.template();
+
+    this.editEventListeners();
+    this.updateProfileTemplate();
+    this.logoutEventListener();
+  }
+
+  editEventListeners() {
+    document.getElementById("profile-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const email = document.getElementById("email").value;
+      const bio = document.getElementById("bio").value;
+
+      userStore.setState({ username, email, bio });
+      localStorage.setItem("user", JSON.stringify({ username, email, bio }));
+      this.updateProfileTemplate();
+    });
+  }
+
+  updateProfileTemplate() {
+    const { username, email, bio } = userStore.getState();
+
+    document.getElementById("username").value = username;
+    document.getElementById("email").value = email;
+    document.getElementById("bio").value = bio;
+  }
+
+  logoutEventListener() {
+    document.getElementById("logout").addEventListener("click", (e) => {
+      e.preventDefault();
+      localStorage.removeItem("user");
+      this.router.navigate(path.LOGIN);
+    });
   }
 }
 
@@ -23,7 +59,7 @@ export const ProfileTemplate = () => `
           <ul class="flex justify-around">
             <li><a href="/" class="text-gray-600">홈</a></li>
             <li><a href="/profile" class="text-blue-600">프로필</a></li>
-            <li><a href="#" class="text-gray-600">로그아웃</a></li>
+            <li><button id="logout" class="text-gray-600">로그아웃</button></li>
           </ul>
         </nav>
 
@@ -32,7 +68,7 @@ export const ProfileTemplate = () => `
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
               내 프로필
             </h2>
-            <form>
+            <form id="profile-form">
               <div class="mb-4">
                 <label
                   for="username"
