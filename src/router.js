@@ -19,6 +19,7 @@ export const Router = () => {
   }
 
   function navigateTo(path) {
+    if (window.location.pathname == path) return;
     history.pushState(null, "", path);
     handleRoute(path);
   }
