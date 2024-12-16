@@ -211,9 +211,7 @@ const ProfilePage = () => `
                   name="bio"
                   rows="4"
                   class="w-full p-2 border rounded"
-                >
-                ${state.userData.bio || ""}
-                </textarea>
+                >${state.userData.bio || ""}</textarea>
               </div>
               <button
                 type="submit"
@@ -274,7 +272,7 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       const username = document.querySelector("#username").value;
       const email = document.querySelector("#email").value;
-      const bio = document.querySelector("#bio").value.trim();
+      const bio = document.querySelector("#bio").value;
 
       const profileData = { username, email, bio };
 
@@ -311,8 +309,11 @@ const router = () => {
     page = ProfilePage();
   } else if (path === "/login") {
     page = LoginPage();
-  } else {
+  } else if (path === "/") {
     page = MainPage();
+  } else {
+    page = ErrorPage();
+    window.history.pushState({}, "", "/404");
   }
 
   document.body.innerHTML = page;
