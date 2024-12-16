@@ -9,7 +9,7 @@ const Header = (isLoggedIn) => `
       ${
         isLoggedIn
           ? `<li><a href="/profile" class="text-gray-600">프로필</a></li>
-      <li><a href="/login" class="text-gray-600">로그아웃</a></li>`
+      <li><a href="/login" id="logout" class="text-gray-600">로그아웃</a></li>`
           : `<li><a href="/login" class="text-gray-600">로그인</a></li>`
       }
       

@@ -1,11 +1,6 @@
 import { router } from "../router/router.js";
 
 export const handleLogin = () => {
-  if (localStorage.getItem("user")) {
-    localStorage.clear(); // 있을 경우 localStorage 비워주기(로그아웃이랑 url 같아서 구분 위해)
-    return;
-  }
-
   const id = document.getElementById("username").value;
   const password = document.getElementById("password").value;
 
@@ -20,6 +15,22 @@ export const handleLogin = () => {
   }
 };
 
+export const handleLogOut = (e) => {
+  const clickedElement = e.target.closest("#logout");
+
+  if (clickedElement) {
+    if (localStorage.getItem("user")) {
+      localStorage.removeItem("user");
+      history.pushState({}, "", "/login");
+      router();
+    }
+  }
+};
+
 export const initLogin = () => {
   document.body.addEventListener("submit", handleLogin);
+};
+
+export const initLogOut = () => {
+  document.body.addEventListener("click", handleLogOut);
 };
