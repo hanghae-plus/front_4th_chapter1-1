@@ -1,5 +1,6 @@
 import AuthManager from "./authManager";
 import Router from "./router";
+import { UserProfile } from "./userProfile";
 
 const MainPage = () => `
   <div class="bg-gray-100 min-h-screen flex justify-center">
@@ -244,23 +245,5 @@ router.init();
 
 const auth = new AuthManager(router);
 
-await renderUserData(auth);
-// 라우트 변경 시 사용자 데이터 렌더링
-router.afterEnter("/profile", async () => {
-  await renderUserData();
-});
-
-export async function renderUserData() {
-  const usernameInput = document.getElementById("username");
-  const emailInput = document.getElementById("email");
-  const bioInput = document.getElementById("bio");
-
-  if (usernameInput && emailInput && bioInput) {
-    const user = auth.user;
-    if (user) {
-      usernameInput.value = user.username || "";
-      emailInput.value = user.email || "";
-      bioInput.value = user.bio || "";
-    }
-  }
-}
+const userProfile = new UserProfile(auth, router);
+userProfile.init();
