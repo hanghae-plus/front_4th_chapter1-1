@@ -1,9 +1,9 @@
-import routes from "./routes/routes";
-import navigate from "./routes/navigate";
-import NotFoundPage from "./pages/NotFoundPage";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import isLogin from "./utils/isLogin";
+import routes from "../routes/routes";
+import navigate from "../routes/navigate";
+import NotFoundPage from "../pages/NotFoundPage";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import isLogin from "../utils/isLogin";
 
 const render = (path) => {
   const root = document.getElementById("root");

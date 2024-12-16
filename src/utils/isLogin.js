@@ -1,6 +1,6 @@
 const isLogin = () => {
-  const loginInfo = window.localStorage.getItem("loginInfo");
-  return loginInfo ? true : false;
+  const user = window.localStorage.getItem("user");
+  return user ? true : false;
 };
 
 export default isLogin;
