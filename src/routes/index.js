@@ -1,3 +1,4 @@
+// src/routes/index.js
 import { LoginPage, MainPage, ProfilePage, NotFoundPage } from "@pages";
 import { UserStore } from "@stores";
 
@@ -10,17 +11,39 @@ export const ROUTES = {
 
 function createRouter(options = {}) {
   const routes = options.routes || {};
+  const isHashMode = window.location.pathname.endsWith("hash.html");
 
-  // 로그인 상태에 따라 라우트 보호
+  function getPath() {
+    return isHashMode
+      ? window.location.hash.slice(1) || "/"
+      : window.location.pathname;
+  }
+
+  function updatePath(path) {
+    if (isHashMode) {
+      window.location.hash = path;
+    } else {
+      history.pushState(null, "", path);
+    }
+  }
+
+  function replacePath(path) {
+    if (isHashMode) {
+      window.location.replace(`#${path}`);
+    } else {
+      history.replaceState(null, "", path);
+    }
+  }
+
   function protectRoute(path) {
     const isLogin = UserStore.getValue("isLogin");
 
     if (path === ROUTES.PROFILE && !isLogin) {
-      history.replaceState(null, "", ROUTES.LOGIN);
+      replacePath(ROUTES.LOGIN);
       return ROUTES.LOGIN;
     }
     if (path === ROUTES.LOGIN && isLogin) {
-      history.replaceState(null, "", ROUTES.HOME);
+      replacePath(ROUTES.HOME);
       return ROUTES.HOME;
     }
 
@@ -28,42 +51,42 @@ function createRouter(options = {}) {
   }
 
   function renderPage(path) {
-    // 유효한 라우트인지 확인
+    const rootElement = document.getElementById("root");
+
+    // 페이지 렌더링 전에 root 엘리먼트 초기화
+    rootElement.innerHTML = "";
     if (!routes[path]) {
-      history.replaceState(null, "", ROUTES.ERROR);
+      replacePath(ROUTES.ERROR);
       const rootElement = document.getElementById("root");
       const notFoundPage = NotFoundPage();
       notFoundPage.render(rootElement);
       return;
     }
+
     const protectedPath = protectRoute(path);
     const page = routes[protectedPath];
-
-    // 페이지 컴포넌트 생성하고 render 메서드 호출
     const pageInstance = page();
+
     if (typeof pageInstance.render === "function") {
-      pageInstance.render();
+      const rootElement = document.getElementById("root");
+      pageInstance.render(rootElement);
     }
   }
 
-  // 페이지 이동
   function navigate(path) {
-    history.pushState(null, "", path);
+    updatePath(path);
     renderPage(path);
   }
 
-  // 뒤로가기/앞으로가기 처리
-  function handlePopState() {
-    const path = window.location.pathname;
+  function handleRouteChange() {
+    const path = getPath();
     renderPage(path);
   }
 
-  // 링크 클릭 이벤트 처리
   function handleLinkClick(e) {
     const target = e.target.closest("a");
     if (!target) return;
 
-    // 로그아웃
     if (target.id === "logout") {
       e.preventDefault();
       UserStore.clearState();
@@ -71,24 +94,33 @@ function createRouter(options = {}) {
       return;
     }
 
-    if (target.href.startsWith(window.location.origin)) {
+    const href = target.getAttribute("href");
+    if (href?.startsWith("/")) {
       e.preventDefault();
-      const path = target.getAttribute("href");
-      navigate(path);
+      navigate(href);
     }
   }
 
-  // 라우터 초기화
   function init() {
-    console.log("init");
-    window.addEventListener("popstate", handlePopState);
-    document.addEventListener("click", handleLinkClick);
+    if (isHashMode) {
+      window.addEventListener("hashchange", handleRouteChange);
+      if (!window.location.hash) {
+        window.location.hash = "/";
+        return;
+      }
+    } else {
+      window.addEventListener("popstate", handleRouteChange);
+    }
 
-    renderPage(window.location.pathname || ROUTES.HOME);
+    document.addEventListener("click", handleLinkClick);
+    handleRouteChange();
 
     return () => {
-      // 클린업 함수
-      window.removeEventListener("popstate", handlePopState);
+      if (isHashMode) {
+        window.removeEventListener("hashchange", handleRouteChange);
+      } else {
+        window.removeEventListener("popstate", handleRouteChange);
+      }
       document.removeEventListener("click", handleLinkClick);
     };
   }
@@ -104,6 +136,6 @@ export const Router = createRouter({
     [ROUTES.HOME]: MainPage,
     [ROUTES.PROFILE]: ProfilePage,
     [ROUTES.LOGIN]: LoginPage,
-    [ROUTES.NOT_FOUND]: NotFoundPage,
+    [ROUTES.ERROR]: NotFoundPage,
   },
 });

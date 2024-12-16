@@ -2,10 +2,20 @@ import { UserStore } from "@stores";
 
 export const Header = () => {
   const isLogin = UserStore.getValue("isLogin");
-  const currentPath = window.location.pathname;
+  const isHashMode = window.location.pathname.endsWith("hash.html");
+
+  // 현재 경로 가져오기를 해시모드에 맞게 수정
+  const currentPath = isHashMode
+    ? window.location.hash.slice(1) || "/"
+    : window.location.pathname;
 
   const activeClass = (path) => {
     return currentPath === path ? "text-blue-600 font-bold" : "text-gray-600";
+  };
+
+  // 메뉴의 path를 해시모드에 맞게 수정
+  const getPath = (path) => {
+    return isHashMode ? `#${path}` : path;
   };
 
   const menus = [
@@ -49,7 +59,7 @@ export const Header = () => {
         <li>
           <a 
             id="${menu.id}"
-            href="${menu.path}" 
+            href="${getPath(menu.path)}" 
             class="${activeClass(menu.path)}"
           >
             ${menu.name}
