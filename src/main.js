@@ -304,6 +304,11 @@ const pageEventListeners = () => {
         navigation(path);
       }
     }
+    if (e.target.id === "logoutBtn") {
+      e.preventDefault();
+      updateLogin(false);
+      navigation("/login");
+    }
   });
 };
 
@@ -374,15 +379,6 @@ const renderNav = () => {
       `;
     }
   }
-
-  const logoutBtn = document.querySelector("#logoutBtn");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      updateLogin(false);
-      navigation("/login");
-    });
-  }
 };
 
 const renderPage = (path) => {
@@ -404,7 +400,7 @@ const renderPage = (path) => {
 };
 
 // go back
-window.addEventListener("popstate", () => router());
+// window.addEventListener("popstate", () => router());
 
 const routes = {
   "/": MainPage,
