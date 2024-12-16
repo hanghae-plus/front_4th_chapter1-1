@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "dev:hash": "vite --open ./index.hash.html",
+    "dev": "VITE_ROUTER_MODE=history vite",
+    "dev:hash": "VITE_ROUTER_MODE=hash vite --open ./index.hash.html",
     "build": "vite build",
     "lint:fix": "eslint --fix",
     "prettier:write": "prettier --write ./src",
