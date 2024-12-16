@@ -18,7 +18,6 @@ export class ProfilePage {
 
     this.userInfo = UserStore.state.userInfo;
 
-    // Observer 등록
     UserStore.addObserver({
       update: (state) => {
         this.userInfo = state.userInfo;
@@ -32,7 +31,6 @@ export class ProfilePage {
   }
 
   render() {
-    console.log("count");
     return `
     <div id="root">
       <div class="bg-gray-100 min-h-screen flex justify-center">
