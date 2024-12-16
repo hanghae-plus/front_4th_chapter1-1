@@ -40,6 +40,7 @@ export function createRouter() {
 
   return {
     router(path) {
+      if (window.location.hash) return;
       path = path || window.location.pathname;
       path = validateRouteUser(path);
       const route = ROUTES[path] || ROUTES["404"];

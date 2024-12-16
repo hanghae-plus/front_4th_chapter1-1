@@ -51,6 +51,6 @@ function clickEventHandler(e) {
 
 document.body.addEventListener("submit", submitEventHandler);
 document.body.addEventListener("click", clickEventHandler);
-window.addEventListener("popstate", () => router());
 window.addEventListener("load", () => router());
+window.addEventListener("popstate", () => router());
 window.addEventListener("hashchange", () => hashRouter());
