@@ -398,14 +398,10 @@ const renderPage = (path) => {
     if (bioData) bioData.value = state.userData.bio;
   }
 
-  // document.body.innerHTML = pageContent;
-  root.innerHTML = pageContent;
+  document.body.innerHTML = pageContent;
   renderNav();
   pageEventListeners();
 };
-
-// go back
-// window.addEventListener("popstate", () => router());
 
 const routes = {
   "/": MainPage,
