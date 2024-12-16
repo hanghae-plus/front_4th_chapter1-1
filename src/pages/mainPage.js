@@ -1,4 +1,4 @@
-import Nav from "../components/nav.js";
+import Nav from "../components/common/nav.js";
 import Header from "../components/common/header.js";
 import Footer from "../components/common/footer.js";
 

@@ -29,16 +29,7 @@ function init() {
     errorPage.render();
   });
 
-  if (window.location.pathname === "/") {
-    router.navigateTo("/");
-  } else if (window.location.pathname === "/profile") {
-    router.navigateTo("/profile");
-  } else if (window.location.pathname === "/login") {
-    router.navigateTo("/login");
-    loginInit();
-  } else {
-    router.navigateTo("/error");
-  }
+  router.renderInit();
 }
 
 function addNavListener() {
@@ -46,17 +37,16 @@ function addNavListener() {
   if (nav) {
     nav.addEventListener("click", (e) => {
       e.preventDefault();
-      console.log(e.target.id);
-      if (e.target.id === "logout") {
+      if (e.target && e.target.pathname === "/login") {
         prefs.remove();
-      } else if (e.target.id === "profile") {
-        // router.navigateTo(e.target.pathname);
-      } else if (e.target.id === "home") {
-        // router.navigateTo(e.target.pathname);
+        router.navigateTo(e.target.pathname);
+      } else if (e.target && e.target.pathname === "/profile") {
+        router.navigateTo(e.target.pathname);
+      } else if (e.target && e.target.pathname === "/") {
+        router.navigateTo(e.target.pathname);
       } else {
         return;
       }
-      router.navigateTo(e.target.pathname);
     });
   }
 }
