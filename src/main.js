@@ -170,7 +170,7 @@ const ProfilePage = () => `
         </nav>
 
         <main class="p-4">
-          <div class="bg-white p-8 rounded-lg shadow-md">
+          <div id="login-form" class="bg-white p-8 rounded-lg shadow-md">
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
               내 프로필
             </h2>
@@ -185,7 +185,6 @@ const ProfilePage = () => `
                   type="text"
                   id="username"
                   name="username"
-                  value="홍길동"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -199,7 +198,6 @@ const ProfilePage = () => `
                   type="email"
                   id="email"
                   name="email"
-                  value="hong@example.com"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -214,9 +212,7 @@ const ProfilePage = () => `
                   name="bio"
                   rows="4"
                   class="w-full p-2 border rounded"
-                >
-안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.</textarea
-                >
+                ></textarea>
               </div>
               <button
                 type="submit"
@@ -246,4 +242,25 @@ const routes = {
 const router = new Router(routes);
 router.init();
 
-new AuthManager(router);
+const auth = new AuthManager(router);
+
+await renderUserData(auth);
+// 라우트 변경 시 사용자 데이터 렌더링
+router.afterEnter("/profile", async () => {
+  await renderUserData();
+});
+
+export async function renderUserData() {
+  const usernameInput = document.getElementById("username");
+  const emailInput = document.getElementById("email");
+  const bioInput = document.getElementById("bio");
+
+  if (usernameInput && emailInput && bioInput) {
+    const user = auth.user;
+    if (user) {
+      usernameInput.value = user.username || "";
+      emailInput.value = user.email || "";
+      bioInput.value = user.bio || "";
+    }
+  }
+}

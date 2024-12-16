@@ -8,6 +8,10 @@ export default class AuthManager {
     return localStorage.getItem("user") !== null;
   }
 
+  get user() {
+    return this.isLogin ? JSON.parse(localStorage.getItem("user")) : null;
+  }
+
   login({ username, email = "", bio = "" }) {
     const user = { username, email, bio };
     localStorage.setItem("user", JSON.stringify(user));

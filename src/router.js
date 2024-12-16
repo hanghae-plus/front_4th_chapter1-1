@@ -1,6 +1,8 @@
 export default class Router {
   #routes = {};
   #guard = null;
+  #afterEnterCallbacks = null;
+
   constructor(routes) {
     this.#routes = routes;
     this.init();
@@ -16,6 +18,10 @@ export default class Router {
 
     const render = this.#routes[path] || this.#routes["/404"];
     root.innerHTML = render();
+
+    if (this.#afterEnterCallbacks && this.#afterEnterCallbacks[path]) {
+      this.#afterEnterCallbacks[path].forEach((callback) => callback());
+    }
   }
 
   init() {
@@ -43,5 +49,13 @@ export default class Router {
 
   beforeEnter(callback) {
     this.#guard = callback;
+  }
+
+  afterEnter(path, callback) {
+    if (!this.#afterEnterCallbacks) {
+      this.#afterEnterCallbacks = {};
+      this.#afterEnterCallbacks[path] = [];
+    }
+    this.#afterEnterCallbacks[path].push(callback);
   }
 }
