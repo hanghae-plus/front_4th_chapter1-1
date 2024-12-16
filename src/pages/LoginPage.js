@@ -1,7 +1,7 @@
 export const USER_NAME_INPUT_ID = "username";
 export const LOGIN_FORM_ID = "login-form";
 
-export const Login = () => {
+export const LoginPage = () => {
   return `
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">

@@ -10,7 +10,7 @@ import {
   vi,
 } from "vitest";
 
-import { USER_NAME_INPUT_ID } from "../components/LoginPage.js";
+import { LOGIN_FORM_ID, USER_NAME_INPUT_ID } from "../pages/LoginPage.js";
 
 beforeAll(async () => {
   // DOM 초기화
@@ -77,7 +77,7 @@ describe("기본과제 테스트", () => {
     it("로그인 폼에서 사용자 이름을 입력하고 제출하면 로그인 되고, 로그아웃 버튼 클릭시 로그아웃 된다.", async () => {
       goTo("/login");
 
-      const loginForm = document.getElementById("login-form");
+      const loginForm = document.getElementById(LOGIN_FORM_ID);
       console.log(loginForm);
       document.querySelectorAll("input").forEach((input) => {
         console.log(input);
