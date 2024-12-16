@@ -1,5 +1,5 @@
 import Component from "../core/component";
-import { getAuth } from "../auth/auth";
+import { getAuth, logout } from "../auth/auth";
 import Router from "../router/router";
 
 class MainPage extends Component {
@@ -9,10 +9,19 @@ class MainPage extends Component {
       if (!(target instanceof HTMLAnchorElement)) return;
 
       e.preventDefault();
+
+      if (target.id === "logoutBtn") {
+        this.handleLogout();
+      }
+
       const targetURL = e.target.getAttribute("href");
       const router = Router.instance;
       router.navigate(targetURL);
     });
+  }
+
+  handleLogout() {
+    logout();
   }
 
   template() {
@@ -32,7 +41,7 @@ class MainPage extends Component {
           ${
             auth
               ? `<li><a href="/profile" class="nav-link ${currentPath === "/profile" ? "text-blue-600" : "text-gray-600"}">프로필</a></li>
-              <li><a href="/login" class="nav-link logoutBtn text-gray-600">로그아웃</a></li>`
+              <li><a href="/login" id="logoutBtn" class="nav-link text-gray-600">로그아웃</a></li>`
               : `<li><a href="/login" class="nav-link text-gray-600">로그인</a></li>`
           }
         </ul>

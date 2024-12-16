@@ -6,7 +6,6 @@ class LoginPage extends Component {
   setEvent() {
     this.addEvent("click", ".loginSubmitBtn", (e) => {
       e.preventDefault();
-      console.log("Login Page addEvent : loginSubmit");
       const username = this.$target.querySelector(".username").value.trim();
       const password = this.$target.querySelector(".password").value.trim();
 

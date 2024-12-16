@@ -1,8 +1,18 @@
 import Component from "../core/component";
-import { getAuth } from "../auth/auth";
+import { getAuth, getUser, saveUser } from "../auth/auth";
 import Router from "../router/router";
 
 class ProfilePage extends Component {
+  init() {
+    const user = getUser();
+    console.log(user);
+    this.state = {
+      name: user.name || "",
+      email: user.email || "",
+      introduction: user.introduction || "",
+    };
+  }
+
   setEvent() {
     this.addEvent("click", ".nav-link", (e) => {
       const target = e.target.closest("a");
@@ -12,6 +22,25 @@ class ProfilePage extends Component {
       const targetURL = e.target.getAttribute("href");
       const router = Router.instance;
       router.navigate(targetURL);
+    });
+
+    this.addEvent("click", ".profile-submit", (e) => {
+      e.preventDefault();
+
+      const form = e.target.closest("form");
+      const name = form.querySelector("#username").value;
+      const email = form.querySelector("#email").value;
+      const introduction = form.querySelector("#bio").value;
+
+      saveUser(name, email, introduction);
+
+      this.setState({
+        name,
+        email,
+        introduction,
+      });
+
+      alert("프로필이 업데이트 되었습니다");
     });
   }
 
@@ -54,7 +83,7 @@ class ProfilePage extends Component {
                   type="text"
                   id="username"
                   name="username"
-                  value="홍길동"
+                  value="${this.state.name}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -68,7 +97,7 @@ class ProfilePage extends Component {
                   type="email"
                   id="email"
                   name="email"
-                  value="hong@example.com"
+                  value="${this.state.email}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -83,13 +112,11 @@ class ProfilePage extends Component {
                   name="bio"
                   rows="4"
                   class="w-full p-2 border rounded"
-                >
-안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.</textarea
-                >
+                >${this.state.introduction}</textarea>
               </div>
               <button
                 type="submit"
-                class="w-full bg-blue-600 text-white p-2 rounded font-bold"
+                class="profile-submit w-full bg-blue-600 text-white p-2 rounded font-bold"
               >
                 프로필 업데이트
               </button>
