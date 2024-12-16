@@ -275,6 +275,7 @@ const loadProfile = () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   loadProfile();
+  router();
 
   const updateProfile = document.querySelector("#profileForm");
   if (updateProfile) {
@@ -364,24 +365,51 @@ const router = () => {
 
 // navigation render
 const renderNav = () => {
-  const nav = document.querySelector("nav ul");
-  if (nav) {
-    if (state.isLoggedIn) {
-      nav.innerHTML = `
-        <li><a href="/" class="text-gray-600">홈</a></li>
-        <li><a href="/profile" class="text-blue-600">프로필</a></li>
-        <li><a href="/login" id="logoutBtn" class="text-gray-600">로그아웃</a></li>
-      `;
-    } else {
-      nav.innerHTML = `
-        <li><a href="/" class="text-gray-600">홈</a></li>
-        <li><a href="/login" class="text-gray-600">로그인</a></li>
-      `;
-    }
+  const root = document.querySelector("#root");
+  if (!root) return;
+
+  let nav = document.querySelector("nav ul");
+
+  if (!nav) {
+    const navContainer = document.createElement("nav");
+    navContainer.innerHTML = `<ul></ul>`;
+    root.prepend(navContainer);
+    nav = navContainer.querySelector("ul");
   }
+
+  if (state.isLoggedIn) {
+    nav.innerHTML = `
+      <li><a href="/" class="text-gray-600">홈</a></li>
+      <li><a href="/profile" class="text-blue-600">프로필</a></li>
+      <li><a href="/login" id="logoutBtn" class="text-gray-600">로그아웃</a></li>
+    `;
+  } else {
+    nav.innerHTML = `
+      <li><a href="/" class="text-gray-600">홈</a></li>
+      <li><a href="/login" class="text-gray-600">로그인</a></li>
+    `;
+  }
+  // const nav = document.querySelector("nav ul");
+  // if (nav) {
+  //   if (state.isLoggedIn) {
+  //     nav.innerHTML = `
+  //       <li><a href="/" class="text-gray-600">홈</a></li>
+  //       <li><a href="/profile" class="text-blue-600">프로필</a></li>
+  //       <li><a href="/login" id="logoutBtn" class="text-gray-600">로그아웃</a></li>
+  //     `;
+  //   } else {
+  //     nav.innerHTML = `
+  //       <li><a href="/" class="text-gray-600">홈</a></li>
+  //       <li><a href="/login" class="text-gray-600">로그인</a></li>
+  //     `;
+  //   }
+  // }
 };
 
 const renderPage = (path) => {
+  const root = document.querySelector("#root");
+  if (!root) return;
+
   let pageContent = routes[path] ? routes[path]() : routes["/404"]();
 
   if (path === "/profile" && state.isLoggedIn) {
@@ -394,7 +422,8 @@ const renderPage = (path) => {
     if (bioData) bioData.value = state.userData.bio;
   }
 
-  document.body.innerHTML = pageContent;
+  // document.body.innerHTML = pageContent;
+  root.innerHTML = pageContent;
   renderNav();
   pageEventListeners();
 };
