@@ -16,11 +16,13 @@ class MainPage extends Component {
   }
 
   logoutEventListener() {
-    document.getElementById("logout").addEventListener("click", (e) => {
-      e.preventDefault();
-      localStorage.removeItem("user");
-      this.router.navigate(path.LOGIN);
-    });
+    if (this.isLogin()) {
+      document.getElementById("logout").addEventListener("click", (e) => {
+        e.preventDefault();
+        localStorage.removeItem("user");
+        this.router.navigate(path.LOGIN);
+      });
+    }
   }
 
   isLogin() {
@@ -39,8 +41,9 @@ const MainTemplate = (isLogin) => `
           ${
             isLogin
               ? `<li><a href="/profile" class="text-gray-600">프로필</a></li>
-<li><button id="logout"  class="text-gray-600">로그아웃</button></li>`
-              : `<li><button id="logout"  class="text-gray-600">로그인</button></li>`
+<li><button id="logout"  class="text-gray-600">로그아웃</button></li>
+`
+              : `<li><a href="/login"  class="text-gray-600">로그인</a></li>`
           }
         </ul>
       </nav>

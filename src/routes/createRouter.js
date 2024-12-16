@@ -9,7 +9,6 @@ export class CreateRouter {
     this.popstateListener();
     this.linkEventListeners();
     this.navigate(window.location.pathname);
-    Object.values(this.routes).forEach((route) => route.setRouter(this));
   }
 
   navigate(currentPath) {
