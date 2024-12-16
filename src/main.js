@@ -130,12 +130,12 @@ const LoginPage = () => `
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
-      <form>
+      <form id="loginForm">
         <div class="mb-4">
-          <input type="text" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
+          <input id="userId" type="text" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
         </div>
         <div class="mb-6">
-          <input type="password" placeholder="비밀번호" class="w-full p-2 border rounded">
+          <input id="password" type="password" placeholder="비밀번호" class="w-full p-2 border rounded">
         </div>
         <button type="submit" id="loginConfirm" class="w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</button>
       </form>
@@ -182,7 +182,7 @@ const ProfilePage = () => `
                   type="text"
                   id="username"
                   name="username"
-                  value="홍길동"
+                  value="${state.userData.username || ""}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -196,7 +196,7 @@ const ProfilePage = () => `
                   type="email"
                   id="email"
                   name="email"
-                  value=""
+                  value="${state.userData.email || ""}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -212,6 +212,7 @@ const ProfilePage = () => `
                   rows="4"
                   class="w-full p-2 border rounded"
                 >
+                ${state.userData.bio || ""}
                 </textarea>
               </div>
               <button
@@ -268,14 +269,38 @@ const renderNav = () => {
   }
 };
 
+document.addEventListener("DOMContentLoaded", () => {
+  const loginForm = document.querySelector("#loginForm");
+  if (loginForm) {
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const userId = document.querySelector("#userId").value;
+      const password = document.querySelector("#password").value;
+
+      if (userId && password) {
+        updateLogin(true);
+        navigation("/profile");
+      } else {
+        alert("아이디와 비밀번호를 입력해주세요");
+      }
+    });
+  }
+});
+
 const updateLogin = (isLoggedIn) => {
   state.isLoggedIn = isLoggedIn;
   localStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn));
   renderNav();
 };
 
+const navigation = (path) => {
+  window.history.pushState({}, "", window.location.origin + path);
+  renderPage(path);
+  renderNav();
+};
+
 const saveProfile = (userData) => {
-  state.userData = userData;
+  state.userData = { ...state.userData, ...userData };
   localStorage.setItem("userData", JSON.stringify(userData));
 };
 
@@ -294,24 +319,25 @@ const pageEventListeners = () => {
     }
   });
 
-  const loginBtn = document.querySelector("#loginBtn");
-  if (loginBtn) {
-    loginBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      navigation("/login");
-    });
-  }
+  // const loginBtn = document.querySelector("#loginBtn");
+  // if (loginBtn) {
+  //   loginBtn.addEventListener("click", (e) => {
+  //     e.preventDefault();
+  //     navigation("/login");
+  //   });
+  // }
 
-  const loginConfirm = document.querySelector("#loginConfirm");
-  if (loginConfirm) {
-    loginConfirm.addEventListener("click", (e) => {
-      e.preventDefault();
-      updateLogin(true);
-      navigation("/profile");
-    });
-  }
+  // const loginConfirm = document.querySelector("#loginConfirm");
+  // if (loginConfirm) {
+  //   loginConfirm.addEventListener("click", (e) => {
+  //     e.preventDefault();
+  //     updateLogin(true);
+  //     navigation("/profile");
+  //   });
+  // }
 
   // profile update
+
   const updateProfile = document.querySelector("#profileForm");
   if (updateProfile) {
     updateProfile.addEventListener("submit", (e) => {
@@ -320,7 +346,9 @@ const pageEventListeners = () => {
       const email = document.querySelector("#email").value;
       const bio = document.querySelector("#bio").value;
 
-      saveProfile({ username, email, bio });
+      const profileData = { username, email, bio };
+
+      saveProfile(profileData);
       alert("프로필이 업데이트되었습니다.");
     });
 
@@ -328,12 +356,6 @@ const pageEventListeners = () => {
     document.querySelector("#email").value = state.userData.email;
     document.querySelector("#bio").value = state.userData.bio;
   }
-};
-
-const navigation = (path) => {
-  window.history.pushState({}, path, window.location.origin + path);
-  renderPage(path);
-  renderNav();
 };
 
 // go back
@@ -349,9 +371,22 @@ const routes = {
 };
 
 const renderPage = (path) => {
-  const page = routes[path] || routes["/404"];
-  document.body.innerHTML = page();
+  // !login -> /profile = /login
+  if (path === "/profile" && !state.isLoggedIn) {
+    navigation("/login");
+    return;
+  }
 
+  let pageContent = routes[path] || routes["/404"];
+  if (path !== "/login" && path !== "/404") {
+    pageContent = `
+      <header></header>
+      ${pageContent}
+      <footer></footer>
+    `;
+  }
+
+  document.body.innerHTML = pageContent;
   renderNav();
   pageEventListeners();
 };
