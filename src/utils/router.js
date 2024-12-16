@@ -21,10 +21,12 @@ export const router = (path) => {
   }
 
   if (!isLogin && pathname === "/profile") {
+    history.pushState({}, "", "/login");
     router("/login");
     return;
   }
 
+  history.pushState({}, "", pathname);
   page();
 };
 
@@ -75,10 +77,6 @@ const handleClick = (e) => {
     const { href } = e.target;
     let path = href.slice(href.lastIndexOf("/"));
     e.preventDefault();
-
-    if (!href.includes("#")) {
-      history.pushState({}, "", href);
-    }
 
     if (e.target.id === "logout") {
       userManager.resetUserLocalStorage();
