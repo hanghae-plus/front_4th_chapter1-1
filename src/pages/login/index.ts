@@ -47,7 +47,9 @@ export class LoginPage {
           "#username",
         ) as HTMLInputElement;
 
-        UserStore.actions.useSetUserInfo("name", username.value);
+        UserStore.actions.useSetUserInfo("username", username.value);
+        UserStore.actions.useSetUserInfo("email", "");
+        UserStore.actions.useSetUserInfo("bio", "");
 
         Router.push("/");
       }

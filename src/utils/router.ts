@@ -1,6 +1,6 @@
 import { UserStore } from "../store/authStore";
 
-type Routes = "/" | "/profile" | "/login" | "404";
+export type Routes = "/" | "/profile" | "/login" | "404";
 
 // 컴포넌트 타입 정의
 type Component = () => string;
