@@ -1,4 +1,2 @@
-export * from "./MainPage";
-export * from "./ErrorPage";
-export * from "./LoginPage";
-export * from "./ProfilePage";
+export * from "./header";
+export * from "./footer";

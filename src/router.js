@@ -1,11 +1,12 @@
 import routes from "./routes.js";
-import { MainPage, ProfilePage, LoginPage, ErrorPage } from "./components";
+import { MainPage, ProfilePage, LoginPage, ErrorPage } from "./pages";
+const root = document.getElementById("root");
 
 function renderPage() {
-  const path = window.location.pathname;
-  const root = document.getElementById("root");
+  const currentPath = window.location.pathname;
+  let page;
 
-  switch (path) {
+  switch (currentPath) {
     case routes.home:
       root.innerHTML = MainPage();
       break;
@@ -13,7 +14,12 @@ function renderPage() {
       root.innerHTML = ProfilePage();
       break;
     case routes.login:
-      root.innerHTML = LoginPage();
+      //   root.innerHTML = LoginPage();
+      page = LoginPage();
+      root.innerHTML = page.template;
+      if (page.init) {
+        page.init();
+      }
       break;
     default:
       root.innerHTML = ErrorPage();
@@ -21,12 +27,12 @@ function renderPage() {
   }
 }
 
-function navigate(path) {
+const navigate = (path) => {
   window.history.pushState({}, "", path);
   renderPage();
-}
+};
 
-function setUpRouter() {
+const setUpRouter = () => {
   window.addEventListener("popstate", renderPage);
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -43,6 +49,6 @@ function setUpRouter() {
       }
     });
   });
-}
+};
 
 export default setUpRouter;
