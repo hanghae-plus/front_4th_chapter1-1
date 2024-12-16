@@ -24,32 +24,33 @@ export function createRouter() {
     root.innerHTML = route();
   }
 
-  return {
-    router() {
-      let path = window.location.pathname;
-      const user = new UserStore().getUser();
+  function validateRouteUser(path) {
+    const user = new UserStore().getUser();
+    if (!user && path === "/profile") path = "/login";
+    if (user && path === "/login") path = "/";
+    return path;
+  }
 
-      if (!user && path === "/profile") path = "/login";
-      if (user && path === "/login") path = "/";
+  function validateHashRouteUser(hash) {
+    const user = new UserStore().getUser();
+    if (!user && hash === "#/profile") hash = "#/login";
+    if (user && hash === "#/login") hash = "#/";
+    return hash;
+  }
+
+  return {
+    router(path) {
+      path = path || window.location.pathname;
+      path = validateRouteUser(path);
       const route = ROUTES[path] || ROUTES["404"];
       window.history.pushState(null, "", path);
       render(route);
     },
-    hashRouter() {
-      let hash = window.location.hash;
-      const user = new UserStore().getUser();
-      if (!user && hash === "#/profile") hash = "#/login";
-      if (user && hash === "#/login") hash = "#/";
+    hashRouter(hash) {
+      hash = hash || window.location.hash;
+      hash = validateHashRouteUser(hash);
       const route = HASH_ROUTES[hash] || HASH_ROUTES[404];
       window.history.pushState(null, "", hash);
-      render(route);
-    },
-    navigator(path) {
-      const user = new UserStore().getUser();
-      if (!user && path === "/profile") path = "/login";
-      if (user && path === "/login") path = "/";
-      const route = ROUTES[path] || ROUTES["404"];
-      window.history.pushState(null, "", path);
       render(route);
     },
   };
