@@ -9,7 +9,6 @@ const route = new Router();
 const auth = new useAuth();
 
 const renderLoginPage = () => {
-  document.getElementById("root").innerHTML = LoginPage();
   authGuard(
     () => {
       document.getElementById("root").innerHTML = HomePage();
