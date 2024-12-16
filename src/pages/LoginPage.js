@@ -1,4 +1,3 @@
-import { Button } from "../components/Button";
 import { router } from "../main";
 
 export const LoginPage = () => {
@@ -24,13 +23,15 @@ export const LoginPage = () => {
         <input type="password" id='password' placeholder="비밀번호" class="w-full p-2 border rounded">
       </div>
       <button type="submit" id='loginSubmit' class="w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</button>
+
     </form>
     <div class="mt-4 text-center">
       <a href="#" class="text-blue-600 text-sm">비밀번호를 잊으셨나요?</a>
     </div>
     <hr class="my-6">
     <div class="text-center">
-    ${Button("새 계정 만들기", "button")}
+    
+      <button class="bg-green-500 text-white px-4 py-2 rounded font-bold">새 계정 만들기</button>
     </div>
   </div>
 </main>`;
