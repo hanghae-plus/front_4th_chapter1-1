@@ -1,5 +1,5 @@
 const isLogin = () => {
-  const user = window.localStorage.getItem("user");
+  const user = localStorage.getItem("user");
   return user ? true : false;
 };
 
