@@ -39,16 +39,12 @@ function createRouter() {
       window.history.pushState(null, "", hash);
     }
 
-    initializeView(route);
+    render(route);
   };
 }
 
-function initializeView(route) {
+function render(route) {
   const root = document.getElementById("root");
-  render(route, root);
-}
-
-function render(route, root) {
   root.innerHTML = route();
 }
 
