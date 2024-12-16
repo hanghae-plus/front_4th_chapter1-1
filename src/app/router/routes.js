@@ -6,10 +6,18 @@ import { ProfilePage } from "../../pages/profile";
 import { MainLayout } from "../layout/main-layout";
 import { useRouter } from "./lib/hooks";
 
-export function protectedRoute(router, Component) {
+function authGuard(router, Component) {
   if (!localStorage.getItem("user")) {
     router.navigate("/login");
     return LoginPage();
+  }
+  return Component;
+}
+
+function protectedRoute(router, Component) {
+  if (localStorage.getItem("user")) {
+    router.navigate("/");
+    return MainLayout(MainPage());
   }
   return Component;
 }
@@ -18,10 +26,13 @@ export function protectedRoute(router, Component) {
 const routes = {
   404: ErrorPage,
   "/": () => MainLayout(MainPage()),
-  "/login": () => LoginPage(),
+  "/login": () => {
+    const router = useRouter();
+    return protectedRoute(router, LoginPage());
+  },
   "/profile": () => {
     const router = useRouter();
-    return protectedRoute(router, MainLayout(ProfilePage()));
+    return authGuard(router, MainLayout(ProfilePage()));
   },
 };
 

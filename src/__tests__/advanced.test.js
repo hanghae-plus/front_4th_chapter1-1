@@ -3,8 +3,8 @@ import {
   afterAll,
   beforeAll,
   beforeEach,
-  expect,
   describe,
+  expect,
   it,
   vi,
 } from "vitest";
@@ -58,6 +58,7 @@ describe("심화과제 테스트", () => {
       );
 
       goTo("/login");
+      console.log("여기보세요", document.body.innerHTML);
       expect(
         document.querySelector("nav .text-blue-600.font-bold").innerHTML,
       ).toContain("홈");
