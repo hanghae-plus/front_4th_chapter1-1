@@ -42,7 +42,7 @@ route.registerRoute("/login", renderLoginPage);
 route.registerRoute("/profile", renderProfilePage);
 
 //현재 패스에 대한 페이지 렌더
-route.setting(location.pathname);
+route.setting();
 
 // 전역 click 이벤트 리스너 추가
 document.body.addEventListener("click", (event) => {

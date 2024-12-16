@@ -34,3 +34,27 @@ export class Router {
     this.render(location.pathname);
   }
 }
+
+export class HashRouter {
+  constructor() {
+    this.route = {};
+    window.addEventListener("hashchange", this.setting.bind(this));
+  }
+
+  registerRoute(path, render) {
+    this.route[path] = render;
+  }
+
+  render(path) {
+    const render = this.route[path];
+    if (render) {
+      render();
+    } else {
+      document.getElementById("root").innerHTML = NotFoundPage();
+    }
+  }
+
+  setting() {
+    this.render(location.hash);
+  }
+}
