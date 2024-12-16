@@ -1,5 +1,5 @@
 import { ProfilePage } from "./profile";
-import { ErrorPage } from "./error";
+import { NotFoundPage } from "./error";
 import { LoginPage } from "./login";
 import { HomePage } from "./home";
 
@@ -7,7 +7,7 @@ const routes = {
   "/": HomePage,
   "/profile": ProfilePage,
   "/login": LoginPage,
-  "/404": ErrorPage,
+  "/404": NotFoundPage,
 };
 
 // return ProfilePage();
@@ -16,13 +16,13 @@ const renderPage = () => {
   console.log("renderPage called");
   const path = window.location.pathname;
   // 경로에 맞는 컴포넌트 검색
-  const PageComponent = routes[path] || ErrorPage;
+  const PageComponent = routes[path] || NotFoundPage;
   document.getElementById("root").innerHTML = PageComponent();
 };
 
 export const navigate = (path) => {
   // URL 업데이트
-  const newPath = ["/", "/profile", "/login", "/404"].includes(path)
+  const newPath = ["/", "/profile", "/login", "/#", "/404"].includes(path)
     ? path
     : "/404";
   window.history.pushState({}, "", newPath);
