@@ -1,7 +1,5 @@
-// import { Header } from "tar";
 import { Header } from "./header";
 import { Footer } from "./footer";
-// import { navigate } from "./main";
 
 export const HomePage = () => {
   const header = Header();

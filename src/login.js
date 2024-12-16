@@ -1,4 +1,4 @@
-import { set } from "./local-storage";
+import { saveUser } from "./local-storage";
 import { navigate } from "./main";
 import { validateUsername } from "./validator";
 
@@ -34,26 +34,16 @@ export const LoginPage = () => {
       console.log(`submit pressed`);
       e.preventDefault();
 
-      const formData = new FormData(form);
-
-      const username = formData.get("username");
-      const password = formData.get("password");
-
-      //FIXME: 이거 왜 uncaught exception 나오지?
-      // const username = document.querySelector("#username").value;
-      // const password = document.querySelector("#password").value;
-
-      // const formData.has('username') {
-
-      // }
+      const username = document.querySelector("#username").value;
+      const password = document.querySelector("#password").value;
 
       console.log(`username: ${username}`);
       console.log(`password: ${password}`);
 
-      if (validateUsername(username)) {
+      if (validateUsername(username) && password) {
         console.log(`isvalid, go to home page`);
-        set("username", username);
-        set("password", password);
+        saveUser(username);
+        console.log(`username:${username}`);
         navigate("/");
       }
     });

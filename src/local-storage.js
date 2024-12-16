@@ -3,13 +3,38 @@ export const set = (key, value) => {
 };
 
 export const isLoggedIn = () => {
-  return localStorage.getItem("username");
+  const user = getUser();
+  if (user && user.username !== "") {
+    return true;
+  } else {
+    return false;
+  }
 };
 
-export const remove = (key) => {
-  localStorage.removeItem(key);
+export const saveUser = (username, email, bio) => {
+  localStorage.setItem(
+    "user",
+    JSON.stringify({
+      username: username ?? "",
+      email: email ?? "",
+      bio: bio ?? "",
+    }),
+  );
+};
+
+export const getValue = (key) => {
+  return localStorage.getItem(key) ?? "";
+};
+
+export const getUser = () => {
+  const userValue = getValue("user");
+  if (userValue) {
+    return JSON.parse(userValue);
+  }
+  // return null
+  return { username: "", email: "", bio: "" };
 };
 
 export const clear = () => {
-  localStorage.clear();
+  saveUser("", "", "");
 };

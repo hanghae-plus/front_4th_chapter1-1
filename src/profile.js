@@ -1,9 +1,17 @@
 import { Footer } from "./footer";
 import { Header } from "./header";
+import { getUser, saveUser } from "./local-storage";
 export const ProfilePage = () => {
   // 페이지 구조 생성
   const header = Header();
   const footer = Footer();
+
+  //   const user = getValue('user');
+  //   const { username = '', email = '', bio = ''} = {...user}
+  const { username = "", email = "", bio = "" } = getUser() || {};
+  //   const username = getValue('username');
+  //   const email = getValue('email');
+  //   const bio = getValue('bio');
 
   const html = `
       <div id="root">
@@ -26,7 +34,7 @@ export const ProfilePage = () => {
                       type="text"
                       id="username"
                       name="username"
-                      value="홍길동"
+                      value="${username}"
                       class="w-full p-2 border rounded"
                     />
                   </div>
@@ -40,7 +48,7 @@ export const ProfilePage = () => {
                       type="email"
                       id="email"
                       name="email"
-                      value="hong@example.com"
+                      value="${email}"
                       class="w-full p-2 border rounded"
                     />
                   </div>
@@ -55,9 +63,7 @@ export const ProfilePage = () => {
                       name="bio"
                       rows="4"
                       class="w-full p-2 border rounded"
-                    >
-  안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.</textarea
-                    >
+                    >${bio}</textarea>
                   </div>
                   <button
                     type="submit"
@@ -77,13 +83,22 @@ export const ProfilePage = () => {
 
   // DOM에 추가된 후 이벤트 리스너 설정
   setTimeout(() => {
-    const form = document.querySelector("#profile-form");
+    const form = document.querySelector("#root #profile-form");
 
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
+    if (form) {
+      form.addEventListener("submit", (event) => {
+        const usernameInput = document.querySelector("#username").value;
+        const emailInput = document.querySelector("#email").value;
+        const bioInput = document.querySelector("#bio").value;
+        saveUser(usernameInput, emailInput, bioInput);
 
-      // const formData = new FormData(form);
-    });
+        console.log(`inputs: ${usernameInput} ${emailInput} ${bioInput}`);
+        event.preventDefault();
+        alert("프로필이 업데이트되었습니다.");
+
+        // const formData = new FormData(form);
+      });
+    }
   }, 0);
 
   return html;
