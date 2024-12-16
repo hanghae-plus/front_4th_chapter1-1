@@ -2,7 +2,9 @@ import { useAuth } from "../store/useAuth";
 
 export const Header = () => {
   const auth = new useAuth();
-  const currentPath = location.pathname;
+  const currentPath = location.hash
+    ? location.hash.slice(1)
+    : location.pathname;
   const activeMenu = "text-blue-600 font-bold";
   const inActiveMenu = "text-gray-600";
 
