@@ -1,5 +1,4 @@
 import createRouter from "./core/createRouter";
-import { routes } from "./routes";
 
 let router: ReturnType<typeof createRouter>;
 
@@ -10,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     throw new Error("Couldn't find root element!");
   }
 
-  router = createRouter(container, routes);
+  router = createRouter(container);
   router.init();
 });
 

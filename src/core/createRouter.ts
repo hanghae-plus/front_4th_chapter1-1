@@ -1,6 +1,16 @@
-import { ROUTES, Routes } from "../routes";
+import { ROUTES, routes } from "../routes";
 
-const createRouter = (container: HTMLElement, routes: Routes) => {
+type Router = {
+  render: (pathname: string) => void;
+  navigate: (pathname: string) => void;
+  init: () => void;
+};
+
+const createBaseRouter = (
+  container: HTMLElement,
+  getPath: () => string,
+  updatePath: (path: string) => void,
+): Router => {
   const checkAuth = (pathname: string) => {
     const route = routes[pathname];
     if (route?.isProtectedRoute && !localStorage.getItem("user")) {
@@ -18,20 +28,16 @@ const createRouter = (container: HTMLElement, routes: Routes) => {
     const checkedPath = checkAuth(pathname);
     const route = routes[checkedPath] || routes[ROUTES.NOT_FOUND];
     container.innerHTML = route.component();
-    route.setUp && route.setUp();
+    route.setUp?.();
   };
 
   const navigate = (pathname: string) => {
-    window.history.pushState({}, "", pathname);
+    updatePath(pathname);
     render(pathname);
   };
 
   const init = () => {
-    render(window.location.pathname);
-
-    window.addEventListener("popstate", () => {
-      render(window.location.pathname);
-    });
+    render(getPath());
 
     document.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
@@ -54,11 +60,41 @@ const createRouter = (container: HTMLElement, routes: Routes) => {
     });
   };
 
-  return {
-    render,
-    navigate,
-    init,
-  };
+  return { render, navigate, init };
+};
+
+const createRouter = (container: HTMLElement): Router => {
+  const isHashRouter = import.meta.env.VITE_ROUTER_MODE === "hash";
+
+  if (isHashRouter && window.location.pathname !== "/index.hash.html") {
+    window.location.href = `/index.hash.html${window.location.hash || "#/"}`;
+    return createBaseRouter(
+      container,
+      () => window.location.hash,
+      (pathname) => (window.location.hash = pathname),
+    );
+  }
+
+  const config = isHashRouter
+    ? {
+        getPath: () => window.location.hash,
+        updatePath: (pathname: string) => (window.location.hash = pathname),
+        event: "hashchange",
+      }
+    : {
+        getPath: () => window.location.pathname,
+        updatePath: (pathname: string) =>
+          window.history.pushState({}, "", pathname),
+        event: "popstate",
+      };
+
+  const router = createBaseRouter(container, config.getPath, config.updatePath);
+
+  window.addEventListener(config.event, () => {
+    router.render(config.getPath());
+  });
+
+  return router;
 };
 
 export default createRouter;

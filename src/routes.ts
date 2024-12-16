@@ -3,31 +3,26 @@ import { LoginPage, setupLoginPage } from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 import { ProfilePage, setUpProfilePage } from "./pages/ProfilePage";
 
-export type Routes = {
-  [key: string]: {
+export type Routes<T extends string> = {
+  [key in T]: {
     setUp?: () => void;
     component: () => string;
     isProtectedRoute?: boolean;
   };
 };
 
+const isHistoryRouter = import.meta.env.VITE_ROUTER_MODE === "history";
+
 export const ROUTES = {
-  HOME: "/",
-  LOGIN: "/login",
-  PROFILE: "/profile",
-  NOT_FOUND: "*",
+  HOME: isHistoryRouter ? "/" : "#/",
+  LOGIN: isHistoryRouter ? "/login" : "#/login",
+  PROFILE: isHistoryRouter ? "/profile" : "#/profile",
+  NOT_FOUND: isHistoryRouter ? "404" : "#/404",
 } as const;
 
 export type RoutePaths = (typeof ROUTES)[keyof typeof ROUTES];
 
-export const routes: Record<
-  RoutePaths,
-  {
-    component: () => string;
-    setUp?: () => void;
-    isProtectedRoute: boolean;
-  }
-> = {
+export const routes = {
   [ROUTES.HOME]: {
     component: MainPage,
     isProtectedRoute: false,
@@ -45,7 +40,6 @@ export const routes: Record<
     isProtectedRoute: true,
   },
   [ROUTES.NOT_FOUND]: {
-    setUp: () => {},
     component: NotFoundPage,
     isProtectedRoute: false,
   },

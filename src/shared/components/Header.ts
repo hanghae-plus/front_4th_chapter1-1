@@ -1,9 +1,12 @@
+import { getCurrentPath } from "./utils/getCurrentPath";
+
 const Header = () => {
   const isLoggedIn = !!localStorage.getItem("user");
   const activeColor = "text-blue-600 font-bold";
   const deactiveColor = "text-gray-600";
+
   const getNavColor = (path: string) => {
-    return window.location.pathname === path ? activeColor : deactiveColor;
+    return getCurrentPath() === path ? activeColor : deactiveColor;
   };
 
   return /* html */ `
@@ -13,15 +16,15 @@ const Header = () => {
 
   <nav class="bg-white shadow-md p-2 sticky top-14" role="navigation">
   <ul class="flex justify-around">
-     <li><a href="/" class="${getNavColor("/")}" data-link>홈</a></li>
+     <li><a href="${window.location.hash ? "#/" : "/"}" class="${getNavColor("/")}" data-link>홈</a></li>
      ${
        isLoggedIn
          ? `
-       <li><a href="/profile" class="${getNavColor("/profile")}" data-link>프로필</a></li>
+       <li><a href="${window.location.hash ? "#/profile" : "/profile"}" class="${getNavColor("/profile")}" data-link>프로필</a></li>
        <li><a id="logout" href="#" class="${deactiveColor}" data-action="logout">로그아웃</a></li>
      `
          : `
-       <li><a href="/login" class="${getNavColor("/login")}" data-link>로그인</a></li>
+       <li><a href="${window.location.hash ? "#/login" : "/login"}" class="${getNavColor("/login")}" data-link>로그인</a></li>
      `
      }
    </ul>
