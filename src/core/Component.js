@@ -21,7 +21,18 @@ class Component {
 
   setState(newState) {
     this.state = { ...this.state, ...newState };
-    this.render;
+    this.render();
+  }
+
+  addEvent(eventType, selector, callback) {
+    const boundCallback = (event) => {
+      if (!event.target.closest(selector)) return false;
+      callback(event);
+    };
+
+    // 기존에 동일한 이벤트 리스너가 있는지 확인 후 제거
+    this.$target.removeEventListener(eventType, boundCallback);
+    this.$target.addEventListener(eventType, boundCallback);
   }
 
   setEvent() {}

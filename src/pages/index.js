@@ -4,16 +4,16 @@ import MainPage from "./Main";
 import ProfilePage from "./Profile";
 
 const createPageFactory = ($target) => {
-  const main = () => new MainPage($target);
-  const error = () => new ErrorPage($target);
-  const login = () => new LoginPage($target);
-  const profile = () => new ProfilePage($target);
+  const mainInstance = new MainPage($target);
+  const errorInstance = new ErrorPage($target);
+  const loginInstance = new LoginPage($target);
+  const profileInstance = new ProfilePage($target);
 
   return {
-    main,
-    error,
-    login,
-    profile,
+    main: () => mainInstance,
+    error: () => errorInstance,
+    login: () => loginInstance,
+    profile: () => profileInstance,
   };
 };
 

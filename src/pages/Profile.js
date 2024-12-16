@@ -1,25 +1,45 @@
 import Component from "../core/component";
+import { getAuth } from "../auth/auth";
+import Router from "../router/router";
 
 class ProfilePage extends Component {
+  setEvent() {
+    this.addEvent("click", ".nav-link", (e) => {
+      const target = e.target.closest("a");
+      if (!(target instanceof HTMLAnchorElement)) return;
+
+      e.preventDefault();
+      const targetURL = e.target.getAttribute("href");
+      const router = Router.instance;
+      router.navigate(targetURL);
+    });
+  }
+
   template() {
+    const currentPath = window.location.pathname;
+    const auth = getAuth();
+
     return `
-  <div id="root">
     <div class="bg-gray-100 min-h-screen flex justify-center">
-      <div class="max-w-md w-full">
-        <header class="bg-blue-600 text-white p-4 sticky top-0">
-          <h1 class="text-2xl font-bold">항해플러스</h1>
-        </header>
+    <div class="max-w-md w-full">
+      <header class="bg-blue-600 text-white p-4 sticky top-0">
+        <h1 class="text-2xl font-bold">항해플러스</h1>
+      </header>
 
-        <nav class="bg-white shadow-md p-2 sticky top-14">
-          <ul class="flex justify-around">
-            <li><a href="/" data-link class="text-gray-600">홈</a></li>
-            <li><a href="/profile" data-link class="text-blue-600">프로필</a></li>
-            <li><a href="#" class="text-gray-600">로그아웃</a></li>
-          </ul>
-        </nav>
+       <nav class="navbar bg-white shadow-md p-2 sticky top-14">
+        <ul class="flex justify-around">
+          <li><a href="/" class="nav-link ${currentPath === "/" ? "text-blue-600" : "text-gray-600"}">홈</a></li>
+          ${
+            auth
+              ? `<li><a href="/profile" class="nav-link ${currentPath === "/profile" ? "text-blue-600" : "text-gray-600"}">프로필</a></li>
+              <li><a href="/login" class="nav-link logoutBtn text-gray-600">로그아웃</a></li>`
+              : `<li><a href="/login" class="nav-link text-gray-600">로그인</a></li>`
+          }
+        </ul>
+      </nav>
 
-        <main class="p-4">
-          <div class="bg-white p-8 rounded-lg shadow-md">
+      <main class="p-4">
+        <div class="bg-white p-8 rounded-lg shadow-md">
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
               내 프로필
             </h2>
@@ -82,7 +102,6 @@ class ProfilePage extends Component {
         </footer>
       </div>
     </div>
-  </div>
   `;
   }
 }

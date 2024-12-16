@@ -1,23 +1,23 @@
 import Component from "../core/component";
 import { login } from "../auth/auth";
-import Router from "../router/Router";
+import Router from "../router/router";
 
 class LoginPage extends Component {
   setEvent() {
-    this.$target.addEventListener("click", (e) => {
-      if (e.target.type === "submit") {
-        e.preventDefault();
-        const username = this.$target.querySelector(".username").value.trim();
-        const password = this.$target.querySelector(".password").value.trim();
+    this.addEvent("click", ".loginSubmitBtn", (e) => {
+      e.preventDefault();
+      console.log("Login Page addEvent : loginSubmit");
+      const username = this.$target.querySelector(".username").value.trim();
+      const password = this.$target.querySelector(".password").value.trim();
 
-        if (!username || !password) {
-          return;
-        }
-
-        login(username);
-        const router = new Router();
-        router.navigateTo("/");
+      if (!username || !password) {
+        return;
       }
+
+      login(username);
+
+      const router = Router.instance;
+      router.navigate("/");
     });
   }
 
@@ -33,7 +33,7 @@ class LoginPage extends Component {
         <div class="mb-6">
           <input type="password"placeholder="비밀번호" class="password w-full p-2 border rounded">
         </div>
-        <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</button>
+        <button type="submit" class="loginSubmitBtn w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</button>
       </form>
       <div class="mt-4 text-center">
         <a href="#" class="text-blue-600 text-sm">비밀번호를 잊으셨나요?</a>
