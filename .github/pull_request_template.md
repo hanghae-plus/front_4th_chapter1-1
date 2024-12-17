@@ -109,21 +109,61 @@ DOM은 window 객체의 하위인 document 객체를 통해 접근할 수 있다
 - 즉, BOM은 브라우저 환경을 제어하는 모델이고, DOM은 HTML 문서의 구조를 제어하는 모델이다.
 DOM Tree 구조를 이해하면서 노드 간의 관계와 이벤트 위임의 작동 방식을 파악하는 데 큰 도움이 될 것 같다.(아직 안함)
 
-https://m.blog.naver.com/magnking/220972680805
+- 선언한 코드도 사실 tree 구조 중, 뿌리(root)에서 시작해서 잎(leaf)에서 끝난다 할때 뿌리에 해당된다
+```javascript
+  // DOM 의 뿌리 부분, 즉 DOM 노드
+  document.getElementById("root").innerHTML = content; 
+  //선언이 되며 "#root" 요소 내부의 모든 내용이 새로운 값으로 대체 됨
+```
+
+![DOM의 구조](image.png)
+
+[그림] https://m.blog.naver.com/magnking/220972680805
 <br />
 
-- 이벤트 위임 : 
+- 이벤트 위임 : 버블링과 캡처링
 
 <br />
 
 - History API : 업무를 하면서 **리액트 라우터** 의 원초적 개념을 모른체 사용하고 있었다는 것을 알게 되었다.<br/>**리액트 라우터** 가 실은 내부적으로 History API 를 사용한다는 것을 배우는 순간 이었다. (뜨든!)
 
 ### 코드 품질
-<!-- 예시
-- 특히 만족스러운 구현
-- 리팩토링이 필요한 부분
-- 코드 설계 관련 고민과 결정
--->
+- 코드가 겹치는 부분이 많았다 <br />
+예시로, History API 를 구현에 있어서 router.addRoute() 파트는 path 별로 아래 코드를 모두 할당해 주었어야 했다
+```javascript
+document.getElementById("root").innerHTML = content; 
+```
+하지만, 하나의 함수로 정의해주면 파라미터 값에 따라 이벤트 처리도 각각 동시에 해줄 수 있다고 생각했다<br />
+따라서 **loadRoute(content)** 라는 함수를 정의하여 파라미터로 컴포넌트화 된 각 페이지 정보를 넘겨주었다
+```javascript
+// 파라미터로 페이지 컴포넌트 받아 옴
+function loadRoute(content) {
+  document.getElementById("root").innerHTML = content;
+
+  switch (content) {
+    case FirstPage():
+      // FIrstPage 에 해당하는 이벤트 처리
+      break;
+    case SecondPage():
+      // SecondPage 에 해당하는 이벤트 처리
+      break;
+      // 등..
+    default:
+      break;
+  }
+}
+```
+
+**TME.** loadRoute() 에 문제가 있었다.<br />
+기본 과제가 끝나서 커밋을 하려는데 ESLint 테스트에 걸렸다.<br />
+살펴보니 switch case 문에 오류가 있었다.<br />
+기능적인 오류는 아니었고 조건문의 흐름에 방해가 되는 부분이었다.<br />
+  1. switch case 문에 여러개의 변수가 선언되어서는 안된다.
+    - 필요하다면 **'{ }'** 를 사용해서 구현하면된다고 한다.
+  2. case 뒤에는 상수나 표현식이 와야 한다.
+    - 난 **FirstPage()** 와 같이 함수 호출을 했기 때문에 안된 것이다.<br /><br />
+  ***해결 :* 그냥 간단하게 if 문으로 갈아탔다.** ~~끄읕~~
+
 
 ### 학습 효과 분석
 <!-- 예시
@@ -139,7 +179,7 @@ https://m.blog.naver.com/magnking/220972680805
 -->
 
 ## 리뷰 받고 싶은 내용
-
+- 이벤트 리스너는 항상 DOM 랜더링 이후에 선언을 해두어야 에러가 발생하지 않는 것을 경험했습니다.<br />해당 요소를 찾지 못해서 그렇다고 생각합니다. 그래서 랜더링 되는 페이지 별로 리스너를 처리하는 함수 **loadRoute(content)** 를 선언 해두었는데요.<br />비동기적으로 렌더링되는 요소에 대해 DOM을 주기적으로 체크하는 방식 대신, 효율적으로 이벤트를 바인딩하는 방법을 알고 싶습니다.<br />
 <!--
 피드백 받고 싶은 내용을 구체적으로 남겨주세요
 모호한 요청은 피드백을 남기기 어렵습니다.

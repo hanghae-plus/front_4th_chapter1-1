@@ -11,7 +11,7 @@ export default function ProfilePage() {
             <ul class="flex justify-around">
               <li><a href="/" class="text-gray-600">홈</a></li>
               <li><a href="/profile" class="text-blue-600">프로필</a></li>
-              <li><button id="logout" class="text-gray-600">로그아웃</button></li>
+              <li><a href="/" id="logout" class="text-gray-600">로그아웃</a></li>
             </ul>
           </nav>
 
