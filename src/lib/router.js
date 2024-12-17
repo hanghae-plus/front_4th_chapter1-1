@@ -1,4 +1,3 @@
-// src/lib/router.js
 import { MainPage } from "../pages/MainPage.js";
 import { ProfilePage } from "../pages/ProfilePage.js";
 import { LoginPage } from "../pages/LoginPage.js";
@@ -15,7 +14,7 @@ const routerTypes = {
   history: {
     getPath: () => window.location.pathname,
 
-    navigate: (url, { replace = false } = {}) => {
+    updateURL: (url, { replace = false } = {}) => {
       const pathname = url.startsWith("http") ? new URL(url).pathname : url;
 
       if (replace) {
@@ -28,17 +27,17 @@ const routerTypes = {
 
     setupListeners: (handleRoute) => {
       const popstateHandler = () => handleRoute(routerTypes.history.getPath());
-      window.removeEventListener("popstate", popstateHandler); // 기존 리스너 제거
+      window.removeEventListener("popstate", popstateHandler);
       window.addEventListener("popstate", popstateHandler);
 
       const clickHandler = (e) => {
         if (e.target.matches("[data-link]")) {
           e.preventDefault();
-          const path = routerTypes.history.navigate(e.target.href);
+          const path = routerTypes.history.updateURL(e.target.href);
           handleRoute(path);
         }
       };
-      document.removeEventListener("click", clickHandler); // 기존 리스너 제거
+      document.removeEventListener("click", clickHandler);
       document.addEventListener("click", clickHandler);
     },
   },
@@ -56,11 +55,24 @@ const createRouter = (type = "history") => {
 
   const handleRoute = (path) => {
     const user = JSON.parse(localStorage.getItem("user"));
+
     if (path === "/profile" && !user) {
-      router.navigate("/login", { replace: true });
+      navigate("/login", { replace: true });
       return;
     }
+
+    if (path === "/login" && user) {
+      navigate("/", { replace: true });
+      return;
+    }
+
     renderPage(path);
+  };
+
+  const navigate = (url, options) => {
+    const path = router.updateURL(url, options);
+    handleRoute(path);
+    return path;
   };
 
   const init = (rootElementId) => {
@@ -71,7 +83,7 @@ const createRouter = (type = "history") => {
     handleRoute(router.getPath());
   };
 
-  return { init, navigate: router.navigate };
+  return { init, navigate };
 };
 
 export const router = createRouter("history");
