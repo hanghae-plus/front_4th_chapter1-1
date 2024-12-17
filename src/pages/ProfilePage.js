@@ -1,14 +1,12 @@
 import userService from "../features/userService";
 import { InputName } from "../shared/const";
-import { router } from "../shared/router";
+import { router } from "../app/router";
 import { Footer } from "../widgets/Footer";
 import { Header } from "../widgets/Header";
 
 export const ProfilePage = () => {
   const user = userService.getUser();
-  console.log("~ ~ ~ ~ ~ ~ ~");
-  console.log(user);
-  console.log("~ ~ ~ ~ ~ ~ ~");
+
   const { view: headerView, init: initHeader } = Header();
 
   const view = `
@@ -16,6 +14,7 @@ export const ProfilePage = () => {
       <div class="bg-gray-100 min-h-screen flex justify-center">
         <div class="max-w-md w-full">
         ${headerView}
+
           <main class="p-4">
             <div class="bg-white p-8 rounded-lg shadow-md">
               <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">

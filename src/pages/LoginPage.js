@@ -1,6 +1,6 @@
 import userService from "../features/userService";
 import { InputName } from "../shared/const";
-import { router } from "../shared/router";
+import { router } from "../app/router";
 
 export const LoginPage = () => {
   const view = `
@@ -9,7 +9,7 @@ export const LoginPage = () => {
         <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
         <form id="login-form">
           <div class="mb-4">
-            <input type="text" id="username" name=${InputName.ID} placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
+            <input type="text" id="username" name=${InputName.USERNAME} placeholder="사용자 이름" class="w-full p-2 border rounded">
           </div>
           <div class="mb-6">
             <input type="password" name=${InputName.PASSWORD} placeholder="비밀번호" class="w-full p-2 border rounded">
@@ -33,20 +33,14 @@ export const LoginPage = () => {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      const id = form.querySelector(`input[name = ${InputName.ID}]`)?.value;
-      // const pw = form.querySelector(
-      //   `input[name = ${InputName.PASSWORD}]`,
-      // )?.value;
+      const username = form.querySelector(
+        `input[name = ${InputName.USERNAME}]`,
+      )?.value;
 
-      if (!(userService.isValidName(id) || userService.isValidEmail(id))) {
-        return alert("이메일 또는 전화번호를 확인해주세요.");
+      if (!username) {
+        return alert("이름을 입력해주세요.");
       }
-
-      if (userService.isValidName(id)) {
-        userService.setUser({ username: id, email: "", bio: "" });
-      } else if (userService.isValidEmail(id)) {
-        userService.setUser({ email: id, username: "", bio: "" });
-      }
+      userService.setUser({ username, email: "", bio: "" });
       router("/");
     });
   };

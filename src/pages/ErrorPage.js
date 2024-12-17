@@ -1,4 +1,4 @@
-import { router } from "../shared/router";
+import { router } from "../app/router";
 
 export const ErrorPage = () => {
   const view = `
@@ -20,7 +20,8 @@ export const ErrorPage = () => {
   const init = () => {
     const homeBtn = document.querySelector("#to-main");
 
-    homeBtn.addEventListener("click", () => {
+    homeBtn.addEventListener("click", (e) => {
+      e.preventDefault();
       router("/");
     });
   };
