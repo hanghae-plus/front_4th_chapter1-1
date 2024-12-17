@@ -8,6 +8,7 @@ class MainApp extends HTMLElement {
   connectedCallback() {
     this.router = createRouter(this)
       .addRoute("/", <main-page></main-page>)
+      .addRoute("/login", <login-page></login-page>)
       .addRoute("/profile", <profile-page></profile-page>)
       .init();
 
