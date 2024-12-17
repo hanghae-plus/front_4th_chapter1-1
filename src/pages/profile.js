@@ -10,6 +10,7 @@ import router from "../router/router";
 
 const ProfilePage = () => {
   const userInfo = JSON.parse(localStorage.getItem(USER_INFO_LOCALSTORAGE_KEY));
+
   return `
   <div id="root">
     <div class="bg-gray-100 min-h-screen flex justify-center">
@@ -89,6 +90,13 @@ ${userInfo.bio}</textarea
 };
 
 export default function renderProfile() {
+  const userInfo = localStorage.getItem(USER_INFO_LOCALSTORAGE_KEY);
+
+  if (!userInfo) {
+    router("/login");
+    return;
+  }
+
   document.body.innerHTML = `
     ${ProfilePage()}
   `;

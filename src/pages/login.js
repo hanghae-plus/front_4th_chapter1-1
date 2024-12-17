@@ -31,6 +31,13 @@ const LoginPage = () => `
 `;
 
 export default function renderLogin() {
+  const userInfo = localStorage.getItem(USER_INFO_LOCALSTORAGE_KEY);
+
+  if (userInfo) {
+    router("/");
+    return;
+  }
+
   document.body.innerHTML = `
     ${LoginPage()}`;
 
