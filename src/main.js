@@ -257,7 +257,12 @@ const navigation = (path) => {
 const saveProfile = (userData) => {
   state.userData = { ...state.userData, ...userData };
   localStorage.setItem("userData", JSON.stringify(state.userData));
-  console.log("Updated userData:", state.userData);
+
+  const { username, email, bio } = state.userData;
+  document.querySelector("#username").value = username;
+  document.querySelector("#email").value = email;
+  document.querySelector("#bio").value = bio;
+
   renderPage(window.location.pathname);
   alert("프로필이 업데이트되었습니다.");
 };
@@ -274,11 +279,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const updateProfile = document.querySelector("#profileForm");
   if (updateProfile) {
-    const { username, email, bio } = state.userData;
-    document.querySelector("#username").value = username || "";
-    document.querySelector("#email").value = email || "";
-    document.querySelector("#bio").value = bio || "";
-
     updateProfile.addEventListener("submit", (e) => {
       e.preventDefault();
       const username = document.querySelector("#username").value;
@@ -389,19 +389,16 @@ const renderNav = () => {
 const renderPage = (path) => {
   let pageContent = routes[path] ? routes[path]() : routes["/404"]();
 
-  if (path === "/profile" && state.isLoggedIn) {
-    const usernameData = document.querySelector("#username");
-    const emailData = document.querySelector("#email");
-    const bioData = document.querySelector("#bio");
-
-    if (usernameData) usernameData.value = state.userData.username;
-    if (emailData) emailData.value = state.userData.email;
-    if (bioData) bioData.value = state.userData.bio;
-  }
-
   document.body.innerHTML = pageContent;
   renderNav();
   pageEventListeners();
+
+  if (path === "/profile" && state.isLoggedIn) {
+    const { username, email, bio } = state.userData;
+    document.querySelector("#username").value = username;
+    document.querySelector("#email").value = email;
+    document.querySelector("#bio").value = bio;
+  }
 };
 
 // go back
