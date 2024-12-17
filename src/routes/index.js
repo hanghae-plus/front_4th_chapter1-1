@@ -20,6 +20,7 @@ function createRouter(options = {}) {
   }
 
   function updatePath(path) {
+    console.log("이거뭐야", isHashMode());
     if (isHashMode()) {
       window.location.hash = path;
     } else {
@@ -84,6 +85,7 @@ function createRouter(options = {}) {
 
   function handleRouteChange() {
     const path = getPath();
+    console.log("Current path:", path);
     renderPage(path);
   }
 
@@ -118,24 +120,29 @@ function createRouter(options = {}) {
   }
   function init() {
     if (isHashMode()) {
-      window.addEventListener("hashchange", handleRouteChange);
-      // if (!window.location.hash) {
-      //   window.location.hash = "/";
-      //   return;
-      // }
+      // hashchange 이벤트 핸들러 등록
+      window.addEventListener("hashchange", () => {
+        // 즉시 실행
+        handleRouteChange();
+      });
+      if (!window.location.hash) {
+        window.location.hash = "/";
+        // 초기 렌더링 즉시 실행
+        handleRouteChange();
+      } else {
+        // 이미 해시가 있는 경우 즉시 렌더링
+        handleRouteChange();
+      }
     } else {
       window.addEventListener("popstate", handleRouteChange);
+      handleRouteChange();
     }
 
     document.addEventListener("click", handleLinkClick);
-    handleRouteChange();
 
     return () => {
-      // if (isHashMode()) {
       window.removeEventListener("hashchange", handleRouteChange);
-      // } else {
       window.removeEventListener("popstate", handleRouteChange);
-      // }
       document.removeEventListener("click", handleLinkClick);
     };
   }
