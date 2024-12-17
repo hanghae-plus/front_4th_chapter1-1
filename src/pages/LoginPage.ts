@@ -1,5 +1,5 @@
 import { useRouter } from "../main";
-import { ROUTES } from "../routes";
+import { getPathnames } from "../routes";
 
 const setupLoginPage = () => {
   const form = document.getElementById("login-form") as HTMLFormElement;
@@ -13,6 +13,7 @@ const setupLoginPage = () => {
 
 const handleLogin = (form: HTMLFormElement) => {
   const router = useRouter();
+  const PATHNAMES = getPathnames();
 
   const formData = new FormData(form);
 
@@ -24,7 +25,7 @@ const handleLogin = (form: HTMLFormElement) => {
 
   localStorage.setItem("user", JSON.stringify(loginData));
 
-  router.navigate(ROUTES.HOME);
+  router.navigate(PATHNAMES.HOME);
 };
 
 const LoginPage = () => {

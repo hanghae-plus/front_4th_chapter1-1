@@ -1,4 +1,4 @@
-import { ROUTES, routes } from "../routes";
+import { getPathnames, getRoutes } from "../routes";
 
 type Router = {
   render: (pathname: string) => void;
@@ -11,22 +11,25 @@ const createBaseRouter = (
   getCurrentPath: () => string,
   updatePath: (path: string) => void,
 ): Router => {
+  const PATHNAMES = getPathnames();
+  const ROUTES = getRoutes();
+
   const checkAuth = (pathname: string) => {
-    const route = routes[pathname];
+    const route = ROUTES[pathname];
     if (route?.isProtectedRoute && !localStorage.getItem("user")) {
-      navigate(ROUTES.LOGIN);
-      return ROUTES.LOGIN;
+      navigate(PATHNAMES.LOGIN);
+      return PATHNAMES.LOGIN;
     }
-    if (pathname === ROUTES.LOGIN && !!localStorage.getItem("user")) {
-      navigate(ROUTES.HOME);
-      return ROUTES.HOME;
+    if (pathname === PATHNAMES.LOGIN && !!localStorage.getItem("user")) {
+      navigate(PATHNAMES.HOME);
+      return PATHNAMES.HOME;
     }
     return pathname;
   };
 
   const render = (pathname: string) => {
     const checkedPath = checkAuth(pathname);
-    const route = routes[checkedPath] || routes[ROUTES.NOT_FOUND];
+    const route = ROUTES[checkedPath] || ROUTES[PATHNAMES.NOT_FOUND];
     container.innerHTML = route.component();
     route.setUp?.();
   };
@@ -45,7 +48,7 @@ const createBaseRouter = (
       const linkElement = target.closest("[data-link]");
       if (linkElement instanceof HTMLElement) {
         e.preventDefault();
-        const pathname = linkElement.getAttribute("href") || ROUTES.HOME;
+        const pathname = linkElement.getAttribute("href") || PATHNAMES.HOME;
         navigate(pathname);
         return;
       }
@@ -54,7 +57,7 @@ const createBaseRouter = (
       if (logoutButton) {
         e.preventDefault();
         localStorage.removeItem("user");
-        navigate(ROUTES.LOGIN);
+        navigate(PATHNAMES.LOGIN);
         return;
       }
     });
@@ -64,19 +67,13 @@ const createBaseRouter = (
 };
 
 const createRouter = (container: HTMLElement): Router => {
-  const isHashRouter = import.meta.env.VITE_ROUTER_MODE === "hash";
-  console.log(import.meta.env.TEST);
-  if (
-    isHashRouter &&
-    window.location.pathname !== "/index.hash.html" &&
-    !import.meta.env.TEST
-  ) {
-    window.location.href = `/index.hash.html${window.location.hash || "#/"}`;
-    return createBaseRouter(
-      container,
-      () => window.location.hash,
-      (pathname) => (window.location.hash = pathname),
-    );
+  const isHashRouter = window.ROUTE_MODE === "hash";
+
+  if (window.location.hash === "" && isHashRouter) {
+    const currentPath = window.location.pathname;
+    const [_, __, ...pathnames] = currentPath.split("/");
+
+    window.location.href = `${window.location.origin}/index.hash.html#/${pathnames}`;
   }
 
   const config = isHashRouter

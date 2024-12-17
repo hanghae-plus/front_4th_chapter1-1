@@ -11,36 +11,39 @@ export type Routes<T extends string> = {
   };
 };
 
-const isHistoryRouter = import.meta.env.VITE_ROUTER_MODE === "history";
+export const getPathnames = () => {
+  const isHashRouter = window.ROUTE_MODE === "hash";
+  return {
+    HOME: isHashRouter ? "#/" : "/",
+    LOGIN: isHashRouter ? "#/login" : "/login",
+    PROFILE: isHashRouter ? "#/profile" : "/profile",
+    NOT_FOUND: isHashRouter ? "#/404" : "404",
+  } as const;
+};
 
-export const ROUTES = {
-  HOME: isHistoryRouter ? "/" : "#/",
-  LOGIN: isHistoryRouter ? "/login" : "#/login",
-  PROFILE: isHistoryRouter ? "/profile" : "#/profile",
-  NOT_FOUND: isHistoryRouter ? "404" : "#/404",
-} as const;
+export const getRoutes = () => {
+  const PATHNAMES = getPathnames();
 
-export type RoutePaths = (typeof ROUTES)[keyof typeof ROUTES];
-
-export const routes = {
-  [ROUTES.HOME]: {
-    component: MainPage,
-    isProtectedRoute: false,
-  },
-  [ROUTES.LOGIN]: {
-    setUp: setupLoginPage,
-    component: LoginPage,
-    isProtectedRoute: false,
-  },
-  [ROUTES.PROFILE]: {
-    setUp: () => {
-      setUpProfilePage();
+  return {
+    [PATHNAMES.HOME]: {
+      component: MainPage,
+      isProtectedRoute: false,
     },
-    component: ProfilePage,
-    isProtectedRoute: true,
-  },
-  [ROUTES.NOT_FOUND]: {
-    component: NotFoundPage,
-    isProtectedRoute: false,
-  },
+    [PATHNAMES.LOGIN]: {
+      setUp: setupLoginPage,
+      component: LoginPage,
+      isProtectedRoute: false,
+    },
+    [PATHNAMES.PROFILE]: {
+      setUp: () => {
+        setUpProfilePage();
+      },
+      component: ProfilePage,
+      isProtectedRoute: true,
+    },
+    [PATHNAMES.NOT_FOUND]: {
+      component: NotFoundPage,
+      isProtectedRoute: false,
+    },
+  };
 };
