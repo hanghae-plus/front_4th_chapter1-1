@@ -24,6 +24,7 @@ class Component {
 
   setState(newState) {
     this.state = { ...this.state, ...newState };
+    console.log(`setstate : ${this.state.username}`);
     this.render();
   }
 

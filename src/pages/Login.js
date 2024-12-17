@@ -1,6 +1,7 @@
 import Component from "../core/component";
 import { login } from "../auth/auth";
 import Router from "../router/router";
+import ProfilePage from "./Profile";
 
 class LoginPage extends Component {
   setEvent() {
@@ -14,7 +15,9 @@ class LoginPage extends Component {
       }
 
       login(username);
-      const router = Router.instance;
+      const router = new Router();
+      const profileInstnace = new ProfilePage(this.$target);
+      router.addRoute("/profile", () => profileInstnace);
       router.navigate("/");
     });
   }

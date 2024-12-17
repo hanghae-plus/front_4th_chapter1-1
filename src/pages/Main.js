@@ -15,7 +15,7 @@ class MainPage extends Component {
       }
 
       const targetURL = e.target.getAttribute("href");
-      const router = Router.instance;
+      const router = new Router();
       router.navigate(targetURL);
     });
   }

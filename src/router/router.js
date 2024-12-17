@@ -4,7 +4,6 @@ class Router extends Component {
   static instance = null;
 
   constructor($target) {
-    console.log("router init");
     // 라우터 싱글톤(Singleton) 인스턴스
     if (Router.instance) {
       return Router.instance;
@@ -63,9 +62,12 @@ class Router extends Component {
 
   // 라우트 추가
   addRoute(fragment, page) {
-    // 기존 라우트와 중복되는 라우트 무시 처리
+    // 기존 라우트와 중복되는 라우트는 신규 라우트로 대체
     if (this.state.routes.some((route) => route.fragment === fragment)) {
-      return;
+      this.state.routes = this.state.routes.filter(
+        (routeObj) => routeObj.fragment !== fragment,
+      );
+      console.log("remove route", this.state.routes);
     }
 
     this.state.routes.push({ fragment, page });
