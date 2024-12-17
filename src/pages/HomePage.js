@@ -1,10 +1,14 @@
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
+import { authStore } from "../store/AuthStore";
 
-export const HomePage = () => `
+export const HomePage = () => {
+  const container = document.createElement("div");
+
+  const render = () => {
+    container.innerHTML = `
   <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
-    ${Header()}
       <main class="p-4">
         <div class="mb-4 bg-white rounded-lg shadow p-4">
           <textarea class="w-full p-2 border rounded" placeholder="무슨 생각을 하고 계신가요?"></textarea>
@@ -94,7 +98,20 @@ export const HomePage = () => `
           </div>
         </div>
       </main>
-    ${Footer()}
     </div>
   </div>
 `;
+
+    const main = container.querySelector("main");
+    main.parentNode.insertBefore(Header(), main);
+    main.parentNode.insertBefore(Footer(), main.nextSibling);
+  };
+
+  render();
+
+  authStore.subscribe(() => {
+    render();
+  });
+
+  return container;
+};
