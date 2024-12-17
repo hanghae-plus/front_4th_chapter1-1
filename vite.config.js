@@ -17,5 +17,8 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./src/setupTests.js",
     exclude: ["**/e2e/**", "**/*.e2e.spec.js", "**/node_modules/**"],
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
   },
 });
