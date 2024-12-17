@@ -3,7 +3,6 @@ import { isLoggedIn } from "../utils/local-storage";
 export const Header = () => {
   const loggedIn = isLoggedIn();
 
-  console.log(`from header, isLoggedIn: ${loggedIn}`);
   const path = window.location.pathname;
 
   const activatedStyle = "text-blue-600";

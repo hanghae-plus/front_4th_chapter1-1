@@ -27,27 +27,5 @@ export const LoginPage = () => {
   </main>
 `;
 
-  // setTimeout(() => {
-  //   const form = document.getElementById("login-form");
-
-  //   form.addEventListener("submit", (e) => {
-  //     console.log(`submit pressed`);
-  //     e.preventDefault();
-
-  //     const username = document.getElementById("username").value;
-  //     const password = document.getElementById("password").value;
-
-  //     console.log(`username: ${username}`);
-  //     console.log(`password: ${password}`);
-
-  //     if (validateUsername(username)) {
-  //       console.log(`isvalid, go to home page`);
-  //       saveUser(username);
-  //       console.log(`username:${username}`);
-  //       // navigate("/");
-  //     }
-  //   });
-  // }, 0);
-
   return html;
 };

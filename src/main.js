@@ -14,7 +14,6 @@ class Router {
 
   addRoute(path, handler) {
     this.routes[path] = handler;
-    // console.log(`handler: ${handler()}`)
   }
 
   navigateTo(path) {
@@ -54,49 +53,40 @@ router.addRoute("/login", () => LoginPage());
 router.addRoute("/profile", () => ProfilePage());
 router.addRoute("/404", () => NotFoundPage());
 
-document.getElementById("root").addEventListener("click", function (e) {
-  if (e.target && e.target.nodeName == "LI") {
-    console.log(`li tag tapped`);
-    // console.log("List item ", e.target.id, " was clicked!");
-  }
-});
+router.render();
 
 document.addEventListener("click", (event) => {
-  //   console.log(`hi`);
   if (event.target.tagName === "A") {
     // 모든 <a> 태그에 대해 처리
     event.preventDefault(); // 기본 동작(페이지 이동) 방지
-    // navigate(event.target.getAttribute("href")); // 경로 가져오기
     router.navigateTo(event.target.getAttribute("href"));
+  }
+});
+
+document.body.addEventListener("submit", (e) => {
+  if (e.target.id === "login-form") {
+    const username = e.target.querySelector("#username").value;
+    if (username) {
+      saveUser(username);
+      router.navigateTo("/");
+    }
+  }
+
+  if (e.target.id === "profile-form") {
+    let form = e.target;
+    const username = form.querySelector("#username").value;
+    const email = form.querySelector("#email").value;
+    const bio = form.querySelector("#bio").value;
+    saveUser(username, email, bio);
+    alert("프로필이 업데이트되었습니다.");
   }
 });
 
 document.getElementById("root").addEventListener("click", (e) => {
   if (e.target && e.target.nodeName === "BUTTON") {
-    const form = e.target.parentNode;
-    console.log(`form id: ${form.id}`);
-
     if (e.target.id === "logout") {
       removeUser();
       router.navigateTo("/login");
     }
-
-    if (form.id === "login-form") {
-      const username = form.querySelector("#username").value;
-      if (username) {
-        saveUser(username);
-        router.navigateTo("/");
-      }
-    }
-
-    if (form.id === "profile-form") {
-      const username = form.querySelector("#username").value;
-      const email = form.querySelector("#email").value;
-      const bio = form.querySelector("#bio").value;
-      saveUser(username, email, bio);
-      alert("프로필이 업데이트되었습니다.");
-    }
   }
 });
-
-router.render();

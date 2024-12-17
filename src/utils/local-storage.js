@@ -35,10 +35,12 @@ export const getUser = () => {
   if (userValue) {
     return JSON.parse(userValue);
   }
-  return { username: "", email: "", bio: "" };
+  return null;
+  // return { username: "", email: "", bio: "" };
 };
 // userValue: {"username":"qweqweqwe","email":"asdasd@naver.com","bio":"nsajkdjasdnjkasdnjk"}
 
 export const removeUser = () => {
-  saveUser("", "", "");
+  // saveUser("", "", "");
+  localStorage.clear();
 };
