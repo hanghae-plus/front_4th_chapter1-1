@@ -139,9 +139,8 @@ function loadRoute(content) {
         e.preventDefault();
 
         const id = loginForm.querySelector("#username").value;
-        const pwd = loginForm.querySelector("#password").value;
 
-        if (id && pwd) {
+        if (id) {
           const userJson = {
             username: id,
             email: "",
