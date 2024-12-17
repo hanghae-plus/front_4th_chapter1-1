@@ -1,20 +1,35 @@
 export class CreateRouter {
-  constructor(routes) {
+  constructor(routes, { mode = "history" }) {
     this.routes = routes;
+    this.isHistory = mode === "history";
 
     Object.values(routes).forEach((route) => route.setRouter(this));
   }
 
   init() {
-    this.popstateListener();
-    this.linkEventListeners();
-    this.navigate(window.location.pathname);
+    if (this.isHistory) {
+      this.popstateListener();
+      this.linkEventListeners();
+      this.navigate(window.location.pathname);
+    } else {
+      this.hashchangeListener();
+      this.linkEventListeners();
+      this.navigate(window.location.hash);
+    }
   }
 
   navigate(currentPath) {
-    const template = this.routes[currentPath] || this.routes.error;
+    const validatePath = this.isHistory
+      ? currentPath
+      : currentPath.replace("#", "");
 
-    this.pushHistoryState(currentPath);
+    const template = this.routes[validatePath] || this.routes.error;
+
+    if (this.isHistory) {
+      this.pushHistoryState(validatePath);
+    } else {
+      this.hashState(validatePath);
+    }
     return template.render();
   }
 
@@ -27,7 +42,11 @@ export class CreateRouter {
 
         if (path === "#") return;
 
-        window.history.pushState({}, path, window.location.origin + path);
+        if (this.isHistory) {
+          this.pushHistoryState(path);
+        } else {
+          this.hashState(path);
+        }
         this.navigate(path);
       }
     });
@@ -39,7 +58,17 @@ export class CreateRouter {
     });
   }
 
+  hashchangeListener() {
+    window.addEventListener("hashchange", () => {
+      this.navigate(window.location.hash);
+    });
+  }
+
   pushHistoryState(path) {
     window.history.pushState({}, path, window.location.origin + path);
+  }
+
+  hashState(path) {
+    window.location.hash = path;
   }
 }
