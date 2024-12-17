@@ -1,9 +1,16 @@
 import GlobalNavigation from "../components/gnb";
-import { GLOBAL_NAVIGATION_ID, LOGOUT_BTN_ID } from "../constants/html";
+import {
+  GLOBAL_NAVIGATION_ID,
+  LOGOUT_BTN_ID,
+  PROFILE_UPDATE_FORM_ID,
+  usernameInputName,
+} from "../constants/html";
 import { USER_INFO_LOCALSTORAGE_KEY } from "../constants/user";
 import router from "../router/router";
 
-const ProfilePage = () => `
+const ProfilePage = () => {
+  const userInfo = JSON.parse(localStorage.getItem(USER_INFO_LOCALSTORAGE_KEY));
+  return `
   <div id="root">
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
@@ -18,7 +25,7 @@ const ProfilePage = () => `
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
               내 프로필
             </h2>
-            <form>
+            <form id=${PROFILE_UPDATE_FORM_ID}>
               <div class="mb-4">
                 <label
                   for="username"
@@ -29,7 +36,7 @@ const ProfilePage = () => `
                   type="text"
                   id="username"
                   name="username"
-                  value="홍길동"
+                  value="${userInfo.username}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -43,7 +50,7 @@ const ProfilePage = () => `
                   type="email"
                   id="email"
                   name="email"
-                  value="hong@example.com"
+                  value="${userInfo.email}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -59,7 +66,7 @@ const ProfilePage = () => `
                   rows="4"
                   class="w-full p-2 border rounded"
                 >
-안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.</textarea
+${userInfo.bio}</textarea
                 >
               </div>
               <button
@@ -79,6 +86,7 @@ const ProfilePage = () => `
     </div>
   </div>
 `;
+};
 
 export default function renderProfile() {
   document.body.innerHTML = `
@@ -99,5 +107,26 @@ export default function renderProfile() {
 
         router(e.target.pathname);
       }
+    });
+
+  document.body
+    .querySelector(`#${PROFILE_UPDATE_FORM_ID}`)
+    .addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const userInfo = JSON.parse(
+        localStorage.getItem(USER_INFO_LOCALSTORAGE_KEY),
+      );
+      const newUserInfo = {
+        ...userInfo,
+        username: e.target[usernameInputName].value,
+        email: e.target["email"].value,
+        bio: e.target["bio"].value,
+      };
+
+      localStorage.setItem(
+        USER_INFO_LOCALSTORAGE_KEY,
+        JSON.stringify(newUserInfo),
+      );
     });
 }
