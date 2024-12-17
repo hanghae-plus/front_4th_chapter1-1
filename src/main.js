@@ -1,5 +1,4 @@
 import { router } from "./router/router.js";
-import { initEvents } from "./events/index.js";
 import { setState } from "./store/store.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -10,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   router(); // 초기 렌더링
-  initEvents();
 });
 
 window.addEventListener("popstate", router);

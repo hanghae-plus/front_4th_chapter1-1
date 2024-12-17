@@ -3,6 +3,9 @@ import { LoginPage } from "../components/pages/LoginPage";
 import { MainPage } from "../components/pages/MainPage";
 import { ProfilePage } from "../components/pages/ProfilePage";
 import { state, subscribe } from "../store/store";
+import { initLogin } from "./../events/login";
+import { initProfile } from "./../events/profile";
+import { initNavigation } from "./../events/navigation";
 
 const routes = {
   "/": MainPage,
@@ -10,6 +13,7 @@ const routes = {
   "/profile": ProfilePage,
 };
 
+// UI 그려주기
 export const router = () => {
   const path = window.location.pathname;
   const render = routes[path] || ErrorPage;
@@ -20,6 +24,10 @@ export const router = () => {
   }
 
   document.body.innerHTML = render(render === LoginPage ? null : state.user);
+
+  if (path === "/login") initLogin();
+  else if (path === "/profile") initProfile();
+  else if (path === "/") initNavigation();
 };
 
 // 상태 변경 시 router를 다시 실행해 렌더링

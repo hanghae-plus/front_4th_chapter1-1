@@ -1,23 +1,24 @@
+import { setState } from "./../store/store";
+
 const handleProfileUpdate = (e) => {
   e.preventDefault();
 
-  const profileBtn = document.querySelector("#profile-form");
+  const profileBtn = document.getElementById("profile-form");
 
-  console.log(document.querySelector("header"));
   if (profileBtn) {
-    const usernameInput = document.querySelector(
-      'input[name="username"]',
-    ).value;
-    const emailInput = document.querySelector('input[name="email"]').value;
-    const bioInput = document.querySelector('textarea[name="bio"]').value;
+    const usernameInput = document.getElementById("username").value;
+    const emailInput = document.getElementById("email").value;
+    const bioInput = document.getElementById("bio").value;
 
-    const formattedInfo = JSON.stringify({
+    const updatedInfo = {
       username: usernameInput,
       email: emailInput,
       bio: bioInput,
-    });
+    };
 
-    localStorage.setItem("user", formattedInfo);
+    setState({ user: updatedInfo });
+
+    localStorage.setItem("user", JSON.stringify(updatedInfo));
   }
 };
 

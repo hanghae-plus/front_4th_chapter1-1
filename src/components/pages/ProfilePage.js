@@ -11,7 +11,7 @@ export const ProfilePage = (userInfo) => `
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
               내 프로필
             </h2>
-            <form>
+            <form id="profile-form">
               <div class="mb-4">
                 <label
                   for="username"
@@ -22,7 +22,7 @@ export const ProfilePage = (userInfo) => `
                   type="text"
                   id="username"
                   name="username"
-                  value=${JSON.parse(localStorage.getItem("user")).username}
+                  value=${userInfo?.username}
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -36,7 +36,7 @@ export const ProfilePage = (userInfo) => `
                   type="email"
                   id="email"
                   name="email"
-                  value=${JSON.parse(localStorage.getItem("user")).email || "123@abc.com"}
+                  value=${userInfo?.email || "123@abc.com"}
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -51,7 +51,7 @@ export const ProfilePage = (userInfo) => `
                   name="bio"
                   rows="4"
                   class="w-full p-2 border rounded"
-                >${JSON.parse(localStorage.getItem("user")).bio}</textarea
+                >${userInfo?.bio}</textarea
                 >
               </div>
               <button
