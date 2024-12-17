@@ -1,4 +1,4 @@
-import { createRouter } from "./utils/router";
+import { createHashRouter, createRouter } from "./utils/router";
 
 class MainApp extends HTMLElement {
   constructor() {
@@ -6,7 +6,7 @@ class MainApp extends HTMLElement {
   }
 
   connectedCallback() {
-    this.router = createRouter(this)
+    this.router = (window.isHash ? createHashRouter(this) : createRouter(this))
       .addRoute("/", <main-page></main-page>)
       .addRoute("/login", <login-page></login-page>)
       .addRoute("/profile", <profile-page></profile-page>)
