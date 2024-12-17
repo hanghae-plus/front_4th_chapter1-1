@@ -127,7 +127,8 @@ describe("기본과제 테스트", () => {
       profileForm.dispatchEvent(
         new SubmitEvent("submit", { bubbles: true, cancelable: true }),
       );
-
+      const data = localStorage.getItem("user");
+      console.log(`data: ${JSON.stringify(data)}`);
       expect(localStorage.getItem("user")).toEqual(
         `{"username":"testuser","email":"","bio":"Updated bio"}`,
       );

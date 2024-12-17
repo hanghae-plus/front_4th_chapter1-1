@@ -23,7 +23,10 @@ export const saveUser = (username, email, bio) => {
 };
 
 export const getValue = (key) => {
+  // console.log(``)
+
   return localStorage.getItem(key) ?? "";
+  // return "asd"
 };
 
 export const getUser = () => {
@@ -32,7 +35,6 @@ export const getUser = () => {
   if (userValue) {
     return JSON.parse(userValue);
   }
-  // return null
   return { username: "", email: "", bio: "" };
 };
 // userValue: {"username":"qweqweqwe","email":"asdasd@naver.com","bio":"nsajkdjasdnjkasdnjk"}

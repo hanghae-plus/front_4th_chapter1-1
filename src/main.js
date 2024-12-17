@@ -3,7 +3,6 @@ import { NotFoundPage } from "./pages/not-found-page";
 import { LoginPage } from "./pages/login-page";
 import { HomePage } from "./pages/home-page";
 import { removeUser, isLoggedIn, saveUser } from "./utils/local-storage";
-import { validateEmail } from "./utils/validator";
 // import { isLoggedIn } from "./utils/local-storage";
 
 class Router {
@@ -28,7 +27,7 @@ class Router {
   }
 
   handleRoute(path) {
-    if (path === "/profile" && !isLoggedIn) {
+    if (path === "/profile" && !isLoggedIn()) {
       path = "/login";
     }
 
@@ -94,10 +93,8 @@ document.getElementById("root").addEventListener("click", (e) => {
       const username = form.querySelector("#username").value;
       const email = form.querySelector("#email").value;
       const bio = form.querySelector("#bio").value;
-      if (validateEmail(email)) {
-        saveUser(username, email, bio);
-        alert("프로필이 업데이트되었습니다.");
-      }
+      saveUser(username, email, bio);
+      alert("프로필이 업데이트되었습니다.");
     }
   }
 });
