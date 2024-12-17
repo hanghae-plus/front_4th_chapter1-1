@@ -4,12 +4,11 @@ import { setState } from "../store/store.js";
 export const handleLogin = (e) => {
   e.preventDefault();
 
-  const id = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
+  const username = document.getElementById("username").value;
 
-  const userInfo = { username: "testuser", email: "", bio: "" };
+  const userInfo = { username, email: "", bio: "" };
 
-  if (id && password) {
+  if (username) {
     setState({ user: userInfo }); // 상태 업데이트
 
     localStorage.setItem("user", JSON.stringify(userInfo));
