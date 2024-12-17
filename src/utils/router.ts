@@ -13,6 +13,7 @@ export const Router = (function () {
   }
 
   function push(path: Routes) {
+    console.count("count");
     history.pushState({}, "", path);
 
     handleRoute();
@@ -27,10 +28,11 @@ export const Router = (function () {
   function handleRoute() {
     const path = location.pathname as Routes;
 
-    const isAuthorized = checkAuthorized(path);
+    const redirectPath = routeGuard(path);
+    const shouldRedirect = !!redirectPath;
 
-    if (isAuthorized) {
-      replace("/login");
+    if (shouldRedirect && redirectPath !== path) {
+      push(redirectPath);
       return;
     }
 
@@ -43,8 +45,21 @@ export const Router = (function () {
     }
   }
 
-  function checkAuthorized(path: Routes) {
-    return !UserStore.state.userInfo && path === "/profile";
+  function routeGuard(path: Routes): Routes | undefined {
+    switch (path) {
+      case "/login":
+        if (UserStore.state.userInfo) {
+          return "/";
+        }
+        break;
+      case "/profile":
+        if (!UserStore.state.userInfo) {
+          return "/login";
+        }
+        break;
+      default:
+        return undefined;
+    }
   }
 
   function init() {
@@ -63,9 +78,9 @@ export const Router = (function () {
   }
 
   return {
-    addRoute,
-    push,
-    replace,
     init,
+    replace,
+    push,
+    addRoute,
   };
 })();
