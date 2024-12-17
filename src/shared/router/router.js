@@ -9,25 +9,39 @@
 // 1. history.pushState() 스택에 추가
 // 1. history.relaceState() 스택 최근 데이터로 대체
 
-export const Router = {
-  initialized: false,
+function preventDefaultATagLogic({ callback = () => {} }) {
+  document.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      const url = event.target.getAttribute("href");
+      MyRouter.push(url);
+
+      callback();
+    });
+  });
+}
+
+export const MyRouter = {
+  callback: null,
   push: (url) => {
-    !Router.initialized && Router.init();
-
-    window.history.pushState(null, null, url);
+    window.history.pushState({}, "", url);
+    MyRouter.callback?.();
   },
+
   replace: (url) => {
-    !Router.initialized && Router.init();
-
-    window.history.replaceState(null, null, url);
+    window.history.replaceState({}, "", url);
+    MyRouter.callback?.();
   },
-  init: () => {
-    Router.initialized = true;
-    // Q: onPopState와 hashChange가 무엇이 다른거지?
-    window.onpopstate = (event) => {
-      console.log("URL 변경 감지:", event.state);
+
+  init: ({ callback = () => {} }) => {
+    MyRouter.callback = callback;
+    preventDefaultATagLogic({ callback });
+
+    window.onpopstate = () => {
+      callback();
     };
   },
+
   get pathname() {
     return window.location.pathname;
   },

@@ -1,33 +1,14 @@
-import { Error404Page } from "./pages/404";
-import { HomePage } from "./pages/home/home-page";
-import { LoginPage } from "./pages/login";
-import { ProfilePage } from "./pages/profile";
+import { App } from "./app";
+import { Renderer } from "./Renderer";
 
-function createRouter(routes) {
-  return (path) => {
-    const route = routes[path] || routes["404"];
-    return route();
-  };
-}
-
-const routes = {
-  "/": () => HomePage(),
-  "/profile": () => ProfilePage(),
-  "/login": () => LoginPage(),
-  404: () => Error404Page(),
-};
-
-const router = createRouter(routes);
-
-const render = () => {
-  const path = window.location.pathname;
-  const user = localStorage.getItem("user");
-  if (!user && path === "/profile") {
-    document.body.innerHTML = router("/login");
-    return;
-  }
-  document.body.innerHTML = router(path);
-};
-
-window.addEventListener("popstate", render);
-window.addEventListener("load", render);
+// Q.왜 load로 이벤트 속성을 걸면 렌더링이 안되는거지?
+document.addEventListener("DOMContentLoaded", () => {
+  App.render();
+});
+// NOTE : history.go() history.back() history.forward() 매소드 호출시 해당 이벤트 트리거 됨.
+// 확인해보니 PopState는 뒤로 앞으로 가기를 담당
+Renderer.onPopState(() => App.render());
+Renderer.onPushState(() => App.render());
+Renderer.onReplaceState(() => App.render());
+Renderer.onHashChange(() => App.render());
+Renderer.onATagClick(() => App.render());

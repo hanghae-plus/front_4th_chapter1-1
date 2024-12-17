@@ -1,4 +1,7 @@
-export const LoginPage = () => {
+import { userService } from "../../services/userService";
+import { MyRouter } from "../../shared/router/router";
+
+const LoginPage = () => {
   return `
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
@@ -23,3 +26,23 @@ export const LoginPage = () => {
   </main>
 `;
 };
+
+LoginPage.init = () => {
+  if (userService.isLogin()) {
+    MyRouter.push("/");
+    return;
+  }
+
+  const form = document.getElementById("login-form");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    userService.login({
+      username: form.querySelector("input[type=text]").value,
+    });
+
+    MyRouter.push("/");
+  });
+};
+
+export default LoginPage;
