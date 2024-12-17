@@ -1,6 +1,6 @@
-import { saveUser } from "./local-storage";
-import { navigate } from "./main";
-import { validateUsername } from "./validator";
+import { saveUser } from "../utils/local-storage";
+import { navigate } from "../main";
+import { validateUsername } from "../utils/validator";
 
 export const LoginPage = () => {
   const html = `

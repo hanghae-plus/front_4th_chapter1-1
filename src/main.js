@@ -1,8 +1,8 @@
-import { ProfilePage } from "./profile";
-import { NotFoundPage } from "./error";
-import { LoginPage } from "./login";
-import { HomePage } from "./home";
-import { isLoggedIn } from "./local-storage";
+import { ProfilePage } from "./pages/profile";
+import { NotFoundPage } from "./pages/error";
+import { LoginPage } from "./pages/login";
+import { HomePage } from "./pages/home";
+import { isLoggedIn } from "./utils/local-storage";
 
 const routes = {
   "/": HomePage,

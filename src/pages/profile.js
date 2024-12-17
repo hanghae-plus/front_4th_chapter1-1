@@ -1,7 +1,7 @@
-import { Footer } from "./footer";
-import { Header } from "./header";
-import { getUser, isLoggedIn, saveUser } from "./local-storage";
-import { navigate } from "./main";
+import { Footer } from "../components/footer";
+import { Header } from "../components/header";
+import { getUser, isLoggedIn, saveUser } from "../utils/local-storage";
+import { navigate } from "../main";
 export const ProfilePage = () => {
   // 페이지 구조 생성
   const header = Header();

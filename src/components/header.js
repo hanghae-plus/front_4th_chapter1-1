@@ -1,5 +1,5 @@
-import { clear, isLoggedIn } from "./local-storage";
-import { navigate } from "./main";
+import { clear, isLoggedIn } from "../utils/local-storage";
+import { navigate } from "../main";
 export const Header = () => {
   const loggedIn = isLoggedIn();
 
