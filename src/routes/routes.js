@@ -2,10 +2,10 @@ import HomePage from "../pages/HomePage";
 import ProfilePage from "../pages/ProfilePage";
 import LoginPage from "../pages/LoginPage";
 
-const routes = {
+const ROUTES = {
   "/": HomePage(),
   "/profile": ProfilePage(),
   "/login": LoginPage(),
 };
 
-export default routes;
+export default ROUTES;
