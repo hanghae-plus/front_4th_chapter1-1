@@ -1,5 +1,5 @@
-import { userStore, userStoreActions } from "../stores/userStore";
-import { navigateTo } from "../utils/router";
+import { userStore, userStoreActions } from "@/stores/userStore";
+import { navigateTo } from "@/utils/router";
 
 class NavComponent extends HTMLElement {
   constructor() {

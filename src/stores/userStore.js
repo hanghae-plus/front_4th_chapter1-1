@@ -1,5 +1,5 @@
-import { getItem, removeItem, setItem } from "../utils/localstorage";
-import { createStore } from "../utils/store";
+import { getItem, removeItem, setItem } from "@/utils/localstorage";
+import { createStore } from "@/utils/store";
 
 const initialState = {
   username: "",

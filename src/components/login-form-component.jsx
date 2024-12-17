@@ -1,5 +1,5 @@
-import { userStoreActions } from "../stores/userStore";
-import { navigateTo } from "../utils/router";
+import { userStoreActions } from "@/stores/userStore";
+import { navigateTo } from "@/utils/router";
 
 class LoginFormComponent extends HTMLElement {
   constructor() {
