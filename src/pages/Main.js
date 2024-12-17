@@ -10,7 +10,7 @@ class MainPage extends Component {
 
       e.preventDefault();
 
-      if (target.id === "logoutBtn") {
+      if (target.id === "logout") {
         this.handleLogout();
       }
 
@@ -41,8 +41,8 @@ class MainPage extends Component {
           ${
             auth
               ? `<li><a href="/profile" class="nav-link ${currentPath === "/profile" ? "text-blue-600" : "text-gray-600"}">프로필</a></li>
-              <li><a href="/login" id="logoutBtn" class="nav-link text-gray-600">로그아웃</a></li>`
-              : `<li><a href="/login" class="nav-link text-gray-600">로그인</a></li>`
+              <li><a href="/login" id="logout" class="nav-link text-gray-600">로그아웃</a></li>`
+              : `<li><a href="/login" id="login" class="nav-link text-gray-600">로그인</a></li>`
           }
         </ul>
       </nav>

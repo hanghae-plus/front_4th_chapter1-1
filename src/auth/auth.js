@@ -1,14 +1,13 @@
 export function login(username) {
-  console.log(`save name : ${username}`);
-  localStorage.setItem("username", username);
+  saveUser(username, "", "");
 }
 
 export function logout() {
-  localStorage.removeItem("username");
+  localStorage.removeItem("user");
 }
 
 export function getAuth() {
-  return localStorage.getItem("username");
+  return localStorage.getItem("user");
 }
 
 export function getUser() {
@@ -17,9 +16,13 @@ export function getUser() {
   return user;
 }
 
-export function saveUser(name, email, introduction) {
+export function saveUser(username, email, bio) {
   localStorage.setItem(
     "user",
-    JSON.stringify({ name: name, email: email, introduction: introduction }),
+    JSON.stringify({
+      username: username,
+      email: email,
+      bio: bio,
+    }),
   );
 }
