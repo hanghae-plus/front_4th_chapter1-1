@@ -7,26 +7,29 @@ import { NotFoundPage } from "../pages/NotFoundPage";
 export const PATHNAME_COMPONENT_MAP = Object.freeze({
   "/": () => renderMainPage(),
   "/profile": () => renderProfilePage(),
-  "/login": () => rednerLoginPage(),
+  "/login": () => renderLoginPage(),
 });
 
-export const router = (path) => {
-  let pathname = path ?? window.location.pathname;
+const handleRouteGuard = (path) => {
   const isLogin = userManager.isLogin();
-  const page = PATHNAME_COMPONENT_MAP[pathname];
+  if (path === "/login" && isLogin) return "/";
+  if (path === "/profile" && !isLogin) return "/login";
+  return path;
+};
 
-  if (!page) {
-    renderNotFoundPage();
-    return;
+export const router = (path) => {
+  let pathname = path || window.location.pathname;
+
+  const isInvalid = !Object.keys(PATHNAME_COMPONENT_MAP).includes(pathname);
+
+  pathname = handleRouteGuard(pathname);
+
+  const page = isInvalid
+    ? renderNotFoundPage
+    : PATHNAME_COMPONENT_MAP[pathname];
+  if (window.location.pathname !== pathname) {
+    history.pushState(null, "", pathname);
   }
-
-  if (!isLogin && pathname === "/profile") {
-    history.pushState({}, "", "/login");
-    router("/login");
-    return;
-  }
-
-  history.pushState({}, "", pathname);
   page();
 };
 
@@ -57,7 +60,7 @@ const renderProfilePage = () => {
   });
 };
 
-const rednerLoginPage = () => {
+const renderLoginPage = () => {
   document.querySelector("#root").innerHTML = LoginPage();
   document.querySelector("#login-form").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -80,8 +83,8 @@ const handleClick = (e) => {
 
     if (e.target.id === "logout") {
       userManager.resetUserLocalStorage();
-      router("/login");
-      return;
+
+      path = "/login";
     }
 
     router(path);

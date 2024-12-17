@@ -40,6 +40,10 @@ export const userManager = (() => {
     },
     resetUserLocalStorage: () => {
       localStorage.removeItem(USER_INFO_LOCAL_STORAGE_NAME);
+
+      username = "";
+      email = "";
+      bio = "";
     },
   };
 })();
