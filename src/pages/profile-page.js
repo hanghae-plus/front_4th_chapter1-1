@@ -1,22 +1,15 @@
 import { Footer } from "../components/footer";
 import { Header } from "../components/header";
-import { getUser, isLoggedIn } from "../utils/local-storage";
+import { getUser } from "../utils/local-storage";
 // import { navigate } from "../main";
 export const ProfilePage = () => {
   // 페이지 구조 생성
   const header = Header();
   const footer = Footer();
 
-  const isLogged = isLoggedIn();
-  if (!isLogged) {
-    // navigate("/login");
-  }
-  //   const user = getValue('user');
-  //   const { username = '', email = '', bio = ''} = {...user}
   const { username = "", email = "", bio = "" } = getUser() || {};
-  //   const username = getValue('username');
-  //   const email = getValue('email');
-  //   const bio = getValue('bio');
+  const value = getUser();
+  console.log(`user: ${JSON.stringify(value)}`);
 
   const html = `
       <div id="root">

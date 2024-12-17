@@ -1,9 +1,13 @@
-import { clear, isLoggedIn } from "../utils/local-storage";
-// import { navigate } from "../main";
+import { isLoggedIn } from "../utils/local-storage";
+
 export const Header = () => {
   const loggedIn = isLoggedIn();
 
-  // Conditionally render the navigation links based on loggedIn status
+  console.log(`from header, isLoggedIn: ${loggedIn}`);
+  const path = window.location.pathname;
+
+  const activatedStyle = "text-blue-600";
+  const deactivatedStyle = "text-gray-600";
 
   const html = `
         <div>
@@ -12,32 +16,21 @@ export const Header = () => {
             </header>
             <nav class="bg-white shadow-md p-2 sticky top-14">
                 <ul class="flex justify-around">
-                    <li><a href="/" class="text-blue-600">홈</a></li>
+                    <li><a href="/" class="${path === "/" ? activatedStyle : deactivatedStyle}">홈</a></li>
                     ${
                       loggedIn
                         ? `
-                        <li><a href="/profile" class="text-gray-600">프로필</a></li>
-                        <li><button id="logout" class="text-gray-600">로그아웃</button></li>
+                        <li><a href="/profile" class="${path === "/profile" ? activatedStyle : deactivatedStyle}">프로필</a></li>
+                        <li><button id="logout" class="${deactivatedStyle}">로그아웃</button></li>
                     `
                         : `
-                        <li><a href="/login" class="text-gray-600">로그인</a></li>
+                        <li><a href="/login" class="${deactivatedStyle}">로그인</a></li>
                     `
                     }
                 </ul>
             </nav>
         </div>
     `;
-
-  // Attach event listener for logout button
-  setTimeout(() => {
-    const logoutButton = document.getElementById("logout");
-    if (logoutButton) {
-      logoutButton.addEventListener("click", () => {
-        clear();
-        // navigate("/");
-      });
-    }
-  }, 0);
 
   return html;
 };
