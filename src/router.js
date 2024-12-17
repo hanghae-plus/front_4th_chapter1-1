@@ -7,8 +7,17 @@ export const Router = () => {
   }
 
   function handleRoute(path) {
-    console.log("test", routes[path] || routes["/error"]);
-    const handler = routes[path] || routes["/error"];
+    let handler;
+    if (path === "/profile") {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user) {
+        handler = routes["/profile"];
+      } else {
+        handler = routes["/login"];
+      }
+    } else {
+      handler = routes[path] || routes["/error"];
+    }
     if (handler) {
       document.body.innerHTML = handler();
     } else {
@@ -26,12 +35,9 @@ export const Router = () => {
     handleRoute(path);
   }
 
-  // function setDefaultRoute() {
-  //     handleRoute("/");
-  // }\
   function setDefaultRoute() {
     const initialPath = window.location.pathname;
-    handleRoute(initialPath); // 현재 경로에 맞는 핸들러 실행
+    handleRoute(initialPath);
   }
 
   window.addEventListener("popstate", handlePopState);
