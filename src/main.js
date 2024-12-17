@@ -40,7 +40,7 @@ function clickEventHandler(e) {
   if (tagName === "A") {
     e.preventDefault();
     const { href } = e.target;
-    let path = href.slice(href.lastIndexOf("/"));
+    let path = new URL(href).pathname;
     if (id === "logout") {
       new UserStore().deleteUser();
       path = "/login";
