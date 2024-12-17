@@ -22,7 +22,7 @@ afterAll(() => {
   localStorage.removeItem("user");
 });
 
-const goTo = (path) => {
+const goTo = path => {
   window.history.pushState({}, "", path);
   window.dispatchEvent(new Event("popstate"));
 };
@@ -50,9 +50,17 @@ describe("심화과제 테스트", () => {
       goTo("/login");
 
       const loginForm = document.getElementById("loginForm");
+      const loginId = document.getElementById("userId");
+      const loginPw = document.getElementById("password");
 
       await user.type(document.getElementById("userId"), "testuser");
-
+      if (!loginId) {
+        throw new Error("userId 값 없음");
+      }
+      await user.type(document.getElementById("password"), "1234");
+      if (!loginPw) {
+        throw new Error("password 값 없음");
+      }
       loginForm.dispatchEvent(
         new SubmitEvent("submit", { bubbles: true, cancelable: true }),
       );
@@ -70,7 +78,7 @@ describe("심화과제 테스트", () => {
 
       const firstTarget = document.querySelector('nav a[href="/login"]');
 
-      firstTarget.addEventListener("click", (e) => {
+      firstTarget.addEventListener("click", e => {
         e.stopPropagation();
         e.preventDefault();
       });

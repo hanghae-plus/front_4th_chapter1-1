@@ -243,7 +243,7 @@ const state = {
 };
 
 // profile save / update
-const saveProfile = (userData) => {
+const saveProfile = userData => {
   if (JSON.stringify(state.userData) !== JSON.stringify(userData)) {
     state.userData = { ...state.userData, ...userData };
     localStorage.setItem("userData", JSON.stringify(state.userData));
@@ -257,10 +257,9 @@ const saveProfile = (userData) => {
   }
 };
 
-const updateLogin = (isLoggedIn) => {
+const updateLogin = isLoggedIn => {
   state.isLoggedIn = isLoggedIn;
   localStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn));
-  renderNav();
 };
 
 const loadProfile = () => {
@@ -283,35 +282,53 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const pageEventListeners = () => {
-  document.body.addEventListener("click", (e) => {
-    if (e.target.tagName === "A" && e.target.getAttribute("href")) {
-      e.preventDefault();
-      const path = e.target.getAttribute("href");
-      navigation(path);
-    }
+  document.body.removeEventListener("click", handleClick);
+  document.body.addEventListener("click", handleClick);
 
-    if (e.target.id === "logoutBtn") {
-      e.preventDefault();
-      updateLogin(false);
-      navigation("/login");
-    }
-  });
+  document.body.removeEventListener("submit", handleSubmit);
+  document.body.addEventListener("submit", handleSubmit);
 
-  // event profile
-  document.body.addEventListener("submit", (e) => {
-    if (e.target.id === "profileForm") {
-      e.preventDefault();
-
-      const username = document.querySelector("#username").value;
-      const email = document.querySelector("#email").value;
-      const bio = document.querySelector("#bio").value;
-
-      saveProfile({ username, email, bio });
-    }
+  document.body.removeEventListener("submit", loginSubmitHandle);
+  document.body.addEventListener("submit", e => {
+    if (e.target.id === "loginForm") loginSubmitHandle(e);
   });
 };
 
-const navigation = (path) => {
+const loginSubmitHandle = e => {
+  e.preventDefault();
+  const userId = document.querySelector("#userId").value;
+  const password = document.querySelector("#password").value;
+
+  if (userId && password) {
+    updateLogin(true);
+    navigation("/profile");
+  } else {
+    alert("아이디와 비밀번호를 입력해주세요.");
+  }
+};
+const handleClick = e => {
+  if (e.target.tagName === "A" && e.target.getAttribute("href")) {
+    e.preventDefault();
+    const path = e.target.getAttribute("href");
+    navigation(path);
+  }
+  if (e.target.id === "logoutBtn") {
+    e.preventDefault();
+    updateLogin(false);
+    navigation("/login");
+  }
+};
+const handleSubmit = e => {
+  if (e.target.id === "profileForm") {
+    e.preventDefault();
+    const username = document.querySelector("#username").value;
+    const email = document.querySelector("#email").value;
+    const bio = document.querySelector("#bio").value;
+    saveProfile({ username, email, bio });
+  }
+};
+
+const navigation = path => {
   if (path && !path.startsWith("/")) {
     path = `/${path}`;
   }
@@ -353,11 +370,6 @@ const router = () => {
     window.location.hash = "#/404";
   }
 
-  const rootElement = document.getElementById("root");
-  if (rootElement) {
-    rootElement.innerHTML = page;
-  }
-
   // login -> /login = /
   if (path === "/login" && state.isLoggedIn) {
     navigation("/");
@@ -373,23 +385,6 @@ const router = () => {
   document.body.innerHTML = page;
   renderNav();
   pageEventListeners();
-
-  // 로그인 폼 이벤트 리스너
-  const loginForm = document.querySelector("#loginForm");
-  if (loginForm) {
-    loginForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const userId = document.querySelector("#userId").value;
-      const password = document.querySelector("#password").value;
-
-      if (userId && password) {
-        updateLogin(true); // 로그인 상태 업데이트
-        navigation("/profile"); // 프로필 페이지로 이동
-      } else {
-        alert("아이디와 비밀번호를 입력해주세요"); // 아이디와 비밀번호 없을 시 경고
-      }
-    });
-  }
 };
 
 // navigation render
