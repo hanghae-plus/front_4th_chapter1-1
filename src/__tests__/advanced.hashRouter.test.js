@@ -28,7 +28,7 @@ describe("심화과제 > 해시 라우터 테스트", () => {
     });
 
     it('"/login" 경로로 접근하면 로그인 페이지가 렌더링된다', () => {
-      goTo("/login");
+      goTo("#/login");
       const submitButtons = [
         ...document.querySelectorAll("form button[type='submit']"),
       ];
@@ -39,7 +39,7 @@ describe("심화과제 > 해시 라우터 테스트", () => {
 
     it('로그인이 되지 않은 상태에서 "/profile" 경로로 접근하면, 로그인 페이지로 리다이렉션 된다.', () => {
       // 로그인 상태 시뮬레이션
-      goTo("/profile");
+      goTo("#/profile");
 
       const submitButtons = [
         ...document.querySelectorAll("form button[type='submit']"),

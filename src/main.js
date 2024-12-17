@@ -252,11 +252,6 @@ const updateLogin = (isLoggedIn) => {
   renderNav();
 };
 
-const navigation = (path) => {
-  window.history.pushState({}, "", path);
-  router();
-};
-
 // profile save / update
 const saveProfile = (userData) => {
   state.userData = { ...state.userData, ...userData };
@@ -266,7 +261,7 @@ const saveProfile = (userData) => {
   document.querySelector("#username").value = username;
   document.querySelector("#email").value = email;
   document.querySelector("#bio").value = bio;
-  console.log("Updated userData:", state.userData);
+  // console.log("Updated userData:", state.userData);
   alert("프로필이 업데이트되었습니다.");
 };
 
@@ -278,9 +273,13 @@ const loadProfile = () => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadProfile();
-  router();
-  pageEventListeners();
+  if (!window.location.hash) {
+    navigation("/");
+  }
+  const initialPath = window.location.hash.slice(1) || "/";
+  navigation(initialPath);
+
+  window.addEventListener("hashchange", router);
 
   document.body.addEventListener("submit", (e) => {
     if (e.target.id === "profileForm") {
@@ -294,6 +293,9 @@ document.addEventListener("DOMContentLoaded", () => {
       saveProfile(profileData);
     }
   });
+  loadProfile();
+  router();
+  pageEventListeners();
 });
 
 // page eventListener
@@ -302,6 +304,7 @@ const pageEventListeners = () => {
     if (e.target.tagName === "A" && e.target.getAttribute("href")) {
       e.preventDefault();
       const path = e.target.getAttribute("href");
+      navigation(path);
       if (path === "/login" && !state.isLoggedIn) {
         updateLogin(false);
         navigation("/login");
@@ -317,39 +320,68 @@ const pageEventListeners = () => {
   });
 };
 
+const navigation = (path) => {
+  if (path && !path.startsWith("/")) {
+    path = `/${path}`;
+  }
+  const validPaths = ["/", "/profile", "/login"];
+
+  if (validPaths.includes(path)) {
+    window.location.hash = `#${path}`;
+  } else {
+    window.location.hash = "#/404";
+  }
+};
+
 // router
 const router = () => {
-  // const path = window.location.pathname;
+  const pathName = window.location.pathname;
+  const validPathName = ["/", ""];
+
+  if (!validPathName.includes(pathName)) {
+    window.location.replace(`${window.location.origin}/#/404`);
+    return;
+  }
+
   const path = window.location.hash.slice(1) || "/";
-  let page = "";
+  const validPaths = ["/", "/profile", "/login", "/404"];
+  let page;
+
+  if (validPaths.includes(path)) {
+    if (path === "/profile") {
+      page = ProfilePage();
+    } else if (path === "/login") {
+      page = LoginPage();
+    } else if (path === "/") {
+      page = MainPage();
+    } else if (path === "/404") {
+      page = ErrorPage();
+    }
+  } else {
+    page = ErrorPage();
+    window.location.hash = "#/404";
+  }
+
+  const rootElement = document.getElementById("root");
+  if (rootElement) {
+    rootElement.innerHTML = page;
+  }
 
   // login -> /login = /
   if (path === "/login" && state.isLoggedIn) {
-    navigation("#/");
+    navigation("/");
     return;
   }
 
   // !login -> /profile = /login
   if (path === "/profile" && !state.isLoggedIn) {
-    navigation("#/login");
+    navigation("/login");
     return;
-  }
-
-  if (path === "/profile") {
-    page = ProfilePage();
-  } else if (path === "/login") {
-    page = LoginPage();
-  } else if (path === "/") {
-    page = MainPage();
-  } else {
-    page = ErrorPage();
-    // window.history.pushState({}, "", "/404");
   }
 
   document.body.innerHTML = page;
   renderNav();
   pageEventListeners();
-  renderPage(path);
 
   const loginForm = document.querySelector("#loginForm");
   if (loginForm) {
@@ -367,8 +399,6 @@ const router = () => {
     });
   }
 };
-
-window.addEventListener("hashchange", router);
 
 // navigation render
 const renderNav = () => {
@@ -389,20 +419,11 @@ const renderNav = () => {
   }
 };
 
-const renderPage = (path) => {
-  let pageContent = routes[path] ? routes[path]() : routes["/404"]();
+// const routes = {
+//   "/": MainPage,
+//   "/login": LoginPage,
+//   "/profile": ProfilePage,
+//   "/404": ErrorPage,
+// };
 
-  document.body.innerHTML = pageContent;
-  renderNav();
-  pageEventListeners();
-};
-
-const routes = {
-  "/": MainPage,
-  "/login": LoginPage,
-  "/profile": ProfilePage,
-  "/404": ErrorPage,
-};
-
-renderPage(window.location.pathname);
 router();
