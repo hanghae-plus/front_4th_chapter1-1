@@ -2,7 +2,7 @@ import { ErrorPage } from "./pages/error";
 import { LoginPage } from "./pages/login";
 import { MainPage } from "./pages/main";
 import { ProfilePage } from "./pages/profile";
-import { Router } from "./utils/router";
+import { Router } from "./router";
 
 const loginPage = new LoginPage(document.querySelector("#root")!);
 const prifilePage = new ProfilePage(document.querySelector("#root")!);

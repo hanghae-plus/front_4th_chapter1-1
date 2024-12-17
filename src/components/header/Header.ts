@@ -2,7 +2,7 @@ import { AuthentificatedNavigation } from "./../navigation/AuthentificatedNativa
 import { UserStore } from "../../store/userStore";
 import { UserInfoType } from "../../utils/userPreference";
 import { UnauthentificatedNavigation } from "../navigation/UnauthenticatedNavigation";
-import { Router, Routes } from "../../utils/router";
+import { Router, Routes } from "../../router";
 
 export class Header {
   private static instance: Header | null = null;

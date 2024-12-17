@@ -1,5 +1,5 @@
 import { UserStore } from "../../store/userStore";
-import { Router } from "../../utils/router";
+import { Router } from "../../router";
 
 export class LoginPage {
   private container: HTMLElement;

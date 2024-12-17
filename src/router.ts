@@ -1,4 +1,4 @@
-import { UserStore } from "../store/userStore";
+import { UserStore } from "./store/userStore";
 
 export type Routes = "/" | "/profile" | "/login" | "404";
 export type HashRoutes = "#/" | "#/profile" | "#/login";
