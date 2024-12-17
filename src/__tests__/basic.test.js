@@ -78,6 +78,7 @@ describe("기본과제 테스트", () => {
       const loginForm = document.getElementById("login-form");
 
       await user.type(document.getElementById("username"), "testuser");
+      await user.type(document.getElementById("password"), "testuser");
 
       loginForm.dispatchEvent(
         new SubmitEvent("submit", { bubbles: true, cancelable: true }),
