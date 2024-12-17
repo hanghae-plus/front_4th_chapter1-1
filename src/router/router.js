@@ -5,7 +5,7 @@ import { ProfilePage } from "../components/pages/ProfilePage";
 import { state, subscribe } from "../store/store";
 import { initLogin } from "./../events/login";
 import { initProfile } from "./../events/profile";
-import { initNavigation } from "./../events/navigation";
+import { initNavigation, initLogOut } from "./../events/navigation";
 
 const routes = {
   "/": MainPage,
@@ -27,11 +27,13 @@ export const router = () => {
 
   if (path === "/login") initLogin();
   else if (path === "/profile") initProfile();
-  else if (path === "/") initNavigation();
+  else if (path === "/") {
+    initNavigation();
+    initLogOut();
+  }
 };
 
 // 상태 변경 시 router를 다시 실행해 렌더링
 subscribe(() => {
-  console.log("상태변경!!");
   router();
 });
