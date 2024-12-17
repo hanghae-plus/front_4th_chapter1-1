@@ -1,13 +1,21 @@
+import {
+  LOGIN_FORM_ID,
+  usernameInputName,
+  passwordInputName,
+} from "../constants/html";
+import { USER_INFO_LOCALSTORAGE_KEY } from "../constants/user";
+import router from "../router/router";
+
 const LoginPage = () => `
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
-      <form>
+      <form id=${LOGIN_FORM_ID}>
         <div class="mb-4">
-          <input type="text" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
+          <input type="text" name=${usernameInputName} placeholder="사용자 이름" class="w-full p-2 border rounded">
         </div>
         <div class="mb-6">
-          <input type="password" placeholder="비밀번호" class="w-full p-2 border rounded">
+          <input type="password" name=${passwordInputName} placeholder="비밀번호" class="w-full p-2 border rounded">
         </div>
         <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</button>
       </form>
@@ -25,4 +33,23 @@ const LoginPage = () => `
 export default function renderLogin() {
   document.body.innerHTML = `
     ${LoginPage()}`;
+
+  document.body
+    .querySelector(`#${LOGIN_FORM_ID}`)
+    .addEventListener("submit", (e) => {
+      e.preventDefault();
+      const username = e.target[usernameInputName].value;
+      const password = e.target[passwordInputName].value;
+      localStorage.setItem(
+        USER_INFO_LOCALSTORAGE_KEY,
+        JSON.stringify({
+          username,
+          password,
+          email: "",
+          introduce: "",
+        }),
+      );
+
+      router("/");
+    });
 }

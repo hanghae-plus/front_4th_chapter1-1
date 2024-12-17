@@ -1,3 +1,6 @@
+import GlobalNavigation from "../components/gnb";
+import { GLOBAL_NAVIGATION_ID, LOGOUT_BTN_ID } from "../constants/html";
+import { USER_INFO_LOCALSTORAGE_KEY } from "../constants/user";
 import router from "../router/router";
 
 const MainPage = () => `
@@ -7,13 +10,7 @@ const MainPage = () => `
         <h1 class="text-2xl font-bold">항해플러스</h1>
       </header>
 
-      <nav id="gnb" class="bg-white shadow-md p-2 sticky top-14">
-        <ul class="flex justify-around">
-          <li><a href="/" class="text-blue-600">홈</a></li>
-          <li><a href="/profile" class="text-gray-600">프로필</a></li>
-          <li><a href="#" class="text-gray-600">로그아웃</a></li>
-        </ul>
-      </nav>
+     ${GlobalNavigation()}
 
       <main class="p-4">
         <div class="mb-4 bg-white rounded-lg shadow p-4">
@@ -117,10 +114,19 @@ export default function renderMain() {
   ${MainPage()}
 `;
 
-  document.body.querySelector("#gnb").addEventListener("click", (e) => {
-    if (e.target.tagName === "A") {
-      e.preventDefault();
-      router(e.target.pathname);
-    }
-  });
+  document.body
+    .querySelector(`#${GLOBAL_NAVIGATION_ID}`)
+    .addEventListener("click", (e) => {
+      if (e.target.tagName === "A") {
+        e.preventDefault();
+
+        if (e.target.id === LOGOUT_BTN_ID) {
+          localStorage.removeItem(USER_INFO_LOCALSTORAGE_KEY);
+          router("/login");
+          return;
+        }
+
+        router(e.target.pathname);
+      }
+    });
 }
