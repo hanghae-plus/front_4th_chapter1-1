@@ -5,7 +5,7 @@ export const HomePage = () => {
   const header = Header();
   const footer = Footer();
 
-  const html = `<div class="bg-gray-100 min-h-screen flex justify-center">
+  return `<div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
       ${header}
 
@@ -103,5 +103,4 @@ export const HomePage = () => {
     </div>
   </div>
 `;
-  return html;
 };
