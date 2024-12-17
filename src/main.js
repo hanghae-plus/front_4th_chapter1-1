@@ -1,7 +1,7 @@
 import { createRouter } from "@/router/createRouter";
 import UserStore from "@/store/userStore";
 
-const { router, hashRouter } = createRouter();
+const { router, navigator } = createRouter();
 
 function submitEventHandler(e) {
   e.preventDefault();
@@ -22,7 +22,7 @@ function login(formData) {
   const username = formData.get("username");
   if (username) {
     new UserStore().setUser({ username, email: "", bio: "" });
-    router("/profile");
+    navigator("/profile");
   }
 }
 
@@ -31,7 +31,7 @@ function updateProfile(formData) {
   const email = formData.get("email");
   const bio = formData.get("bio");
   new UserStore().setUser({ username, email, bio });
-  router("/profile");
+  navigator("/profile");
 }
 
 function clickEventHandler(e) {
@@ -45,7 +45,7 @@ function clickEventHandler(e) {
       new UserStore().deleteUser();
       path = "/login";
     }
-    router(path);
+    navigator(path);
   }
 }
 
@@ -53,4 +53,4 @@ document.body.addEventListener("submit", submitEventHandler);
 document.body.addEventListener("click", clickEventHandler);
 window.addEventListener("load", () => router());
 window.addEventListener("popstate", () => router());
-window.addEventListener("hashchange", () => hashRouter());
+window.addEventListener("hashchange", () => router());

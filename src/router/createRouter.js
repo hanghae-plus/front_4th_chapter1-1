@@ -38,21 +38,31 @@ export function createRouter() {
     return hash;
   }
 
+  function navigator(path) {
+    if (window.location.hash) return;
+    path = path || window.location.pathname;
+    path = validateRouteUser(path);
+    const route = ROUTES[path] || ROUTES["404"];
+    window.history.pushState(null, "", path);
+    render(route);
+  }
+
+  function hashNavigator(hash) {
+    hash = hash || window.location.hash;
+    hash = validateHashRouteUser(hash);
+    const route = HASH_ROUTES[hash] || HASH_ROUTES[404];
+    window.history.pushState(null, "", hash);
+    render(route);
+  }
+
   return {
-    router(path) {
-      if (window.location.hash) return;
-      path = path || window.location.pathname;
-      path = validateRouteUser(path);
-      const route = ROUTES[path] || ROUTES["404"];
-      window.history.pushState(null, "", path);
-      render(route);
+    router() {
+      if (window.location.hash) {
+        hashNavigator();
+      } else {
+        navigator();
+      }
     },
-    hashRouter(hash) {
-      hash = hash || window.location.hash;
-      hash = validateHashRouteUser(hash);
-      const route = HASH_ROUTES[hash] || HASH_ROUTES[404];
-      window.history.pushState(null, "", hash);
-      render(route);
-    },
+    navigator,
   };
 }
