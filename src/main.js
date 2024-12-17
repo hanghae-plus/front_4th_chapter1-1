@@ -32,6 +32,7 @@ const routeHandlers = () => {
 const router = () => {
   let path = window.location.pathname;
   const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const root = document.getElementById("root");
 
   if (path === "/profile" && !user.username) {
     path = "/login";
@@ -40,9 +41,9 @@ const router = () => {
   const route = routes[path];
 
   if (route) {
-    document.body.innerHTML = route();
+    root.innerHTML = route();
   } else {
-    document.body.innerHTML = ErrorPage();
+    root.innerHTML = ErrorPage();
   }
 
   if (path === "/login") {
