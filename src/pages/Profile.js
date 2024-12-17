@@ -22,6 +22,18 @@ class ProfilePage extends Component {
     super.render();
   }
 
+  isMainPage() {
+    const currentPath = window.location.pathname;
+    const currentHash = window.location.hash;
+
+    // 현재 경로가 "/"이고 해시가 없거나 "#"인 경우
+    if (currentPath === "/" || currentHash === "#/") {
+      return true;
+    }
+
+    return false;
+  }
+
   setEvent() {
     // this.addEvent("click", ".nav-link", (e) => {
     //   const target = e.target.closest("a");
@@ -55,7 +67,6 @@ class ProfilePage extends Component {
   }
 
   template() {
-    const currentPath = window.location.pathname;
     const auth = getAuth();
 
     return `
@@ -66,17 +77,17 @@ class ProfilePage extends Component {
           <h1 class="text-2xl font-bold">항해플러스</h1>
         </header>
 
-        <nav class="navbar bg-white shadow-md p-2 sticky top-14">
-          <ul class="flex justify-around">
-            <li><a href="/" class="nav-link ${currentPath === "/" ? "text-blue-600" : "text-gray-600"}">홈</a></li>
-            ${
-              auth
-                ? `<li><a href="/profile" class="nav-link ${currentPath === "/profile" ? "text-blue-600" : "text-gray-600"}">프로필</a></li>
-                <li><a href="/login" id="logout" class="nav-link text-gray-600">로그아웃</a></li>`
-                : `<li><a href="/login" id="login" class="nav-link text-gray-600">로그인</a></li>`
-            }
-          </ul>
-        </nav>
+         <nav class="navbar bg-white shadow-md p-2 sticky top-14">
+        <ul class="flex justify-around">
+          <li><a href="/" class="nav-link ${this.isMainPage() ? "text-blue-600 font-bold" : "text-gray-600"}">홈</a></li>
+          ${
+            auth
+              ? `<li><a href="/profile" class="nav-link ${!this.isMainPage() ? "text-blue-600 font-bold" : "text-gray-600"}">프로필</a></li>
+              <li><a href="/login" id="logout" class="nav-link text-gray-600">로그아웃</a></li>`
+              : `<li><a href="/login" id="login" class="nav-link text-gray-600">로그인</a></li>`
+          }
+        </ul>
+      </nav>
 
         <main class="p-4">
           <div class="bg-white p-8 rounded-lg shadow-md">

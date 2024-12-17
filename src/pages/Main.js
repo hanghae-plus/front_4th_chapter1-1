@@ -24,10 +24,20 @@ class MainPage extends Component {
     logout();
   }
 
-  template() {
+  isMainPage() {
     const currentPath = window.location.pathname;
-    const auth = getAuth();
+    const currentHash = window.location.hash;
 
+    // 현재 경로가 "/"이고 해시가 없거나 "#"인 경우
+    if (currentPath === "/" || currentHash === "#/") {
+      return true;
+    }
+
+    return false;
+  }
+
+  template() {
+    const auth = getAuth();
     return `
     <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
@@ -35,12 +45,12 @@ class MainPage extends Component {
         <h1 class="text-2xl font-bold">항해플러스</h1>
       </header>
 
-       <nav class="navbar bg-white shadow-md p-2 sticky top-14">
+        <nav class="navbar bg-white shadow-md p-2 sticky top-14">
         <ul class="flex justify-around">
-          <li><a href="/" class="nav-link ${currentPath === "/" ? "text-blue-600" : "text-gray-600"}">홈</a></li>
+          <li><a href="/" class="nav-link ${this.isMainPage() ? "text-blue-600 font-bold" : "text-gray-600"}">홈</a></li>
           ${
             auth
-              ? `<li><a href="/profile" class="nav-link ${currentPath === "/profile" ? "text-blue-600" : "text-gray-600"}">프로필</a></li>
+              ? `<li><a href="/profile" class="nav-link ${!this.isMainPage() ? "text-blue-600 font-bold" : "text-gray-600"}">프로필</a></li>
               <li><a href="/login" id="logout" class="nav-link text-gray-600">로그아웃</a></li>`
               : `<li><a href="/login" id="login" class="nav-link text-gray-600">로그인</a></li>`
           }

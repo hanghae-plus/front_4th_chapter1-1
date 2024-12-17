@@ -13,6 +13,8 @@ class Router extends Component {
   }
 
   navigate = (to, isReplace = false) => {
+    const hash = window.location.hash;
+    if (hash !== "") to = "#" + to;
     // 페이지 교체 혹은 중복 페이지 방지
     if (isReplace || to === location.pathname) history.replaceState({}, "", to);
     else history.pushState({}, "", to);
@@ -32,6 +34,11 @@ class Router extends Component {
       this.handleRoute();
     });
 
+    window.addEventListener("hashchange", () => {
+      console.log("hash changed");
+      this.handleRoute();
+    });
+
     const originalPushState = window.history.pushState;
     window.history.pushState = function (state, title, url) {
       originalPushState.apply(this, arguments);
@@ -47,7 +54,6 @@ class Router extends Component {
 
     const originalReplaceState = window.history.replaceState;
     window.history.replaceState = function (state, title, url) {
-      console.log(`replace : ${url}`);
       originalReplaceState.apply(this, arguments);
       const event = new CustomEvent("replaceState", {
         detail: { state, title, url },
@@ -75,12 +81,16 @@ class Router extends Component {
 
   // 라우트 예외처리 및 렌더링
   handleRoute() {
-    console.log(`route : ${window.location.pathname}`);
-
     // 현재 라우트를 기준으로 페이지 추출
+    const hash = window.location.hash;
     const fragment = window.location.pathname;
+
+    const pathname = hash !== "" ? hash : fragment;
+
+    console.log(pathname);
+
     const currentRoute = this.state.routes.find(
-      (route) => route.fragment === fragment,
+      (route) => route.fragment === pathname,
     );
 
     if (!currentRoute) {
