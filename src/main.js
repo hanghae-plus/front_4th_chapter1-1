@@ -13,7 +13,7 @@ const MainPage = () => `
         </ul>
       </nav>
 
-      <main class="p-4">
+     <main class="p-4">
         <div class="mb-4 bg-white rounded-lg shadow p-4">
           <textarea class="w-full p-2 border rounded" placeholder="무슨 생각을 하고 계신가요?"></textarea>
           <button class="mt-2 bg-blue-600 text-white px-4 py-2 rounded">게시</button>
@@ -130,12 +130,12 @@ const LoginPage = () => `
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
-      <form>
+      <form id="login-form">
         <div class="mb-4">
-          <input type="text" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
+          <input id="username" type="text" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
         </div>
         <div class="mb-6">
-          <input type="password" placeholder="비밀번호" class="w-full p-2 border rounded">
+          <input id="password" type="password" placeholder="비밀번호" class="w-full p-2 border rounded">
         </div>
         <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</button>
       </form>
@@ -233,9 +233,82 @@ const ProfilePage = () => `
   </div>
 `;
 
-document.body.innerHTML = `
-  ${MainPage()}
-  ${ProfilePage()}
-  ${LoginPage()}
-  ${ErrorPage()}
-`;
+class Router {
+  constructor() {
+    this.routes = {
+      "/": MainPage,
+      "/profile": ProfilePage,
+      "/login": LoginPage,
+    };
+    window.addEventListener("popstate", this.handlePopState.bind(this));
+  }
+
+  navigateTo(path) {
+    history.pushState(null, "", path);
+    this.handleRoute(path);
+  }
+
+  checkLogin(path) {
+    const user = localStorage.getItem("user");
+
+    if (!user) return LoginPage;
+
+    return this.routes[path];
+  }
+
+  handlePopState() {
+    this.handleRoute(window.location.pathname);
+  }
+
+  handleRoute(path) {
+    let page = this.routes[path];
+
+    if (path.includes("/profile")) {
+      page = this.checkLogin(path);
+    }
+
+    if (page) {
+      document.getElementById("root").innerHTML = page();
+    } else {
+      document.getElementById("root").innerHTML = ErrorPage();
+    }
+  }
+}
+
+const router = new Router();
+
+document.addEventListener("DOMContentLoaded", () => {
+  router.handleRoute(window.location.pathname);
+
+  const form = document.getElementById("login-form");
+  const usernameInput = document.getElementById("username");
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const { value } = usernameInput;
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        username: value,
+        email: "",
+        bio: "",
+      }),
+    );
+    router.navigateTo("/profile");
+
+    console.log(localStorage.getItem("user"));
+  });
+});
+
+document.addEventListener("click", (e) => {
+  if (e.target.tagName === "A" && e.target.pathname) {
+    e.preventDefault();
+
+    if (e.target.href.includes("#")) {
+      localStorage.removeItem("user");
+      router.navigateTo("/login");
+      return;
+    }
+    router.navigateTo(e.target.pathname);
+  }
+});
