@@ -5,6 +5,7 @@
 // 4. 현재 패스에 대한 페이지 렌더링
 
 import { NotFoundPage } from "./pages/NotFoundPage";
+import { renderPage } from "./util/render";
 
 export class Router {
   constructor() {
@@ -26,7 +27,7 @@ export class Router {
     if (render) {
       render();
     } else {
-      document.getElementById("root").innerHTML = NotFoundPage();
+      renderPage(NotFoundPage);
     }
   }
 
@@ -50,7 +51,7 @@ export class HashRouter {
     if (render) {
       render();
     } else {
-      document.getElementById("root").innerHTML = NotFoundPage();
+      renderPage(NotFoundPage);
     }
   }
 

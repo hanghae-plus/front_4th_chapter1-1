@@ -3,44 +3,46 @@ import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { HashRouter } from "./router";
-import { useAuth } from "./store/useAuth";
+import { authStore } from "./store/AuthStore";
+import { renderPage } from "./util/render";
 
+//router만 해시라우터로 변경
 const route = new HashRouter();
-const auth = new useAuth();
 
 const renderLoginPage = () => {
   authGuard(
     () => {
-      document.getElementById("root").innerHTML = HomePage();
+      renderPage(HomePage);
       location.hash = "#/";
     },
     () => {
-      document.getElementById("root").innerHTML = LoginPage();
+      renderPage(LoginPage);
     },
   );
 };
 
 const renderHomePage = () => {
-  document.getElementById("root").innerHTML = HomePage();
+  renderPage(HomePage);
 };
 
 const renderProfilePage = () => {
   authGuard(
     () => {
-      document.getElementById("root").innerHTML = ProfilePage();
+      renderPage(ProfilePage);
     },
     () => {
-      document.getElementById("root").innerHTML = LoginPage();
+      renderPage(LoginPage);
       location.hash = "#/login";
     },
   );
 };
 
+// 라우팅 등록
 route.registerRoute("#/", renderHomePage);
 route.registerRoute("#/login", renderLoginPage);
 route.registerRoute("#/profile", renderProfilePage);
 
-//현재 패스에 대한 페이지 렌더
+// 현재 경로에 맞게 페이지 렌더링
 route.setting();
 
 // 전역 click 이벤트 리스너 추가
@@ -52,7 +54,7 @@ document.body.addEventListener("click", (event) => {
     const path = target.getAttribute("href");
 
     if (path === "#") {
-      auth.logOut();
+      authStore.clearUser();
       location.hash = "#/login";
       return;
     }
@@ -80,7 +82,7 @@ document.body.addEventListener("submit", (event) => {
 function loginHandler(formData) {
   const username = formData.get("username");
 
-  auth.login({ username, email: "", bio: "" });
+  authStore.setUser({ username, email: "", bio: "" });
   location.hash = "#/profile";
 }
 
@@ -88,6 +90,5 @@ function updateProfileHandler(formData) {
   const username = formData.get("username");
   const email = formData.get("email");
   const bio = formData.get("bio");
-
-  auth.login({ username, email, bio });
+  authStore.setUser({ username, email, bio });
 }
