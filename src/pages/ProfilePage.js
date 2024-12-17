@@ -1,8 +1,8 @@
 import { Header } from "../components/Header.js";
 import { Footer } from "../components/Footer.js";
-import { UserStore } from "../store/user/userStore.js";
-import { Component } from "../utils/component.js";
-import { path } from "../utils/const/path.js";
+import { UserStore } from "../store/userStore.js";
+import { Component } from "../utils/lib/component.js";
+import { PATH } from "../utils/const/path.js";
 
 class ProfilePage extends Component {
   constructor(template) {
@@ -13,7 +13,7 @@ class ProfilePage extends Component {
 
   render() {
     if (!new UserStore().getState()) {
-      this.router.navigate(path.LOGIN);
+      this.router.navigate(PATH.LOGIN);
       return;
     }
 
@@ -49,16 +49,16 @@ class ProfilePage extends Component {
     document.getElementById("logout").addEventListener("click", (e) => {
       e.preventDefault();
       new UserStore().removeUser();
-      this.router.navigate(path.LOGIN);
+      this.router.navigate(PATH.LOGIN);
     });
   }
 }
 
-export const ProfileTemplate = () => `
+const ProfileTemplate = () => `
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
         ${Header()}
-
+        
         <nav class="bg-white shadow-md p-2 sticky top-14">
           <ul class="flex justify-around">
             <li><a href="/" class="text-gray-600">홈</a></li>
@@ -112,9 +112,8 @@ export const ProfileTemplate = () => `
                   name="bio"
                   rows="4"
                   class="w-full p-2 border rounded"
-                >
-${new UserStore().getState().bio}</textarea
-                >
+                  >
+                  ${new UserStore().getState().bio}</textarea>
               </div>
               <button
                 type="submit"

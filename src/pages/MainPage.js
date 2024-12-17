@@ -1,8 +1,8 @@
 import { Header } from "../components/Header.js";
 import { Footer } from "../components/Footer.js";
-import { UserStore } from "../store/user/userStore.js";
-import { Component } from "../utils/component.js";
-import { path } from "../utils/const/path.js";
+import { UserStore } from "../store/userStore.js";
+import { Component } from "../utils/lib/component.js";
+import { PATH } from "../utils/const/path.js";
 
 class MainPage extends Component {
   constructor() {
@@ -21,7 +21,7 @@ class MainPage extends Component {
         e.preventDefault();
 
         new UserStore().removeUser();
-        this.router.navigate(path.LOGIN);
+        this.router.navigate(PATH.LOGIN);
       });
     }
   }

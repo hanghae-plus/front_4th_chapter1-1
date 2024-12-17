@@ -1,4 +1,4 @@
-export const path = {
+export const PATH = {
   MAIN: "/",
   LOGIN: "/login",
   PROFILE: "/profile",

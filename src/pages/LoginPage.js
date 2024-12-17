@@ -1,6 +1,6 @@
-import { UserStore } from "../store/user/userStore.js";
-import { path } from "../utils/const/path.js";
-import { Component } from "../utils/component.js";
+import { UserStore } from "../store/userStore.js";
+import { Component } from "../utils/lib/component.js";
+import { PATH } from "../utils/const/path.js";
 
 class LoginPage extends Component {
   constructor() {
@@ -9,7 +9,7 @@ class LoginPage extends Component {
 
   render() {
     if (new UserStore().getState() !== null) {
-      this.router.navigate(path.MAIN);
+      this.router.navigate(PATH.MAIN);
       return;
     }
 
@@ -30,12 +30,12 @@ class LoginPage extends Component {
 
       new UserStore().setState({ username: username, email: "", bio: "" });
 
-      this.router.navigate(path.MAIN);
+      this.router.navigate(PATH.MAIN);
     });
   }
 }
 
-export const LoginTemplate = () => `
+const LoginTemplate = () => `
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>

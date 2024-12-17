@@ -1,9 +1,10 @@
-import { CreateStore } from "../createStore.js";
+import { CreateStore } from "../utils/lib/createStore.js";
 
 export class UserStore extends CreateStore {
   constructor() {
     const userInfo = JSON.parse(localStorage.getItem("user")) || null;
     super(userInfo);
+
     if (UserStore.instance) {
       return UserStore.instance;
     }

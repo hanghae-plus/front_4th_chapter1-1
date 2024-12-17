@@ -1,4 +1,4 @@
-import { Component } from "../utils/component.js";
+import { Component } from "../utils/lib/component.js";
 
 class NotFoundPage extends Component {
   constructor(template) {

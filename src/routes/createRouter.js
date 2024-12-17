@@ -7,13 +7,12 @@ export class CreateRouter {
   }
 
   init() {
+    this.linkEventListeners();
     if (this.isHistory) {
       this.popstateListener();
-      this.linkEventListeners();
       this.navigate(window.location.pathname);
     } else {
       this.hashchangeListener();
-      this.linkEventListeners();
       this.navigate(window.location.hash);
     }
   }
@@ -22,7 +21,6 @@ export class CreateRouter {
     const validatePath = this.isHistory
       ? currentPath
       : currentPath.replace("#", "");
-
     const template = this.routes[validatePath] || this.routes.error;
 
     if (this.isHistory) {
@@ -30,6 +28,7 @@ export class CreateRouter {
     } else {
       this.hashState(validatePath);
     }
+
     return template.render();
   }
 
