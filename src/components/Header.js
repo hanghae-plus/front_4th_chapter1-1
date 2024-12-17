@@ -23,7 +23,13 @@ const Header = () => {
         .map(({ text, href, id }) => {
           const isSelected = pathname === href;
 
-          return `<li><a id=${id} href=${href} class=${isSelected ? "text-blue-600" : "text-gray-600"}>${text}</a></li>`;
+          return `
+          <li>
+            <a id="${id}" href="${href}" class="${isSelected ? "font-bold text-blue-600" : "text-gray-600"}">
+              ${text}
+            </a>
+          </li>
+          `;
         })
         .join("")}
     </ul>

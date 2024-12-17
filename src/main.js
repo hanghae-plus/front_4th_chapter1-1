@@ -18,6 +18,9 @@ const router = (path = window.location.pathname || "/") => {
     if (path === "/profile" && !isLogin) {
       history.pushState(null, "", "/login");
       return router("/login");
+    } else if (path === "/login" && isLogin) {
+      history.pushState(null, "", "/");
+      return router("/");
     }
 
     history.pushState(null, "", path);

@@ -32,6 +32,8 @@ const createUserStore = () => {
     },
     resetUserInfoInLocalStorage: () => {
       localStorage.removeItem(USER_INFO_LOCAL_STORAGE_KEY);
+
+      username = "";
     },
   };
 };
