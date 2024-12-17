@@ -8,7 +8,7 @@ export const BIO_TEXTAREA = "bio";
 
 export const ProfilePage = () => {
   const { username = "", email = "", bio = "" } = userManager.getData();
-  console.log(email);
+
   return `
   <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">

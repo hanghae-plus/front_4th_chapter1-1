@@ -1,4 +1,6 @@
-import { router } from "./utils/router";
+import { useRouter } from "./utils/router";
+
+const { router } = useRouter();
 
 window.addEventListener("load", () => {
   router();

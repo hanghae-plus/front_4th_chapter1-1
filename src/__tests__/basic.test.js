@@ -10,8 +10,6 @@ import {
   vi,
 } from "vitest";
 
-import { LOGIN_FORM_ID, USER_NAME_INPUT_ID } from "../pages/LoginPage.js";
-
 beforeAll(async () => {
   // DOM 초기화
   window.alert = vi.fn();
@@ -77,15 +75,9 @@ describe("기본과제 테스트", () => {
     it("로그인 폼에서 사용자 이름을 입력하고 제출하면 로그인 되고, 로그아웃 버튼 클릭시 로그아웃 된다.", async () => {
       goTo("/login");
 
-      const loginForm = document.getElementById(LOGIN_FORM_ID);
-      console.log(loginForm);
-      document.querySelectorAll("input").forEach((input) => {
-        console.log(input);
-      }),
-        await user.type(
-          document.getElementById(USER_NAME_INPUT_ID),
-          "testuser",
-        );
+      const loginForm = document.getElementById("login-form");
+
+      await user.type(document.getElementById("username"), "testuser");
 
       loginForm.dispatchEvent(
         new SubmitEvent("submit", { bubbles: true, cancelable: true }),
@@ -135,7 +127,7 @@ describe("기본과제 테스트", () => {
       profileForm.dispatchEvent(
         new SubmitEvent("submit", { bubbles: true, cancelable: true }),
       );
-      console.log("###", JSON.parse(localStorage.getItem("user"))["email"]);
+
       expect(localStorage.getItem("user")).toEqual(
         `{"username":"testuser","email":"","bio":"Updated bio"}`,
       );

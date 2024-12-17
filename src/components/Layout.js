@@ -1,6 +1,6 @@
 import { userManager } from "../utils/user";
 
-const ATAG_IN_NAVIGATOR_ATTRIBUTE_VALUE_MAP_LIST = [
+const HREF_TAG_IN_NAVIGATOR_ATTRIBUTE_VALUE_MAP_LIST = [
   {
     href: "/",
     id: "home",
@@ -8,7 +8,7 @@ const ATAG_IN_NAVIGATOR_ATTRIBUTE_VALUE_MAP_LIST = [
   },
 ];
 
-const SIGNIN_USER_ATAG_ATTRIBUTE_VALUE_MAP_LIST = [
+const SIGNIN_USER_HREF_TAG_ATTRIBUTE_VALUE_MAP_LIST = [
   {
     href: "/profile",
     id: "profile",
@@ -21,7 +21,7 @@ const SIGNIN_USER_ATAG_ATTRIBUTE_VALUE_MAP_LIST = [
   },
 ];
 
-const NON_SIGNIN_USER_ATAG_ATTRIBUTE_VALUE_MAP_LIST = [
+const NON_SIGNIN_USER_HREF_TAG_ATTRIBUTE_VALUE_MAP_LIST = [
   {
     href: "/login",
     id: "login",
@@ -39,18 +39,23 @@ export const Navigation = () => {
   const isLogin = userManager.isLogin();
 
   const aTagDataList = [
-    ...ATAG_IN_NAVIGATOR_ATTRIBUTE_VALUE_MAP_LIST,
+    ...HREF_TAG_IN_NAVIGATOR_ATTRIBUTE_VALUE_MAP_LIST,
     ...(isLogin
-      ? SIGNIN_USER_ATAG_ATTRIBUTE_VALUE_MAP_LIST
-      : NON_SIGNIN_USER_ATAG_ATTRIBUTE_VALUE_MAP_LIST),
+      ? SIGNIN_USER_HREF_TAG_ATTRIBUTE_VALUE_MAP_LIST
+      : NON_SIGNIN_USER_HREF_TAG_ATTRIBUTE_VALUE_MAP_LIST),
   ];
+
+  const path = window.location.pathname;
+
+  const currentPageTabStyleClassName = "text-blue-600 font-bold";
+  const defaultPageTabStyleClassName = "text-gray-600";
 
   return `<nav class="bg-white shadow-md p-2 sticky top-14">
     <ul class="flex justify-around">
     ${aTagDataList
       .map(
         (data) => `<li>
-        <a href="${data.href}" id="${data.id}">${data.text}</a>
+        <a class="${path === data.href ? currentPageTabStyleClassName : defaultPageTabStyleClassName}" href="${data.href}" id="${data.id}">${data.text}</a>
         </li>`,
       )
       .join("")} 
