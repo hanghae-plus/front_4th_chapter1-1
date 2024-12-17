@@ -5,8 +5,6 @@ beforeAll(async () => {
   window.alert = vi.fn();
   document.body.innerHTML = '<div id="root"></div>';
 
-  import.meta.env.VITE_ROUTER_MODE = "hash";
-
   await import("../main.hash.ts");
   document.dispatchEvent(new Event("DOMContentLoaded"));
 });
@@ -44,7 +42,6 @@ describe("심화과제 > 해시 라우터 테스트", () => {
     it('로그인이 되지 않은 상태에서 "/profile" 경로로 접근하면, 로그인 페이지로 리다이렉션 된다.', () => {
       // 로그인 상태 시뮬레이션
       goTo("/profile");
-
       const submitButtons = [
         ...document.querySelectorAll("form button[type='submit']"),
       ];
