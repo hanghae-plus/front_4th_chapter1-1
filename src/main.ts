@@ -12,4 +12,7 @@ Router.addRoute("/", () => mainPage.render());
 Router.addRoute("/profile", () => prifilePage.render());
 Router.addRoute("/login", () => loginPage.render());
 Router.addRoute("404", ErrorPage);
+Router.addRoute("#/", () => mainPage.render());
+Router.addRoute("#/profile", () => prifilePage.render());
+Router.addRoute("#/login", () => loginPage.render());
 Router.init();

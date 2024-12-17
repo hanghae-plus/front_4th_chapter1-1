@@ -55,14 +55,14 @@ export class Header {
         UserStore.actions.useLogoutUser();
       }
 
-      const href = this.extractPath(event.target.href);
+      const href = this.extractPathname(event.target.href);
 
       Router.push(href as Routes);
     }
   };
 
-  private extractPath(url: string) {
-    const index = url.indexOf("/");
-    return index !== -1 ? url.substring(index) : "";
+  private extractPathname(url: string) {
+    const parsedUrl = new URL(url);
+    return parsedUrl.pathname;
   }
 }
