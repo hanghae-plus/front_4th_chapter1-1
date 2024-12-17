@@ -1,4 +1,4 @@
-import userService from "../features/userService";
+import userService from "../features/UserService";
 import { InputName } from "../shared/const";
 import { router } from "../app/router";
 import { Footer } from "../widgets/Footer";

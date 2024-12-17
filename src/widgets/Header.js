@@ -1,4 +1,4 @@
-import userService from "../features/userService";
+import userService from "../features/UserService";
 import { BASE_URL } from "../shared/const";
 import { router } from "../app/router";
 

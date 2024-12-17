@@ -1,5 +1,5 @@
 import { Routes } from "./routes";
-import userService from "../features/userService";
+import userService from "../features/UserService";
 
 export const historyRouter = (path) => {
   const pathToGo = interceptor(path);
