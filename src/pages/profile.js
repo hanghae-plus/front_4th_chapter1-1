@@ -1,7 +1,7 @@
 import { Footer } from "../components/footer";
 import { Header } from "../components/header";
 import { getUser, isLoggedIn, saveUser } from "../utils/local-storage";
-import { navigate } from "../main";
+// import { navigate } from "../main";
 export const ProfilePage = () => {
   // 페이지 구조 생성
   const header = Header();
@@ -9,7 +9,7 @@ export const ProfilePage = () => {
 
   const isLogged = isLoggedIn();
   if (!isLogged) {
-    navigate("/login");
+    // navigate("/login");
   }
   //   const user = getValue('user');
   //   const { username = '', email = '', bio = ''} = {...user}
@@ -88,13 +88,13 @@ export const ProfilePage = () => {
 
   // DOM에 추가된 후 이벤트 리스너 설정
   setTimeout(() => {
-    const form = document.querySelector("#root #profile-form");
+    const form = document.getElementById("profile-form");
 
     if (form) {
       form.addEventListener("submit", (event) => {
-        const usernameInput = document.querySelector("#username").value;
-        const emailInput = document.querySelector("#email").value;
-        const bioInput = document.querySelector("#bio").value;
+        const usernameInput = document.getElementById("username").value;
+        const emailInput = document.getElementById("email").value;
+        const bioInput = document.getElementById("bio").value;
         saveUser(usernameInput, emailInput, bioInput);
 
         console.log(`inputs: ${usernameInput} ${emailInput} ${bioInput}`);

@@ -1,5 +1,5 @@
 import { saveUser } from "../utils/local-storage";
-import { navigate } from "../main";
+// import { navigate } from "../main";
 import { validateUsername } from "../utils/validator";
 
 export const LoginPage = () => {
@@ -28,14 +28,14 @@ export const LoginPage = () => {
 `;
 
   setTimeout(() => {
-    const form = document.querySelector("#root #login-form");
+    const form = document.getElementById("login-form");
 
     form.addEventListener("submit", (e) => {
       console.log(`submit pressed`);
       e.preventDefault();
 
-      const username = document.querySelector("#username").value;
-      const password = document.querySelector("#password").value;
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
 
       console.log(`username: ${username}`);
       console.log(`password: ${password}`);
@@ -44,7 +44,7 @@ export const LoginPage = () => {
         console.log(`isvalid, go to home page`);
         saveUser(username);
         console.log(`username:${username}`);
-        navigate("/");
+        // navigate("/");
       }
     });
   }, 0);

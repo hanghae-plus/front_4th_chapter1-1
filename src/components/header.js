@@ -1,5 +1,5 @@
 import { clear, isLoggedIn } from "../utils/local-storage";
-import { navigate } from "../main";
+// import { navigate } from "../main";
 export const Header = () => {
   const loggedIn = isLoggedIn();
 
@@ -30,11 +30,11 @@ export const Header = () => {
 
   // Attach event listener for logout button
   setTimeout(() => {
-    const logoutButton = document.querySelector("#logout");
+    const logoutButton = document.getElementById("logout");
     if (logoutButton) {
       logoutButton.addEventListener("click", () => {
         clear();
-        navigate("/");
+        // navigate("/");
       });
     }
   }, 0);
