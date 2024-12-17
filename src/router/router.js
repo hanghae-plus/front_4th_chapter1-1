@@ -13,11 +13,11 @@ const routes = {
   "/profile": ProfilePage,
 };
 
-// UI 그려주기
 export const router = () => {
   const path = window.location.pathname;
   const render = routes[path] || ErrorPage;
 
+  // 404페이지
   if (!state.user && path === "/profile") {
     document.body.innerHTML = LoginPage();
     return;
@@ -30,7 +30,6 @@ export const router = () => {
   else if (path === "/") initNavigation();
 };
 
-// 상태 변경 시 router를 다시 실행해 렌더링
 subscribe(() => {
   router();
 });

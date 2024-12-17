@@ -2,7 +2,7 @@ export const state = {
   user: null, // 현재 로그인한 사용자 정보
 };
 
-const listeners = []; //  리스너들
+const listeners = [];
 
 export const subscribe = (listener) => {
   listeners.push(listener);
