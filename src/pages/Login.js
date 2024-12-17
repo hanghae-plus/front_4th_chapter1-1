@@ -1,5 +1,5 @@
 import Component from "../core/component";
-import { login } from "../auth/auth";
+import { getUser, login } from "../auth/auth";
 import Router from "../router/router";
 import ProfilePage from "./Profile";
 
@@ -15,11 +15,22 @@ class LoginPage extends Component {
       }
 
       login(username);
+
       const router = new Router();
       const profileInstnace = new ProfilePage(this.$target);
       router.addRoute("/profile", () => profileInstnace);
       router.navigate("/");
     });
+  }
+
+  render() {
+    const user = getUser();
+    if (user) {
+      const router = new Router();
+      router.navigate("/");
+      return;
+    }
+    super.render();
   }
 
   template() {
