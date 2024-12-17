@@ -4,7 +4,6 @@ import { isAuthenticated } from "../util/login";
 class Router {
   constructor(routerMap) {
     if (Router.instance) {
-      console.log("test");
       return Router.instance;
     }
     Router.instance = this;
@@ -40,17 +39,5 @@ class Router {
   handlePopState() {
     this.#updatePage(window.location.pathname);
   }
-
-  // back() {
-  //   history.back();
-  // }
-
-  // forward() {
-  //   history.forward();
-  // }
-
-  // go(delta) {
-  //   history.go(delta);
-  // }
 }
 export default Router;
