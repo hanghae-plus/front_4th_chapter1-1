@@ -1,9 +1,11 @@
+import { useUserStore } from "../stores/useUserStore";
+
 const Header = () => {
   const pathname = window.location.pathname;
-  const user = JSON.parse(localStorage.getItem("user"));
+  const isLogin = useUserStore.isLogin();
 
   const navList = [{ text: "홈", href: "/", id: "home" }];
-  if (user) {
+  if (isLogin) {
     navList.push({ text: "프로필", href: "/profile", id: "profile" });
     navList.push({ text: "로그아웃", href: "#", id: "logout" });
   } else {

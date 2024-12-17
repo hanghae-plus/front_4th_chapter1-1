@@ -40,9 +40,14 @@ const renderLoginPage = () => {
   const loginForm = document.querySelector("#login-form");
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const username = e.target.querySelector('input[type="text"]').value;
 
-    useUserStore.setUserInfoInLocalStorage({ username, email: "", bio: "" });
+    const formData = new FormData(e.target);
+    const userInfo = {
+      username: formData.get("username"),
+      email: "",
+      bio: "",
+    };
+    useUserStore.setUserInfoInLocalStorage(userInfo);
 
     router("/");
   });
@@ -57,11 +62,15 @@ const renderProfilePage = () => {
   const profileForm = document.querySelector("#profile-form");
   profileForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const username = e.target.querySelector("#username").value;
-    const email = e.target.querySelector("#email").value;
-    const bio = e.target.querySelector("#bio").value;
 
-    useUserStore.setUserInfoInLocalStorage({ username, email, bio });
+    const formData = new FormData(e.target);
+    const userInfo = {
+      username: formData.get("username"),
+      email: formData.get("email"),
+      bio: formData.get("bio"),
+    };
+
+    useUserStore.setUserInfoInLocalStorage(userInfo);
   });
 };
 
