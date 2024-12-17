@@ -2,11 +2,13 @@ export const Router = () => {
   const routes = {};
 
   function handlePopState() {
+    console.log(window.location.pathname);
     handleRoute(window.location.pathname);
   }
 
   function handleRoute(path) {
-    const handler = routes[path] || routes["/errror"];
+    console.log("test", routes[path] || routes["/error"]);
+    const handler = routes[path] || routes["/error"];
     if (handler) {
       document.body.innerHTML = handler();
     } else {
@@ -24,8 +26,12 @@ export const Router = () => {
     handleRoute(path);
   }
 
+  // function setDefaultRoute() {
+  //     handleRoute("/");
+  // }\
   function setDefaultRoute() {
-    handleRoute("/");
+    const initialPath = window.location.pathname;
+    handleRoute(initialPath); // 현재 경로에 맞는 핸들러 실행
   }
 
   window.addEventListener("popstate", handlePopState);
