@@ -36,7 +36,7 @@ export const ProfilePage = (userInfo) => `
                   type="email"
                   id="email"
                   name="email"
-                  value=${userInfo?.email || "123@abc.com"}
+                  value=${userInfo?.email || "''"}
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -56,7 +56,6 @@ export const ProfilePage = (userInfo) => `
               </div>
               <button
                 type="submit"
-                id="profile-form"
                 class="w-full bg-blue-600 text-white p-2 rounded font-bold"
               >
                 프로필 업데이트

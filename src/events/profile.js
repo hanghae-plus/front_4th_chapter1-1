@@ -3,12 +3,12 @@ import { setState } from "./../store/store";
 const handleProfileUpdate = (e) => {
   e.preventDefault();
 
-  const profileBtn = document.getElementById("profile-form");
+  const profileForm = document.getElementById("profile-form");
 
-  if (profileBtn) {
-    const usernameInput = document.getElementById("username").value;
-    const emailInput = document.getElementById("email").value;
-    const bioInput = document.getElementById("bio").value;
+  if (profileForm) {
+    const usernameInput = document.getElementById("username")?.value;
+    const emailInput = document.getElementById("email")?.value;
+    const bioInput = document.getElementById("bio")?.value;
 
     const updatedInfo = {
       username: usernameInput,
@@ -16,9 +16,9 @@ const handleProfileUpdate = (e) => {
       bio: bioInput,
     };
 
-    setState({ user: updatedInfo });
-
     localStorage.setItem("user", JSON.stringify(updatedInfo));
+
+    setState({ user: updatedInfo });
   }
 };
 

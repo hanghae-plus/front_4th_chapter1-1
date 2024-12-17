@@ -8,7 +8,7 @@ export const handleLogin = (e) => {
 
   const userInfo = { username, email: "", bio: "" };
 
-  if (username) {
+  if (username && !localStorage.getItem("user")) {
     setState({ user: userInfo }); // 상태 업데이트
 
     localStorage.setItem("user", JSON.stringify(userInfo));
