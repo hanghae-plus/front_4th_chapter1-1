@@ -282,19 +282,18 @@ document.addEventListener("DOMContentLoaded", () => {
   router();
   pageEventListeners();
 
-  const updateProfile = document.querySelector("#profileForm");
-  if (updateProfile) {
-    updateProfile.addEventListener("submit", (e) => {
+  document.body.addEventListener("submit", (e) => {
+    if (e.target.id === "profileForm") {
       e.preventDefault();
+
       const username = document.querySelector("#username").value;
       const email = document.querySelector("#email").value;
       const bio = document.querySelector("#bio").value;
 
       const profileData = { username, email, bio };
-
       saveProfile(profileData);
-    });
-  }
+    }
+  });
 });
 
 // page eventListener
