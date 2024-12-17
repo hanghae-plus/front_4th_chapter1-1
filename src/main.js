@@ -287,11 +287,6 @@ const pageEventListeners = () => {
 
   document.body.removeEventListener("submit", handleSubmit);
   document.body.addEventListener("submit", handleSubmit);
-
-  document.body.removeEventListener("submit", loginSubmitHandle);
-  document.body.addEventListener("submit", e => {
-    if (e.target.id === "loginForm") loginSubmitHandle(e);
-  });
 };
 
 const loginSubmitHandle = e => {
@@ -319,8 +314,10 @@ const handleClick = e => {
   }
 };
 const handleSubmit = e => {
-  if (e.target.id === "profileForm") {
-    e.preventDefault();
+  e.preventDefault();
+  if (e.target.id === "loginForm") {
+    loginSubmitHandle(e);
+  } else if (e.target.id === "profileForm") {
     const username = document.querySelector("#username").value;
     const email = document.querySelector("#email").value;
     const bio = document.querySelector("#bio").value;
@@ -329,10 +326,10 @@ const handleSubmit = e => {
 };
 
 const navigation = path => {
+  const validPaths = ["/", "/profile", "/login"];
   if (path && !path.startsWith("/")) {
     path = `/${path}`;
   }
-  const validPaths = ["/", "/profile", "/login"];
 
   if (validPaths.includes(path)) {
     window.location.hash = `#${path}`;

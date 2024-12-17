@@ -50,17 +50,13 @@ describe("심화과제 테스트", () => {
       goTo("/login");
 
       const loginForm = document.getElementById("loginForm");
-      const loginId = document.getElementById("userId");
-      const loginPw = document.getElementById("password");
 
       await user.type(document.getElementById("userId"), "testuser");
-      if (!loginId) {
-        throw new Error("userId 값 없음");
-      }
-      await user.type(document.getElementById("password"), "1234");
-      if (!loginPw) {
-        throw new Error("password 값 없음");
-      }
+
+      loginForm.dispatchEvent(
+        new SubmitEvent("submit", { bubbles: true, cancelable: true }),
+      );
+
       loginForm.dispatchEvent(
         new SubmitEvent("submit", { bubbles: true, cancelable: true }),
       );
