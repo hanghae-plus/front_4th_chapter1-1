@@ -42,15 +42,20 @@ class Router {
 const router = new Router();
 
 // 경로와 그에 대응하는 핸들러 추가
-router.addRoute("/", () => loadRoute(MainPage(), router)); // 메인 페이지
+router.addRoute("/", () => loadRoute(MainPage())); // 메인 페이지
 router.addRoute("/profile", () => {
   const id = window.localStorage.getItem("user");
 
-  if (id) loadRoute(ProfilePage(), router);
-  else loadRoute(LoginPage(), router);
+  if (id) loadRoute(ProfilePage());
+  else router.navigateTo("/login");
 }); // 프로필 페이지
-router.addRoute("/login", () => loadRoute(LoginPage(), router));
-router.addRoute("/404", () => loadRoute(NotFoundPage(), router)); // 에러 페이지
+router.addRoute("/login", () => {
+  const id = window.localStorage.getItem("user");
+
+  if (id) router.navigateTo("/");
+  else loadRoute(LoginPage());
+});
+router.addRoute("/404", () => loadRoute(NotFoundPage())); // 에러 페이지
 
 router.navigateTo(window.location.pathname);
 
