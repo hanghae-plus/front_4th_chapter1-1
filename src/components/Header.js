@@ -9,16 +9,17 @@ export const Header = () => `
     </nav>
 `;
 
+// 로그인 여부에 따른 렌더링
 function renderLoginStatus() {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const path = window.location.pathname;
-  console.log("user", user);
+  // console.log("user", user);
 
-  if (user.email) {
+  if (user.username) {
     return `
       <li><a href="/" class="${path === "/" ? "text-blue-600" : "text-gray-600"}">홈</a></li>
       <li><a href="/profile" class="${path === "/profile" ? "text-blue-600" : "text-gray-600"}">프로필</a></li>
-      <li><a href="/login" id="logout-but" class="text-gray-600">로그아웃</a></li>
+      <li><a href="/login" id="logout" class="text-gray-600">로그아웃</a></li>
     `;
   } else {
     return `

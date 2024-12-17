@@ -3,6 +3,16 @@ import { attachLoginHandler, LoginPage } from "./pages/loginPage.js";
 import { ProfilePage } from "./pages/profilePage.js";
 import { ErrorPage } from "./pages/errorPage.js";
 
+// 로그아웃
+document.addEventListener("click", (e) => {
+  if (e.target && e.target.id === "logout") {
+    e.preventDefault();
+    localStorage.clear();
+    // console.log("세션 삭제 완료")
+  }
+});
+
+// 라우터
 const routes = {
   "/": () => MainPage(),
   "/login": () => LoginPage(),
@@ -20,8 +30,15 @@ const routeHandlers = () => {
 };
 
 const router = () => {
-  const path = window.location.pathname;
+  let path = window.location.pathname;
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+  if (path === "/profile" && !user.username) {
+    path = "/login";
+    window.history.pushState(null, null, "/login");
+  }
   const route = routes[path];
+
   if (route) {
     document.body.innerHTML = route();
   } else {

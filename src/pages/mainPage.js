@@ -100,11 +100,3 @@ export const MainPage = () => `
     </div>
   </div>
 `;
-
-document.addEventListener("click", (e) => {
-  if (e.target && e.target.id === "logout-but") {
-    e.preventDefault();
-    localStorage.clear();
-    console.log("세션 삭제 완료");
-  }
-});

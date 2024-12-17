@@ -4,9 +4,9 @@ export const LoginPage = () => `
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
-      <form id="loginForm">
+      <form id="login-form">
         <div class="mb-4">
-          <input type="text" placeholder="이메일 또는 전화번호" id="emailInput" class="w-full p-2 border rounded">
+          <input type="text" id="username" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
         </div>
         <div class="mb-6">
           <input type="password" placeholder="비밀번호" id="passwordInput" class="w-full p-2 border rounded">
@@ -25,8 +25,8 @@ export const LoginPage = () => `
 `;
 
 export const attachLoginHandler = () => {
-  const form = document.querySelector("#loginForm");
-  const emailInput = document.querySelector("#emailInput");
+  const form = document.querySelector("#login-form");
+  const emailInput = document.querySelector("#username");
   const passwordInput = document.querySelector("#passwordInput");
 
   form.addEventListener("submit", (e) => {
@@ -35,20 +35,19 @@ export const attachLoginHandler = () => {
     const password = passwordInput.value.trim();
 
     if (validateForm(email, password)) {
-      localStorage.setItem("user", JSON.stringify({ email, age: 30 }));
+      localStorage.clear();
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ username: email, email: "", bio: "" }),
+      );
       navigateTo("/profile");
     }
   });
 
-  const validateForm = (email, password) => {
+  const validateForm = (email) => {
     if (!email) {
       alert("이메일을 입력해주세요.");
       emailInput.focus();
-      return false;
-    }
-    if (!password) {
-      alert("비밀번호를 입력해주세요.");
-      passwordInput.focus();
       return false;
     }
     return true;
