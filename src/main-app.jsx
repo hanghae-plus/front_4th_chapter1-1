@@ -10,6 +10,7 @@ class MainApp extends HTMLElement {
       .addRoute("/", <main-page></main-page>)
       .addRoute("/login", <login-page></login-page>)
       .addRoute("/profile", <profile-page></profile-page>)
+      .addRoute("*", <error-page></error-page>)
       .init();
 
     this.render();
