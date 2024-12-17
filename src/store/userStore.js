@@ -9,10 +9,6 @@ const userStore = {
   },
 
   login(username) {
-    if (!username.trim()) {
-      throw new Error("사용자 이름을 입력해주세요.");
-    }
-
     const userData = {
       username: username,
       email: "",

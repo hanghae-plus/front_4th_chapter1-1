@@ -1,12 +1,14 @@
 import userStore from "../store/userStore.js";
 import { router } from "./router.js";
+import { MainPage } from "../pages/MainPage.js";
 export const setupEventHandlers = () => {
   const root = document.getElementById("root");
 
   root.addEventListener("click", (e) => {
     if (e.target.id === "logout") {
       userStore.logout();
-      router.navigate("/login");
+      const rootElement = document.getElementById("root");
+      rootElement.innerHTML = MainPage();
     }
   });
 
