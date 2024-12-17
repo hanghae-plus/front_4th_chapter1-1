@@ -1,15 +1,7 @@
-const isEvent = (key) => key.startsWith("on");
 const isAttribute = (key) => !key.startsWith("on");
 
 const createElement = (type, props, ...children) => {
   const element = document.createElement(type);
-
-  Object.keys(props ?? {})
-    .filter(isEvent)
-    .forEach((key) => {
-      const eventName = key.toLowerCase().substring(2);
-      element.addEventListener(eventName, props[key]);
-    });
 
   Object.keys(props ?? {})
     .filter(isAttribute)
