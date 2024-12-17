@@ -1,53 +1,7 @@
 import { createRouter } from "@/router/createRouter";
-import UserStore from "@/store/userStore";
+import { submitEventHandler, clickEventHandler } from "./utils";
 
-const { router, navigator } = createRouter();
-
-function submitEventHandler(e) {
-  e.preventDefault();
-  const form = e.target;
-  const formData = new FormData(form);
-  const { id } = form;
-
-  if (id === "login-form") {
-    login(formData);
-  }
-
-  if (id === "profile-form") {
-    updateProfile(formData);
-  }
-}
-
-function login(formData) {
-  const username = formData.get("username");
-  if (username) {
-    new UserStore().setUser({ username, email: "", bio: "" });
-    navigator("/profile");
-  }
-}
-
-function updateProfile(formData) {
-  const username = formData.get("username");
-  const email = formData.get("email");
-  const bio = formData.get("bio");
-  new UserStore().setUser({ username, email, bio });
-  navigator("/profile");
-}
-
-function clickEventHandler(e) {
-  const { id, tagName } = e.target;
-
-  if (tagName === "A") {
-    e.preventDefault();
-    const { href } = e.target;
-    let path = new URL(href).pathname;
-    if (id === "logout") {
-      new UserStore().deleteUser();
-      path = "/login";
-    }
-    navigator(path);
-  }
-}
+const { router } = createRouter();
 
 document.body.addEventListener("submit", submitEventHandler);
 document.body.addEventListener("click", clickEventHandler);
