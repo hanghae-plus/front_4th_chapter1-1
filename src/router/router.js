@@ -14,16 +14,20 @@ const routes = {
 };
 
 export const router = () => {
+  const root = document.getElementById("root");
+
+  if (!root) return;
+
   const path = window.location.pathname;
   const render = routes[path] || ErrorPage;
 
   // 404페이지
   if (!state.user && path === "/profile") {
-    document.body.innerHTML = LoginPage();
+    root.innerHTML = LoginPage();
     return;
   }
 
-  document.body.innerHTML = render(render === LoginPage ? null : state.user);
+  root.innerHTML = render(render === LoginPage ? null : state.user);
 
   if (path === "/login") initLogin();
   else if (path === "/profile") initProfile();
