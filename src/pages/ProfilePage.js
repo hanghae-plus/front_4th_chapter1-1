@@ -10,7 +10,7 @@ export const ProfilePage = () => `
           <ul class="flex justify-around">
             <li><a href="/" class="text-gray-600">홈</a></li>
             <li><a href="/profile" class="text-blue-600">프로필</a></li>
-            <li><a href="#" class="text-gray-600">로그아웃</a></li>
+            <li><button id="logout" class="text-gray-600">로그아웃</button></li>
           </ul>
         </nav>
 
@@ -19,7 +19,7 @@ export const ProfilePage = () => `
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
               내 프로필
             </h2>
-            <form>
+            <form id="profile-form">
               <div class="mb-4">
                 <label
                   for="username"
