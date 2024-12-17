@@ -38,19 +38,9 @@ const renderLoginPage = () => {
   document.getElementById("root").innerHTML = `${LoginPage()}`;
 
   const loginForm = document.querySelector("#login-form");
-  loginForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.target);
-    const userInfo = {
-      username: formData.get("username"),
-      email: "",
-      bio: "",
-    };
-    useUserStore.setUserInfoInLocalStorage(userInfo);
-
-    router("/");
-  });
+  loginForm.addEventListener("submit", (e) =>
+    submitEventHandler({ e, onSuccess: () => router("/") }),
+  );
 };
 
 const renderProfilePage = () => {
@@ -60,21 +50,10 @@ const renderProfilePage = () => {
     .addEventListener("click", (e) => clickEventHandler(e));
 
   const profileForm = document.querySelector("#profile-form");
-  profileForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.target);
-    const userInfo = {
-      username: formData.get("username"),
-      email: formData.get("email"),
-      bio: formData.get("bio"),
-    };
-
-    useUserStore.setUserInfoInLocalStorage(userInfo);
-  });
+  profileForm.addEventListener("submit", (e) => submitEventHandler({ e }));
 };
 
-function clickEventHandler(e) {
+const clickEventHandler = (e) => {
   const { id, href, tagName } = e.target;
 
   if (tagName === "A") {
@@ -89,7 +68,21 @@ function clickEventHandler(e) {
 
     router(path);
   }
-}
+};
+
+const submitEventHandler = ({ e, onSuccess }) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const userInfo = {
+    username: formData.get("username"),
+    email: formData.get("email") ?? "",
+    bio: formData.get("bio") ?? "",
+  };
+
+  useUserStore.setUserInfoInLocalStorage(userInfo);
+
+  onSuccess && onSuccess();
+};
 
 window.addEventListener("load", () => router());
 window.addEventListener("popstate", () => router());
