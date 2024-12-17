@@ -19,24 +19,6 @@ export const handleLogin = (e) => {
   }
 };
 
-export const handleLogOut = (e) => {
-  const clickedElement = e.target.closest("#logout");
-
-  if (clickedElement) {
-    if (localStorage.getItem("user")) {
-      localStorage.removeItem("user");
-      setState({ user: null }); // 상태 초기화
-
-      history.pushState({}, "", "/login");
-      router();
-    }
-  }
-};
-
 export const initLogin = () => {
   document.body.addEventListener("submit", handleLogin);
-};
-
-export const initLogOut = () => {
-  document.body.addEventListener("click", handleLogOut);
 };
