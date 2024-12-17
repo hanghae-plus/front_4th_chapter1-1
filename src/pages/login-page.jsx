@@ -1,13 +1,27 @@
+import { userStore } from "../stores/userStore";
+import { navigateTo } from "../utils/router";
+
 class LoginPage extends HTMLElement {
   constructor() {
     super();
+    userStore.subscribe(this.render.bind(this));
   }
 
   connectedCallback() {
     this.render();
   }
 
+  disconnectedCallback() {
+    userStore.unsubscribe(this.render.bind(this));
+  }
+
   render() {
+    const user = userStore.getState();
+
+    if (user.username) {
+      navigateTo(window.isHash ? "#/" : "/", { hash: window.isHash });
+    }
+
     const element = (
       <main class="bg-gray-100 flex items-center justify-center min-h-screen">
         <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">

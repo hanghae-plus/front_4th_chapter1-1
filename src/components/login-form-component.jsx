@@ -6,19 +6,30 @@ class LoginFormComponent extends HTMLElement {
     super();
   }
 
+  addEvent() {
+    const loginForm = this.querySelector("#login-form");
+
+    this.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      if (event.target === loginForm) {
+        this.handleLogin();
+      }
+    });
+  }
+
   connectedCallback() {
     this.render();
   }
 
-  handleLogin(event) {
-    event.preventDefault();
+  handleLogin() {
     const username = this.querySelector("#username").value;
 
     if (!username) {
       return;
     }
 
-    navigateTo("/");
+    navigateTo("/", { hash: window.isHash });
 
     const user = {
       username,
@@ -31,13 +42,13 @@ class LoginFormComponent extends HTMLElement {
 
   render() {
     const element = (
-      <form id="login-form" onSubmit={this.handleLogin}>
+      <form id="login-form">
         <div class="mb-4">
           <input
             type="text"
             id="username"
             name="username"
-            placeholder="이메일 또는 전화번호"
+            placeholder="사용자 이름"
             class="w-full p-2 border rounded"
           />
         </div>
@@ -50,6 +61,7 @@ class LoginFormComponent extends HTMLElement {
           />
         </div>
         <button
+          role="button"
           type="submit"
           class="w-full bg-blue-600 text-white p-2 rounded font-bold"
         >
@@ -63,6 +75,7 @@ class LoginFormComponent extends HTMLElement {
     } else {
       this.appendChild(element);
     }
+    this.addEvent();
   }
 }
 

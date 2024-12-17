@@ -1,36 +1,20 @@
-import { userStore, userStoreActions } from "../stores/userStore";
+import { userStore } from "../stores/userStore";
 import { navigateTo } from "../utils/router";
 
 class ProfilePage extends HTMLElement {
   constructor() {
     super();
-    userStore.subscribe(this.render.bind(this));
   }
 
   connectedCallback() {
     const user = userStore.getState();
 
     if (!user?.username) {
-      navigateTo("/login");
+      navigateTo("/login", { hash: window.isHash });
       return;
     }
 
     this.render();
-  }
-
-  handleUpdateProfile(event) {
-    event.preventDefault();
-    const username = this.querySelector("#username").value;
-    const email = this.querySelector("#email").value;
-    const bio = this.querySelector("#bio").value;
-
-    const user = {
-      username,
-      email,
-      bio,
-    };
-
-    userStoreActions.updateUser(user);
   }
 
   render() {

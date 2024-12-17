@@ -1,17 +1,36 @@
 import { userStore, userStoreActions } from "../stores/userStore";
+import { navigateTo } from "../utils/router";
 
 class ProfileFormComponent extends HTMLElement {
   constructor() {
     super();
+    userStore.subscribe(this.render.bind(this));
+  }
+
+  addEvent() {
+    const profileForm = this.querySelector("#profile-form");
+
+    const handleSubmit = (event) => {
+      if (event.target === profileForm) {
+        event.preventDefault();
+
+        this.handleUpdateProfile();
+      }
+    };
+
+    this.removeEventListener("submit", handleSubmit);
+    this.addEventListener("submit", handleSubmit);
   }
 
   connectedCallback() {
     this.render();
-    userStore.subscribe(this.render.bind(this));
   }
 
-  handleUpdateProfile(event) {
-    event.preventDefault();
+  disconnectedCallback() {
+    userStore.unsubscribe(this.render.bind(this));
+  }
+
+  handleUpdateProfile() {
     const username = this.querySelector("#username").value;
     const email = this.querySelector("#email").value;
     const bio = this.querySelector("#bio").value;
@@ -23,6 +42,7 @@ class ProfileFormComponent extends HTMLElement {
     };
 
     userStoreActions.updateUser(user);
+    navigateTo("/profile");
   }
 
   render() {
@@ -85,6 +105,7 @@ class ProfileFormComponent extends HTMLElement {
     } else {
       this.appendChild(element);
     }
+    this.addEvent();
   }
 }
 

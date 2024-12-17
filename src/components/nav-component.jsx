@@ -7,20 +7,42 @@ class NavComponent extends HTMLElement {
     userStore.subscribe(this.render.bind(this));
   }
 
+  addEvent() {
+    const logoutButton = this.querySelector("#logout");
+
+    this.addEventListener("click", (event) => {
+      Array.from([...this.querySelectorAll("a")]).forEach((el) => {
+        event.preventDefault();
+        const url = new URL(el.href);
+
+        if (event.target === logoutButton) {
+          this.handleLogout();
+          return;
+        }
+
+        if (event.target === el) {
+          this.handleNavigate(url.pathname);
+          return;
+        }
+      });
+    });
+  }
+
   connectedCallback() {
     this.render();
   }
 
+  disconnectedCallback() {
+    userStore.unsubscribe(this.render.bind(this));
+  }
+
   handleNavigate(path) {
-    return function (e) {
-      e.preventDefault();
-      navigateTo(path);
-    };
+    navigateTo(path, { hash: window.isHash });
   }
 
   handleLogout() {
     userStoreActions.logout();
-    navigateTo("/");
+    navigateTo("/login", { hash: window.isHash });
   }
 
   render() {
@@ -31,13 +53,16 @@ class NavComponent extends HTMLElement {
         <ul class="flex justify-around">
           <li>
             <a
-              href="/"
+              href={"/"}
               class={
-                window.location.pathname === "/"
-                  ? "text-blue-600"
-                  : "text-gray-600"
+                window.isHash
+                  ? window.location.hash === "#/"
+                    ? "text-blue-600 font-bold"
+                    : "text-gray-600"
+                  : window.location.pathname === "/"
+                    ? "text-blue-600 font-bold"
+                    : "text-gray-600"
               }
-              onClick={this.handleNavigate("/")}
             >
               홈
             </a>
@@ -46,36 +71,27 @@ class NavComponent extends HTMLElement {
             <a
               href="/profile"
               class={
-                window.location.pathname === "/profile"
-                  ? "text-blue-600"
-                  : "text-gray-600"
+                window.isHash
+                  ? window.location.hash === "#/profile"
+                    ? "text-blue-600 font-bold"
+                    : "text-gray-600"
+                  : window.location.pathname === "/profile"
+                    ? "text-blue-600 font-bold"
+                    : "text-gray-600"
               }
-              onClick={this.handleNavigate("/profile")}
             >
               프로필
             </a>
           </li>
           {isLogin ? (
             <li>
-              <button
-                id="logout"
-                class="text-gray-600"
-                onClick={this.handleLogout}
-              >
+              <a href="#" id="logout" class="text-gray-600">
                 로그아웃
-              </button>
+              </a>
             </li>
           ) : (
             <li>
-              <a
-                href="/login"
-                class={
-                  window.location.pathname === "/login"
-                    ? "text-blue-600"
-                    : "text-gray-600"
-                }
-                onClick={this.handleNavigate("/login")}
-              >
+              <a href="/login" class={"text-gray-600"}>
                 로그인
               </a>
             </li>
@@ -89,6 +105,8 @@ class NavComponent extends HTMLElement {
     } else {
       this.appendChild(element);
     }
+
+    this.addEvent();
   }
 }
 
