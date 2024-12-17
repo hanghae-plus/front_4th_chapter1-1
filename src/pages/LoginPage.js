@@ -1,4 +1,5 @@
-import { createAccount } from "../utils/auth";
+import { signIn, signUp } from "../store";
+import { navigate } from "../router";
 
 export const LoginPage = () => {
   const template = `
@@ -7,7 +8,7 @@ export const LoginPage = () => {
         <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
         <form id="login-form">
           <div class="mb-4">
-            <input type="text" id="username" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
+            <input type="text" id="username" placeholder="사용자 이름" class="w-full p-2 border rounded">
           </div>
           <div class="mb-6">
             <input type="password" id="password" placeholder="비밀번호" class="w-full p-2 border rounded">
@@ -36,10 +37,35 @@ export const LoginPage = () => {
       return { username, password };
     };
 
-    const handleCreateAccount = async (createAccountParams) => {
+    const handleCreateAccount = (createAccountParams) => {
+      const { id, password } = createAccountParams;
+      if (!id || !password) {
+        alert("아이디와 비밀번호를 입력하세요.");
+        return;
+      }
       try {
-        const result = await createAccount(createAccountParams);
-        console.log(result);
+        const result = signUp(createAccountParams);
+        if (result.success) {
+          alert(result.message);
+          // navigate("/");
+        }
+      } catch (error) {
+        alert(error.message);
+      }
+    };
+
+    const handleLogin = (loginParams) => {
+      const { id, password } = loginParams;
+      if (!id || !password) {
+        alert("아이디와 비밀번호를 입력하세요.");
+        return;
+      }
+      try {
+        const result = signIn(loginParams);
+        if (result.success) {
+          alert(result.message);
+          navigate("/profile");
+        }
       } catch (error) {
         alert(error.message);
       }
@@ -49,6 +75,7 @@ export const LoginPage = () => {
       signupButton.addEventListener("click", (event) => {
         event.preventDefault();
         const { username, password } = getUsernameAndPassword();
+
         handleCreateAccount({ id: username, password });
       });
     }
@@ -57,9 +84,8 @@ export const LoginPage = () => {
       loginForm.addEventListener("submit", (event) => {
         event.preventDefault();
         const { username, password } = getUsernameAndPassword();
-        // 계정 생성 로직 호출
 
-        console.log(username, password);
+        handleLogin({ id: username, password });
       });
     }
   };

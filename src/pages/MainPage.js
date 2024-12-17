@@ -1,6 +1,9 @@
 import { Footer, Header } from "../components";
+import { navigate } from "../router";
+import { signOut } from "../store";
 
-export const MainPage = () => `
+export const MainPage = () => {
+  const template = `
   <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
       ${Header()}
@@ -96,3 +99,27 @@ export const MainPage = () => `
     </div>
   </div>
 `;
+
+  const mainPageInitialize = () => {
+    const logoutButton = document.querySelector("#logout");
+
+    const handleLogout = () => {
+      try {
+        signOut();
+        navigate("/login");
+      } catch (error) {
+        alert(error.message);
+      }
+    };
+
+    if (logoutButton) {
+      logoutButton.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        handleLogout();
+      });
+    }
+  };
+
+  return { template, init: mainPageInitialize };
+};

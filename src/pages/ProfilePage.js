@@ -1,6 +1,15 @@
 import { Footer } from "../components";
+import { navigate } from "../router";
+import { signOut } from "../store";
 
-export const ProfilePage = () => `
+export const ProfilePage = () => {
+  const userInfo = JSON.parse(localStorage.getItem("user")) || {
+    username: "",
+    email: "",
+    bio: "",
+  };
+
+  const template = `
   <div id="root">
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
@@ -12,7 +21,7 @@ export const ProfilePage = () => `
           <ul class="flex justify-around">
             <li><a href="/" class="text-gray-600">홈</a></li>
             <li><a href="/profile" class="text-blue-600">프로필</a></li>
-            <li><a href="#" class="text-gray-600">로그아웃</a></li>
+            <li><a id="logout" href="#" class="text-gray-600">로그아웃</a></li>
           </ul>
         </nav>
 
@@ -21,7 +30,7 @@ export const ProfilePage = () => `
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
               내 프로필
             </h2>
-            <form>
+            <form id="profile-form">
               <div class="mb-4">
                 <label
                   for="username"
@@ -32,7 +41,7 @@ export const ProfilePage = () => `
                   type="text"
                   id="username"
                   name="username"
-                  value="홍길동"
+                  value="${userInfo.username}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -46,7 +55,7 @@ export const ProfilePage = () => `
                   type="email"
                   id="email"
                   name="email"
-                  value="hong@example.com"
+                  value="${userInfo.email}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -61,9 +70,7 @@ export const ProfilePage = () => `
                   name="bio"
                   rows="4"
                   class="w-full p-2 border rounded"
-                >
-안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.</textarea
-                >
+                >${userInfo.bio}</textarea>
               </div>
               <button
                 type="submit"
@@ -80,3 +87,28 @@ export const ProfilePage = () => `
     </div>
   </div>
 `;
+
+  const profilePageInitialize = () => {
+    const profileForm = document.getElementById("profile-form");
+    const logoutButton = document.getElementById("logout");
+
+    profileForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const updatedUserInfo = {
+        username: document.getElementById("username").value,
+        email: document.getElementById("email").value,
+        bio: document.getElementById("bio").value,
+      };
+
+      localStorage.setItem("user", JSON.stringify(updatedUserInfo));
+      alert("프로필이 업데이트되었습니다.");
+    });
+
+    logoutButton.addEventListener("click", () => {
+      signOut();
+      navigate("/login");
+    });
+  };
+
+  return { template, init: profilePageInitialize };
+};
