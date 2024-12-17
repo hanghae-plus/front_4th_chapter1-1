@@ -40,7 +40,7 @@ export const LoginPage = () => {
       console.log(`username: ${username}`);
       console.log(`password: ${password}`);
 
-      if (validateUsername(username) && password) {
+      if (validateUsername(username)) {
         console.log(`isvalid, go to home page`);
         saveUser(username);
         console.log(`username:${username}`);

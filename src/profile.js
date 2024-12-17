@@ -1,11 +1,16 @@
 import { Footer } from "./footer";
 import { Header } from "./header";
-import { getUser, saveUser } from "./local-storage";
+import { getUser, isLoggedIn, saveUser } from "./local-storage";
+import { navigate } from "./main";
 export const ProfilePage = () => {
   // 페이지 구조 생성
   const header = Header();
   const footer = Footer();
 
+  const isLogged = isLoggedIn();
+  if (!isLogged) {
+    navigate("/login");
+  }
   //   const user = getValue('user');
   //   const { username = '', email = '', bio = ''} = {...user}
   const { username = "", email = "", bio = "" } = getUser() || {};

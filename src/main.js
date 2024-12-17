@@ -2,6 +2,7 @@ import { ProfilePage } from "./profile";
 import { NotFoundPage } from "./error";
 import { LoginPage } from "./login";
 import { HomePage } from "./home";
+import { isLoggedIn } from "./local-storage";
 
 const routes = {
   "/": HomePage,
@@ -22,9 +23,14 @@ const renderPage = () => {
 
 export const navigate = (path) => {
   // URL 업데이트
-  const newPath = ["/", "/profile", "/login", "/#", "/404"].includes(path)
+  let newPath = ["/", "/profile", "/login", "/#", "/404"].includes(path)
     ? path
     : "/404";
+
+  if (newPath === "/profile" && !isLoggedIn()) {
+    newPath = "/login";
+  }
+
   window.history.pushState({}, "", newPath);
 
   // 새 경로에 맞는 페이지 렌더링
