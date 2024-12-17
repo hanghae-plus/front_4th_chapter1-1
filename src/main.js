@@ -19,5 +19,5 @@ router.init();
 const auth = new AuthManager(router);
 auth.init();
 
-const userProfile = new UserProfile(auth, router);
+const userProfile = new UserProfile(router);
 userProfile.init();

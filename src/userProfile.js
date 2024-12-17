@@ -1,7 +1,13 @@
+import { userStore } from "./store/userStore";
+
 export class UserProfile {
-  constructor(auth, router) {
-    this.auth = auth;
+  constructor(router) {
     this.router = router;
+
+    // userStore 구독
+    userStore.subscribeUser((user) => {
+      this.renderUserData(user);
+    });
   }
 
   init() {
@@ -14,18 +20,15 @@ export class UserProfile {
     document.body.addEventListener("submit", (event) => {
       if (event.target?.id === "profile-form") {
         event.preventDefault();
-
         this.updateUserProfile();
       }
     });
   }
 
-  renderUserData() {
-    const user = this.auth.user;
-    const updatedUser = this.findUserProfile();
-
-    if (updatedUser) {
-      const { usernameInput, emailInput, bioInput } = updatedUser;
+  renderUserData(user = userStore.user) {
+    const renderedUser = this.findUserProfile();
+    if (renderedUser && user) {
+      const { usernameInput, emailInput, bioInput } = renderedUser;
       usernameInput.value = user.username || "";
       emailInput.value = user.email || "";
       bioInput.value = user.bio || "";
@@ -36,18 +39,20 @@ export class UserProfile {
     const usernameInput = document.getElementById("username");
     const emailInput = document.getElementById("email");
     const bioInput = document.getElementById("bio");
-    if (!usernameInput || !emailInput || !bioInput) {
-      return null;
-    }
-    return { usernameInput, emailInput, bioInput };
+    return usernameInput && emailInput && bioInput
+      ? { usernameInput, emailInput, bioInput }
+      : null;
   }
 
   updateUserProfile() {
-    const { usernameInput, emailInput, bioInput } = this.findUserProfile();
-    this.auth.user = {
-      username: usernameInput.value,
-      email: emailInput.value,
-      bio: bioInput.value,
-    };
+    const user = this.findUserProfile();
+    if (user) {
+      const { usernameInput, emailInput, bioInput } = user;
+      userStore.user = {
+        username: usernameInput.value,
+        email: emailInput.value,
+        bio: bioInput.value,
+      };
+    }
   }
 }

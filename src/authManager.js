@@ -1,28 +1,18 @@
+import { userStore } from "./store/userStore";
+
 export default class AuthManager {
   constructor(router) {
     this.router = router;
   }
 
-  isLoggedIn() {
-    return localStorage.getItem("user") !== null;
-  }
-
-  get user() {
-    return this.isLoggedIn() ? JSON.parse(localStorage.getItem("user")) : null;
-  }
-
-  set user(user) {
-    localStorage.setItem("user", JSON.stringify(user));
-  }
-
   login({ username, email = "", bio = "" }) {
     const user = { username, email, bio };
-    localStorage.setItem("user", JSON.stringify(user));
+    userStore.user = user;
     this.router.navigate("/");
   }
 
   logout() {
-    localStorage.removeItem("user");
+    userStore.clearUser();
     this.router.navigate("/login");
   }
 
