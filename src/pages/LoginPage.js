@@ -23,6 +23,11 @@ class LoginPage extends Component {
       e.preventDefault();
       const username = document.getElementById("username").value;
 
+      if (!username) {
+        alert("사용자 이름을 입력해주세요.");
+        return;
+      }
+
       new UserStore().setState({ username: username, email: "", bio: "" });
 
       this.router.navigate(path.MAIN);
