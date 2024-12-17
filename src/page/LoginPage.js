@@ -1,4 +1,5 @@
 import router from "../router/Router";
+import userStore from "../store/userStore";
 
 class LoginPage {
   constructor() {
@@ -34,6 +35,8 @@ class LoginPage {
   }
 
   attachEventListeners() {
+    const store = userStore;
+
     document.querySelector("#login-form").addEventListener("submit", (e) => {
       e.preventDefault();
 
@@ -48,6 +51,13 @@ class LoginPage {
             bio: "",
           }),
         );
+
+        store.setState({
+          username: username,
+          email: "",
+          bio: "",
+        });
+
         router.navigateTo("/profile");
       }
     });

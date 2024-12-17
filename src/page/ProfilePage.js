@@ -1,17 +1,27 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import router from "../router/Router";
+import userStore from "../store/userStore";
 
 class ProfilePage {
   constructor() {
+    this.store = userStore;
+    this.store.addObserver(this);
     this.root = document.querySelector("#root");
   }
+
+  update(state) {
+    this.render(state);
+  }
+
   render() {
     if (this.auth()) {
       return;
     }
 
-    const { username, email, bio } = JSON.parse(localStorage.getItem("user"));
+    const store = this.store.getState();
+
+    console.log(store);
 
     this.root.innerHTML = `
     <div class="bg-gray-100 min-h-screen flex justify-center">
@@ -35,7 +45,7 @@ class ProfilePage {
                   type="text"
                   id="username"
                   name="username"
-                  value="${username}"
+                  value="${store.username}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -49,7 +59,7 @@ class ProfilePage {
                   type="email"
                   id="email"
                   name="email"
-                  value="${email}"
+                  value="${store.email}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -64,9 +74,10 @@ class ProfilePage {
                   name="bio"
                   rows="4"
                   class="w-full p-2 border rounded"
-                >${bio}</textarea>
+                >${store.bio}</textarea>
               </div>
               <button
+                id="increment"
                 type="submit"
                 class="w-full bg-blue-600 text-white p-2 rounded font-bold"
               >
@@ -98,7 +109,6 @@ class ProfilePage {
     if (logout) {
       logout.addEventListener("click", () => {
         localStorage.clear();
-        router.navigateTo("/login");
       });
     }
 
@@ -113,6 +123,12 @@ class ProfilePage {
           bio: document.querySelector("#bio").value,
         }),
       );
+
+      this.store.setState({
+        username: document.querySelector("#username").value,
+        email: document.querySelector("#email").value,
+        bio: document.querySelector("#bio").value,
+      });
 
       alert("프로필이 업데이트되었습니다.");
     });
