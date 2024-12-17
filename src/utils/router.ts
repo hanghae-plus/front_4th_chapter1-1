@@ -65,16 +65,7 @@ export const Router = (function () {
   function init() {
     window.addEventListener("popstate", handleRoute);
 
-    // 초기 경로 처리
     handleRoute();
-
-    // window.addEventListener("hashchange", () => {
-    //   const currentPath = window.location.hash.slice(1) as Routes;
-    //   navigate(currentPath || "/");
-    // });
-
-    // const initialPath = window.location.hash.slice(1) as Routes;
-    // navigate(initialPath || "/");
   }
 
   return {
