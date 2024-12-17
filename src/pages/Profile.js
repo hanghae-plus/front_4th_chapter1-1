@@ -1,28 +1,28 @@
 import Component from "../core/component";
 import { getAuth, getUser, saveUser } from "../auth/auth";
-import Router from "../router/router";
 
 class ProfilePage extends Component {
   init() {
     const user = getUser();
-    console.log(user);
+
     this.state = {
-      name: user.name || "",
-      email: user.email || "",
-      introduction: user.introduction || "",
+      name: user?.name || "",
+      email: user?.email || "",
+      introduction: user?.introduction || "",
     };
   }
 
   setEvent() {
-    this.addEvent("click", ".nav-link", (e) => {
-      const target = e.target.closest("a");
-      if (!(target instanceof HTMLAnchorElement)) return;
+    // this.addEvent("click", ".nav-link", (e) => {
+    //   const target = e.target.closest("a");
+    //   if (!(target instanceof HTMLAnchorElement)) return;
 
-      e.preventDefault();
-      const targetURL = e.target.getAttribute("href");
-      const router = Router.instance;
-      router.navigate(targetURL);
-    });
+    //   e.preventDefault();
+    //   const targetURL = e.target.getAttribute("href");
+    //   const router = Router.instance;
+    //   console.log("navigate : profile");
+    //   router.navigate(targetURL);
+    // });
 
     this.addEvent("click", ".profile-submit", (e) => {
       e.preventDefault();

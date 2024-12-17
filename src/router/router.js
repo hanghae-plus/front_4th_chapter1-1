@@ -4,6 +4,7 @@ class Router extends Component {
   static instance = null;
 
   constructor($target) {
+    console.log("router init");
     // 라우터 싱글톤(Singleton) 인스턴스
     if (Router.instance) {
       return Router.instance;
@@ -12,17 +13,10 @@ class Router extends Component {
     Router.instance = this;
   }
 
-  // 페이지 이동 함수
   navigate = (to, isReplace = false) => {
-    // URL 변경에 대한 커스텀 이벤트 정의
-    const historyChangeEvent = new CustomEvent("historychange", {
-      detail: {
-        to,
-        isReplace,
-      },
-    });
-
-    dispatchEvent(historyChangeEvent);
+    // 페이지 교체 혹은 중복 페이지 방지
+    if (isReplace || to === location.pathname) history.replaceState({}, "", to);
+    else history.pushState({}, "", to);
   };
 
   init() {
@@ -30,10 +24,41 @@ class Router extends Component {
       routes: [],
     };
 
-    // URL 변경에 따른 커스텀 이벤트 리스너
-    window.addEventListener("historychange", this.handleHistory.bind(this));
-    // 뒤로가기 이벤트에 대한 리스너
-    window.addEventListener("popstate", this.handleRoute.bind(this));
+    this.trackRouteState();
+  }
+
+  // 페이지 URL 변경 추적 이벤트 생성 및 리스너 등록
+  trackRouteState() {
+    window.addEventListener("popstate", () => {
+      this.handleRoute();
+    });
+
+    const originalPushState = window.history.pushState;
+    window.history.pushState = function (state, title, url) {
+      originalPushState.apply(this, arguments);
+      const event = new CustomEvent("pushState", {
+        detail: { state, title, url },
+      });
+      window.dispatchEvent(event);
+    };
+
+    window.addEventListener("pushState", () => {
+      this.handleRoute();
+    });
+
+    const originalReplaceState = window.history.replaceState;
+    window.history.replaceState = function (state, title, url) {
+      console.log(`replace : ${url}`);
+      originalReplaceState.apply(this, arguments);
+      const event = new CustomEvent("replaceState", {
+        detail: { state, title, url },
+      });
+      window.dispatchEvent(event);
+    };
+
+    window.addEventListener("replaceState", () => {
+      this.handleRoute();
+    });
   }
 
   // 라우트 추가
@@ -46,20 +71,10 @@ class Router extends Component {
     this.state.routes.push({ fragment, page });
   }
 
-  // 히스토리 관리
-  handleHistory({ detail }) {
-    const { to, isReplace } = detail;
-
-    // 페이지 교체 혹은 중복 페이지 방지
-    if (isReplace || to === location.pathname)
-      history.replaceState(null, "", to);
-    else history.pushState(null, "", to);
-
-    this.handleRoute();
-  }
-
   // 라우트 예외처리 및 렌더링
   handleRoute() {
+    console.log(`route : ${window.location.pathname}`);
+
     // 현재 라우트를 기준으로 페이지 추출
     const fragment = window.location.pathname;
     const currentRoute = this.state.routes.find(

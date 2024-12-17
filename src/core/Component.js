@@ -17,7 +17,10 @@ class Component {
 
   render() {
     this.$target.innerHTML = this.template();
+    this.mount();
   }
+
+  mount() {}
 
   setState(newState) {
     this.state = { ...this.state, ...newState };
