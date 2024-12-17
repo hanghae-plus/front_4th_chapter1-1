@@ -1,6 +1,8 @@
 export class CreateRouter {
   constructor(routes) {
     this.routes = routes;
+
+    Object.values(routes).forEach((route) => route.setRouter(this));
   }
 
   init() {
