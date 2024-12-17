@@ -1,9 +1,7 @@
-import { useAuth } from "../store/useAuth";
-
-const auth = new useAuth();
+import { authStore } from "../store/AuthStore";
 
 export const authGuard = (protectedRoute, fallbackRoute) => {
-  if (auth.isLogin()) {
+  if (authStore.isLogin()) {
     protectedRoute();
   } else {
     fallbackRoute();
