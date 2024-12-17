@@ -8,7 +8,7 @@ const LogoutButton = () => {
     (e) => {
       if (e.target.id === "logout") {
         e.preventDefault();
-        handleLogout();
+        handleLogout(e);
       }
     },
     { once: true },

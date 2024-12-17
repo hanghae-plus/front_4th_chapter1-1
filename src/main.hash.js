@@ -1,7 +1,14 @@
-import { initRouter } from "./app/router";
+import { createRouter } from "./app/router";
+import { routes } from "./app/router/routes";
 
-const rootElement = document.querySelector("#root");
+const rootElement = document.getElementById("root");
 
 if (rootElement) {
-  initRouter(document.getElementById("root"), "hash");
+  const router = createRouter({
+    mode: "hash",
+    root: rootElement,
+  });
+
+  routes.forEach((route) => router.addRoute(route));
+  router.init();
 }

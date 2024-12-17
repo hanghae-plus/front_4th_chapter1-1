@@ -1,9 +1,9 @@
 // src/widgets/navigation/ui/navigation.js
-import { useRouter } from "../../../app/router/lib/hooks";
+import { createRouter } from "../../../app/router";
 import { LogoutButton } from "../../../features/auth/logout";
 
 const Navigation = () => {
-  const router = useRouter();
+  const router = createRouter();
   const pathName = router.getCurrentPath();
   const isAuthenticated = localStorage.getItem("user") !== null;
 

@@ -52,13 +52,14 @@ describe("심화과제 테스트", () => {
       const loginForm = document.getElementById("login-form");
 
       await user.type(document.getElementById("username"), "testuser");
+      await user.type(document.getElementById("password"), "123456");
 
       loginForm.dispatchEvent(
         new SubmitEvent("submit", { bubbles: true, cancelable: true }),
       );
 
       goTo("/login");
-      console.log("여기보세요", document.body.innerHTML);
+
       expect(
         document.querySelector("nav .text-blue-600.font-bold").innerHTML,
       ).toContain("홈");

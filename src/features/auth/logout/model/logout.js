@@ -1,8 +1,9 @@
-import { useRouter } from "../../../../app/router/lib/hooks";
+import { createRouter } from "../../../../app/router";
 
-// src/features/auth/logout/model/logout.js
-function handleLogout() {
-  const router = useRouter();
+function handleLogout(event) {
+  event.preventDefault();
+
+  const router = createRouter();
   localStorage.removeItem("user");
 
   router.navigate("/login");
