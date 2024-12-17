@@ -1,5 +1,6 @@
 import Component from "../core/component";
 import { getAuth, getUser, saveUser } from "../auth/auth";
+import Router from "../router/router";
 
 class ProfilePage extends Component {
   init() {
@@ -9,6 +10,16 @@ class ProfilePage extends Component {
       email: user?.email || "",
       bio: user?.bio || "",
     };
+  }
+
+  render() {
+    const user = getUser();
+    if (!user) {
+      const router = new Router();
+      router.navigate("/login");
+      return;
+    }
+    super.render();
   }
 
   setEvent() {

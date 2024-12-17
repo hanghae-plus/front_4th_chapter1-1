@@ -6,7 +6,6 @@ class Component {
     this.$target = $target;
     this.init();
     this.setEvent();
-    this.render();
   }
 
   init() {}
