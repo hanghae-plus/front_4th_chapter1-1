@@ -319,18 +319,19 @@ const pageEventListeners = () => {
 
 // router
 const router = () => {
-  const path = window.location.pathname;
+  // const path = window.location.pathname;
+  const path = window.location.hash.slice(1) || "/";
   let page = "";
 
   // login -> /login = /
   if (path === "/login" && state.isLoggedIn) {
-    navigation("/");
+    navigation("#/");
     return;
   }
 
   // !login -> /profile = /login
   if (path === "/profile" && !state.isLoggedIn) {
-    navigation("/login");
+    navigation("#/login");
     return;
   }
 
@@ -342,7 +343,7 @@ const router = () => {
     page = MainPage();
   } else {
     page = ErrorPage();
-    window.history.pushState({}, "", "/404");
+    // window.history.pushState({}, "", "/404");
   }
 
   document.body.innerHTML = page;
@@ -366,6 +367,8 @@ const router = () => {
     });
   }
 };
+
+window.addEventListener("hashchange", router);
 
 // navigation render
 const renderNav = () => {
