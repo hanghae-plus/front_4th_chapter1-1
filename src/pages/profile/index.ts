@@ -1,6 +1,6 @@
 import { Footer } from "../../components/footer/Footer";
 import { Header } from "../../components/header/Header";
-import { UserStore } from "../../store/authStore";
+import { UserStore } from "../../store/userStore";
 import { UserInfoType } from "../../utils/userPreference";
 
 export class ProfilePage {

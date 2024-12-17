@@ -1,4 +1,4 @@
-import { UserStore } from "../../store/authStore";
+import { UserStore } from "../../store/userStore";
 import { Router } from "../../utils/router";
 
 export class LoginPage {

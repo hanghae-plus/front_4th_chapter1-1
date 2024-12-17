@@ -1,5 +1,5 @@
 import { AuthentificatedNavigation } from "./../navigation/AuthentificatedNativation";
-import { UserStore } from "../../store/authStore";
+import { UserStore } from "../../store/userStore";
 import { UserInfoType } from "../../utils/userPreference";
 import { UnauthentificatedNavigation } from "../navigation/UnauthenticatedNavigation";
 import { Router, Routes } from "../../utils/router";
