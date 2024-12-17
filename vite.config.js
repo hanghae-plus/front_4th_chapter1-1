@@ -11,13 +11,17 @@ export default defineConfig({
     jsxInject: `import { createElement, Fragment } from '@/utils/element'`,
   },
   resolve: {
-    alias: [{ find: "@", replacement: path.resolve(__dirname, "./src") }],
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
   },
   test: {
     globals: true,
     environment: "jsdom",
     setupFiles: "./src/setupTests.js",
     exclude: ["**/e2e/**", "**/*.e2e.spec.js", "**/node_modules/**"],
-    alias: [{ find: "@", replacement: path.resolve(__dirname, "./src") }],
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
   },
 });
