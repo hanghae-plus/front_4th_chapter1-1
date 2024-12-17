@@ -17,7 +17,7 @@ export const Header = () => {
           <li><a href="/profile" data-link class="${profileLinkClass}">프로필</a></li>
           ${
             user
-              ? `<li><button id="logout" class="text-gray-600">로그아웃</button></li>`
+              ? `<li><a href="#" id="logout" class="text-gray-600">로그아웃</a></li>`
               : `<li><a href="/login" data-link class="text-gray-600">로그인</a></li>`
           }
         </ul>
