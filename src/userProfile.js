@@ -4,55 +4,50 @@ export class UserProfile {
     this.router = router;
   }
 
+  init() {
+    this.router.afterEnter("/profile", () => {
+      this.renderUserData();
+    });
+
+    this.renderUserData();
+
+    document.body.addEventListener("submit", (event) => {
+      if (event.target?.id === "profile-form") {
+        event.preventDefault();
+
+        this.updateUserProfile();
+      }
+    });
+  }
+
   renderUserData() {
     const user = this.auth.user;
+    const updatedUser = this.findUserProfile();
 
-    const usernameInput = document.getElementById("username");
-    const emailInput = document.getElementById("email");
-    const bioInput = document.getElementById("bio");
-
-    if (usernameInput && emailInput && bioInput && user) {
+    if (updatedUser) {
+      const { usernameInput, emailInput, bioInput } = updatedUser;
       usernameInput.value = user.username || "";
       emailInput.value = user.email || "";
       bioInput.value = user.bio || "";
     }
   }
 
-  observeDomAndRender() {
-    const root = document.getElementById("root");
-    if (!root) return;
-
-    const observer = new MutationObserver(() => {
-      const usernameInput = document.getElementById("username");
-      const emailInput = document.getElementById("email");
-      const bioInput = document.getElementById("bio");
-
-      if (usernameInput && emailInput && bioInput) {
-        this.renderUserData();
-        observer.disconnect(); // Stop observing once inputs are ready and data is populated
-      }
-    });
-
-    observer.observe(root, { childList: true, subtree: true });
+  findUserProfile() {
+    const usernameInput = document.getElementById("username");
+    const emailInput = document.getElementById("email");
+    const bioInput = document.getElementById("bio");
+    if (!usernameInput || !emailInput || !bioInput) {
+      return null;
+    }
+    return { usernameInput, emailInput, bioInput };
   }
 
-  init() {
-    this.router.afterEnter("/profile", () => {
-      this.observeDomAndRender();
-    });
-
-    document.body.addEventListener("submit", (event) => {
-      if (event.target?.id === "profile-form") {
-        event.preventDefault();
-
-        const username = document.getElementById("username").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const bio = document.getElementById("bio").value.trim();
-
-        const user = { username, email, bio };
-        this.auth.user = user;
-        alert("프로필이 업데이트되었습니다!");
-      }
-    });
+  updateUserProfile() {
+    const { usernameInput, emailInput, bioInput } = this.findUserProfile();
+    this.auth.user = {
+      username: usernameInput.value,
+      email: emailInput.value,
+      bio: bioInput.value,
+    };
   }
 }

@@ -1,54 +1,36 @@
+const AUTH_REQUIRED_PAGES = ["/profile"];
+
+const isLoggedIn = () => !!localStorage.getItem("user");
 export default class Router {
   #routes = {};
-  #guard = null;
   #afterEnterCallbacks = null;
 
   constructor(routes) {
     this.#routes = routes;
-    this.init();
+  }
+
+  init() {
+    this.handleEventListeners();
+    const path = window.location.pathname;
+    this.navigate(path);
   }
 
   navigate(path) {
     const root = document.getElementById("root");
 
-    if (this.#guard) {
-      const canNavigate = this.#guard(path);
-      if (!canNavigate) return;
-    }
+    const authenticatedPath = this.checkAuth(path);
 
-    const render = this.#routes[path] || this.#routes["/404"];
+    const render = this.#routes[authenticatedPath] || this.#routes["/404"];
     root.innerHTML = render();
 
-    if (this.#afterEnterCallbacks && this.#afterEnterCallbacks[path]) {
-      this.#afterEnterCallbacks[path].forEach((callback) => callback());
+    if (
+      this.#afterEnterCallbacks &&
+      this.#afterEnterCallbacks[authenticatedPath]
+    ) {
+      this.#afterEnterCallbacks[authenticatedPath].forEach((callback) =>
+        callback(),
+      );
     }
-  }
-
-  init() {
-    const path = window.location.pathname;
-    history.replaceState(null, "", path);
-    this.navigate(path);
-
-    // a 태그 새로고침 방지 및 라우팅 처리
-    document.body.addEventListener("click", (e) => {
-      const target = e.target.closest("a");
-      if (target) {
-        e.preventDefault(); // 기본 동작 차단
-        const path = target.getAttribute("href");
-        history.pushState(null, "", path);
-        this.navigate(path);
-      }
-    });
-
-    // popstate 이벤트 처리(뒤로가기, 앞으로가기)
-    window.addEventListener("popstate", () => {
-      const path = window.location.pathname;
-      this.navigate(path);
-    });
-  }
-
-  beforeEnter(callback) {
-    this.#guard = callback;
   }
 
   afterEnter(path, callback) {
@@ -57,5 +39,40 @@ export default class Router {
       this.#afterEnterCallbacks[path] = [];
     }
     this.#afterEnterCallbacks[path].push(callback);
+  }
+
+  checkAuth(path) {
+    let authenticatedPath = path;
+    if (AUTH_REQUIRED_PAGES.includes(path) && !isLoggedIn()) {
+      alert("로그인이 필요한 페이지입니다.");
+      authenticatedPath = "/login";
+    } else if (path === "/login" && isLoggedIn()) {
+      alert("이미 로그인되어 있습니다.");
+      authenticatedPath = "/";
+    }
+    return authenticatedPath;
+  }
+
+  handleEventListeners() {
+    this.handleLinkClick();
+    this.handlePopstate();
+  }
+
+  handlePopstate() {
+    window.addEventListener("popstate", () => {
+      this.navigate(window.location.pathname);
+    });
+  }
+
+  handleLinkClick() {
+    document.body.addEventListener("click", (e) => {
+      const target = e.target.closest("a");
+      if (target) {
+        e.preventDefault();
+        const path = target.getAttribute("href");
+        history.pushState(null, "", path);
+        this.navigate(path);
+      }
+    });
   }
 }
