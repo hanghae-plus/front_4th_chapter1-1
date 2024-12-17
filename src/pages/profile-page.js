@@ -1,6 +1,6 @@
 import { Footer } from "../components/footer";
 import { Header } from "../components/header";
-import { getUser, isLoggedIn, saveUser } from "../utils/local-storage";
+import { getUser, isLoggedIn } from "../utils/local-storage";
 // import { navigate } from "../main";
 export const ProfilePage = () => {
   // 페이지 구조 생성
@@ -87,24 +87,24 @@ export const ProfilePage = () => {
     `;
 
   // DOM에 추가된 후 이벤트 리스너 설정
-  setTimeout(() => {
-    const form = document.getElementById("profile-form");
+  // setTimeout(() => {
+  //   const form = document.getElementById("profile-form");
 
-    if (form) {
-      form.addEventListener("submit", (event) => {
-        const usernameInput = document.getElementById("username").value;
-        const emailInput = document.getElementById("email").value;
-        const bioInput = document.getElementById("bio").value;
-        saveUser(usernameInput, emailInput, bioInput);
+  //   if (form) {
+  //     form.addEventListener("submit", (event) => {
+  //       const usernameInput = document.getElementById("username").value;
+  //       const emailInput = document.getElementById("email").value;
+  //       const bioInput = document.getElementById("bio").value;
+  //       saveUser(usernameInput, emailInput, bioInput);
 
-        console.log(`inputs: ${usernameInput} ${emailInput} ${bioInput}`);
-        event.preventDefault();
-        alert("프로필이 업데이트되었습니다.");
+  //       console.log(`inputs: ${usernameInput} ${emailInput} ${bioInput}`);
+  //       event.preventDefault();
+  //       alert("프로필이 업데이트되었습니다.");
 
-        // const formData = new FormData(form);
-      });
-    }
-  }, 0);
+  //       // const formData = new FormData(form);
+  //     });
+  //   }
+  // }, 0);
 
   return html;
 };

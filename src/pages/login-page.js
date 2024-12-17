@@ -1,6 +1,6 @@
-import { saveUser } from "../utils/local-storage";
+// import { saveUser } from "../utils/local-storage";
 // import { navigate } from "../main";
-import { validateUsername } from "../utils/validator";
+// import { validateUsername } from "../utils/validator";
 
 export const LoginPage = () => {
   const html = `
@@ -27,27 +27,27 @@ export const LoginPage = () => {
   </main>
 `;
 
-  setTimeout(() => {
-    const form = document.getElementById("login-form");
+  // setTimeout(() => {
+  //   const form = document.getElementById("login-form");
 
-    form.addEventListener("submit", (e) => {
-      console.log(`submit pressed`);
-      e.preventDefault();
+  //   form.addEventListener("submit", (e) => {
+  //     console.log(`submit pressed`);
+  //     e.preventDefault();
 
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
+  //     const username = document.getElementById("username").value;
+  //     const password = document.getElementById("password").value;
 
-      console.log(`username: ${username}`);
-      console.log(`password: ${password}`);
+  //     console.log(`username: ${username}`);
+  //     console.log(`password: ${password}`);
 
-      if (validateUsername(username)) {
-        console.log(`isvalid, go to home page`);
-        saveUser(username);
-        console.log(`username:${username}`);
-        // navigate("/");
-      }
-    });
-  }, 0);
+  //     if (validateUsername(username)) {
+  //       console.log(`isvalid, go to home page`);
+  //       saveUser(username);
+  //       console.log(`username:${username}`);
+  //       // navigate("/");
+  //     }
+  //   });
+  // }, 0);
 
   return html;
 };
