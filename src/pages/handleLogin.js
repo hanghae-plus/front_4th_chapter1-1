@@ -1,4 +1,4 @@
-import navigate from "../routes/navigate";
+import router from "../routes/router";
 
 const handleLogin = (data) => {
   const user = {
@@ -8,6 +8,6 @@ const handleLogin = (data) => {
   };
 
   localStorage.setItem("user", JSON.stringify(user));
-  navigate("/profile");
+  router("/profile");
 };
 export default handleLogin;
