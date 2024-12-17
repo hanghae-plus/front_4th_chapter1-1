@@ -49,9 +49,9 @@ describe("심화과제 테스트", () => {
     it("로그인된 사용자가 로그인 페이지에 접근시 메인 페이지로 리다이렉트 한다.", async () => {
       goTo("/login");
 
-      const loginForm = document.getElementById("login-form");
+      const loginForm = document.getElementById("loginForm");
 
-      await user.type(document.getElementById("username"), "testuser");
+      await user.type(document.getElementById("userId"), "testuser");
 
       loginForm.dispatchEvent(
         new SubmitEvent("submit", { bubbles: true, cancelable: true }),

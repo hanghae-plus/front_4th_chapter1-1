@@ -111,8 +111,7 @@ const MainPage = () => `
 `;
 
 const ErrorPage = () => `
-  <div id="root">
-    <main class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <main id="root" class="bg-gray-100 flex items-center justify-center min-h-screen">
       <div class="bg-white p-8 rounded-lg shadow-md w-full text-center" style="max-width: 480px">
         <h1 class="text-2xl font-bold text-blue-600 mb-4">항해플러스</h1>
         <p class="text-4xl font-bold text-gray-800 mb-4">404</p>
@@ -125,12 +124,10 @@ const ErrorPage = () => `
         </a>
       </div>
     </main>
-  </div>
 `;
 
 const LoginPage = () => `
-  <div id="root">
-    <main class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <main id="root" class="bg-gray-100 flex items-center justify-center min-h-screen">
       <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
         <form id="loginForm">
@@ -151,7 +148,6 @@ const LoginPage = () => `
         </div>
       </div>
     </main>
-  </div>
 `;
 
 const ProfilePage = () => `
@@ -246,23 +242,25 @@ const state = {
   },
 };
 
+// profile save / update
+const saveProfile = (userData) => {
+  if (JSON.stringify(state.userData) !== JSON.stringify(userData)) {
+    state.userData = { ...state.userData, ...userData };
+    localStorage.setItem("userData", JSON.stringify(state.userData));
+
+    const { username, email, bio } = state.userData;
+    document.querySelector("#username").value = username;
+    document.querySelector("#email").value = email;
+    document.querySelector("#bio").value = bio;
+
+    alert("프로필이 업데이트되었습니다.");
+  }
+};
+
 const updateLogin = (isLoggedIn) => {
   state.isLoggedIn = isLoggedIn;
   localStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn));
   renderNav();
-};
-
-// profile save / update
-const saveProfile = (userData) => {
-  state.userData = { ...state.userData, ...userData };
-  localStorage.setItem("userData", JSON.stringify(state.userData));
-
-  const { username, email, bio } = state.userData;
-  document.querySelector("#username").value = username;
-  document.querySelector("#email").value = email;
-  document.querySelector("#bio").value = bio;
-  // console.log("Updated userData:", state.userData);
-  alert("프로필이 업데이트되었습니다.");
 };
 
 const loadProfile = () => {
@@ -273,14 +271,33 @@ const loadProfile = () => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  if (!window.location.hash) {
-    navigation("/");
-  }
+  loadProfile();
+  renderNav();
+  pageEventListeners();
+
+  // hash
   const initialPath = window.location.hash.slice(1) || "/";
   navigation(initialPath);
 
   window.addEventListener("hashchange", router);
+});
 
+const pageEventListeners = () => {
+  document.body.addEventListener("click", (e) => {
+    if (e.target.tagName === "A" && e.target.getAttribute("href")) {
+      e.preventDefault();
+      const path = e.target.getAttribute("href");
+      navigation(path);
+    }
+
+    if (e.target.id === "logoutBtn") {
+      e.preventDefault();
+      updateLogin(false);
+      navigation("/login");
+    }
+  });
+
+  // event profile
   document.body.addEventListener("submit", (e) => {
     if (e.target.id === "profileForm") {
       e.preventDefault();
@@ -289,33 +306,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const email = document.querySelector("#email").value;
       const bio = document.querySelector("#bio").value;
 
-      const profileData = { username, email, bio };
-      saveProfile(profileData);
-    }
-  });
-  loadProfile();
-  router();
-  pageEventListeners();
-});
-
-// page eventListener
-const pageEventListeners = () => {
-  document.body.addEventListener("click", (e) => {
-    if (e.target.tagName === "A" && e.target.getAttribute("href")) {
-      e.preventDefault();
-      const path = e.target.getAttribute("href");
-      navigation(path);
-      if (path === "/login" && !state.isLoggedIn) {
-        updateLogin(false);
-        navigation("/login");
-      } else {
-        navigation(path);
-      }
-    }
-    if (e.target.id === "logoutBtn") {
-      e.preventDefault();
-      updateLogin(false);
-      navigation("/login");
+      saveProfile({ username, email, bio });
     }
   });
 };
@@ -383,6 +374,7 @@ const router = () => {
   renderNav();
   pageEventListeners();
 
+  // 로그인 폼 이벤트 리스너
   const loginForm = document.querySelector("#loginForm");
   if (loginForm) {
     loginForm.addEventListener("submit", (e) => {
@@ -391,10 +383,10 @@ const router = () => {
       const password = document.querySelector("#password").value;
 
       if (userId && password) {
-        updateLogin(true);
-        navigation("/profile");
+        updateLogin(true); // 로그인 상태 업데이트
+        navigation("/profile"); // 프로필 페이지로 이동
       } else {
-        alert("아이디와 비밀번호를 입력해주세요");
+        alert("아이디와 비밀번호를 입력해주세요"); // 아이디와 비밀번호 없을 시 경고
       }
     });
   }
@@ -403,20 +395,18 @@ const router = () => {
 // navigation render
 const renderNav = () => {
   const nav = document.querySelector("nav ul");
-  if (nav) {
-    if (state.isLoggedIn) {
-      nav.innerHTML = `
-        <li><a href="/" class="text-gray-600">홈</a></li>
-        <li><a href="/profile" class="text-blue-600">프로필</a></li>
-        <li><a href="/login" id="logoutBtn" class="text-gray-600">로그아웃</a></li>
-      `;
-    } else {
-      nav.innerHTML = `
-        <li><a href="/" class="text-gray-600">홈</a></li>
-        <li><a href="/login" class="text-gray-600">로그인</a></li>
-      `;
+  if (!nav) return;
+
+  const isLoggedIn = state.isLoggedIn;
+  nav.innerHTML = `
+    <li><a href="/" class="text-gray-600">홈</a></li>
+    ${
+      isLoggedIn
+        ? `<li><a href="/profile" class="text-blue-600">프로필</a></li>
+    <li><a href="/login" id="logoutBtn" class="text-gray-600">로그아웃</a></li>`
+        : `<li><a href="/login" class="text-gray-600">로그인</a></li>`
     }
-  }
+  `;
 };
 
 // const routes = {
