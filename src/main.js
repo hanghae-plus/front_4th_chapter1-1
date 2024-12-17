@@ -2,41 +2,9 @@ import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
+
 import { navClick } from "./utils/event";
-
-class Router {
-  constructor() {
-    this.routes = {}; // 라우트와 그에 대응하는 핸들러를 저장
-    window.addEventListener("popstate", this.handleState.bind(this)); // 뒤로 가기, 앞으로 가기 이벤트 처리
-    this.handleRoute(window.location.pathname); // 페이지가 처음 로드될 때 경로 처리
-  }
-
-  // 라우트를 라우터에 추가하는 메서드
-  addRoute(path, handler) {
-    this.routes[path] = handler;
-  }
-
-  // 새로운 경로로 네비게이션하는 메서드
-  navigateTo(path) {
-    history.pushState(null, "", path); // URL을 브라우저 히스토리에 추가
-    this.handleRoute(path); // 새로운 경로에 대해 핸들러 호출
-  }
-
-  // popstate 이벤트 처리 (뒤로 가기/앞으로 가기)
-  handleState() {
-    this.handleRoute(window.location.pathname); // 현재 경로에 대해 처리
-  }
-
-  // 메인 라우트 처리 메서드
-  handleRoute(path) {
-    let handler = this.routes[path] || this.routes["/404"];
-    if (handler) {
-      handler(); // 핸들러가 있으면 실행
-    } else {
-      this.routes["/404"]; // path 가 비어있다면 핸들러가 없을테니 에러 페이지 로드
-    }
-  }
-}
+import Router from "./utils/route";
 
 // 라우터 초기화
 const router = new Router();
