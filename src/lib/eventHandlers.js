@@ -1,4 +1,4 @@
-import userStore from "../store/userStore.js";
+import userStore from "./store.js";
 import { router } from "./router.js";
 import { MainPage } from "../pages/MainPage.js";
 export const setupEventHandlers = () => {
