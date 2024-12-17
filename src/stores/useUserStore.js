@@ -1,9 +1,13 @@
 const USER_INFO_LOCAL_STORAGE_KEY = "user";
 
 const createUserStore = () => {
-  let username = "";
-  let email = "";
-  let bio = "";
+  const storedUserInfo = JSON.parse(
+    localStorage.getItem(USER_INFO_LOCAL_STORAGE_KEY) || "{}",
+  );
+
+  let username = storedUserInfo.username || "";
+  let email = storedUserInfo.email || "";
+  let bio = storedUserInfo.bio || "";
 
   return {
     isLogin: () => !!username,
