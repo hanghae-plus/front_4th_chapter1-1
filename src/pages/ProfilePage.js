@@ -1,8 +1,9 @@
 import Footer from "../components/Footer.js";
 import Header from "../components/Header.js";
+import { useUserStore } from "../stores/useUserStore.js";
 
 const ProfilePage = () => {
-  const { username, email, bio } = JSON.parse(localStorage.getItem("user"));
+  const { username, email, bio } = useUserStore.getUserInfo();
 
   return `
   <div id="root">

@@ -2,6 +2,7 @@ import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ProfilePage from "./pages/ProfilePage";
+import { useUserStore } from "./stores/useUserStore";
 
 const routes = {
   "/": () => renderMainPage(),
@@ -10,8 +11,8 @@ const routes = {
 };
 
 const router = (path = window.location.pathname || "/") => {
-  const isLogin = !!localStorage.getItem("user");
   const route = routes[path];
+  const isLogin = useUserStore.isLogin();
 
   if (route) {
     if (path === "/profile" && !isLogin) {
@@ -41,10 +42,7 @@ const renderLoginPage = () => {
     e.preventDefault();
     const username = e.target.querySelector('input[type="text"]').value;
 
-    localStorage.setItem(
-      "user",
-      JSON.stringify({ username, email: "", bio: "" }),
-    );
+    useUserStore.setUserInfoInLocalStorage({ username, email: "", bio: "" });
 
     router("/");
   });
@@ -63,7 +61,7 @@ const renderProfilePage = () => {
     const email = e.target.querySelector("#email").value;
     const bio = e.target.querySelector("#bio").value;
 
-    localStorage.setItem("user", JSON.stringify({ username, email, bio }));
+    useUserStore.setUserInfoInLocalStorage({ username, email, bio });
   });
 };
 
@@ -76,7 +74,7 @@ function clickEventHandler(e) {
     let path = href.slice(href.lastIndexOf("/"));
 
     if (id === "logout") {
-      localStorage.removeItem("user");
+      useUserStore.resetUserInfoInLocalStorage();
       path = "/login";
     }
 
