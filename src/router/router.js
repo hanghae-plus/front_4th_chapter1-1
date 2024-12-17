@@ -27,6 +27,13 @@ export const router = () => {
     return;
   }
 
+  // 로그인한 사용자가 로그인 페이지 접근 시
+  if ((state.user || localStorage.getItem("user")) && path === "/login") {
+    root.innerHTML = MainPage();
+    alert("이미 로그인이 되어 있습니다.");
+    return;
+  }
+
   root.innerHTML = render(render === LoginPage ? null : state.user);
 
   if (path === "/login") initLogin();
