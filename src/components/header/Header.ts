@@ -2,24 +2,27 @@ import { AuthentificatedNavigation } from "./../navigation/AuthentificatedNativa
 import { UserStore } from "../../store/authStore";
 import { UserInfoType } from "../../utils/userPreference";
 import { UnauthentificatedNavigation } from "../navigation/UnauthenticatedNavigation";
+import { Router, Routes } from "../../utils/router";
 
 export class Header {
-  private container: HTMLElement;
-  authentificatedNavigation: AuthentificatedNavigation;
-  unAuthentificatedNavigation: UnauthentificatedNavigation;
-  userInfo: UserInfoType | null;
+  private static instance: Header | null = null;
+  private container!: HTMLElement;
+  authentificatedNavigation!: AuthentificatedNavigation;
+  unAuthentificatedNavigation!: UnauthentificatedNavigation;
+  userInfo!: UserInfoType | null;
 
   constructor(container: HTMLElement) {
+    if (Header.instance) {
+      return Header.instance;
+    }
+
     this.container = container;
+
     this.userInfo = UserStore.state.userInfo;
+    this.authentificatedNavigation = new AuthentificatedNavigation();
+    this.unAuthentificatedNavigation = new UnauthentificatedNavigation();
 
-    this.authentificatedNavigation = new AuthentificatedNavigation(
-      this.container,
-    );
-
-    this.unAuthentificatedNavigation = new UnauthentificatedNavigation(
-      this.container,
-    );
+    this.attachEventListeners();
 
     UserStore.addObserver({
       update: (state) => {
@@ -27,6 +30,8 @@ export class Header {
         this.container.innerHTML = this.render();
       },
     });
+
+    Header.instance = this;
   }
 
   render() {
@@ -36,5 +41,28 @@ export class Header {
       </header>
       ${this.userInfo ? this.authentificatedNavigation.render() : this.unAuthentificatedNavigation.render()}
       `;
+  }
+
+  attachEventListeners() {
+    this.container.addEventListener("click", this.handleClick);
+  }
+
+  private handleClick = (event: MouseEvent) => {
+    if (event.target instanceof HTMLAnchorElement) {
+      event.preventDefault();
+
+      if (event.target.id === "logout") {
+        UserStore.actions.useLogoutUser();
+      }
+
+      const href = this.extractPath(event.target.href);
+
+      Router.push(href as Routes);
+    }
+  };
+
+  private extractPath(url: string) {
+    const index = url.indexOf("/");
+    return index !== -1 ? url.substring(index) : "";
   }
 }
