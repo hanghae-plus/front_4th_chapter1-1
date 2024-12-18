@@ -16,15 +16,15 @@ const Header = () => {
 
   <nav class="bg-white shadow-md p-2 sticky top-14" role="navigation">
   <ul class="flex justify-around">
-     <li><a href="${window.location.hash ? "#/" : "/"}" class="${getNavColor("/")}" data-link>홈</a></li>
+     <li><a href="${window.ROUTE_MODE === "hash" ? "#/" : "/"}" class="${getNavColor("/")}" data-link>홈</a></li>
      ${
        isLoggedIn
          ? `
-       <li><a href="${window.location.hash ? "#/profile" : "/profile"}" class="${getNavColor("/profile")}" data-link>프로필</a></li>
+       <li><a href="${window.ROUTE_MODE === "hash" ? "#/profile" : "/profile"}" class="${getNavColor("/profile")}" data-link>프로필</a></li>
        <li><a id="logout" href="#" class="${deactiveColor}" data-action="logout">로그아웃</a></li>
      `
          : `
-       <li><a href="${window.location.hash ? "#/login" : "/login"}" class="${getNavColor("/login")}" data-link>로그인</a></li>
+       <li><a href="${window.ROUTE_MODE === "hash" ? "#/login" : "/login"}" class="${getNavColor("/login")}" data-link>로그인</a></li>
      `
      }
    </ul>
