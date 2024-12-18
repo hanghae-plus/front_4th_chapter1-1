@@ -3,7 +3,6 @@ import { NotFoundPage } from "./pages/not-found-page";
 import { LoginPage } from "./pages/login-page";
 import { HomePage } from "./pages/home-page";
 import { removeUser, isLoggedIn, saveUser } from "./utils/local-storage";
-// import { isLoggedIn } from "./utils/local-storage";
 
 class Router {
   constructor() {
@@ -17,7 +16,6 @@ class Router {
   }
 
   navigateTo(path) {
-    history.pushState(null, "", path);
     this.handleRoute(path);
   }
 
@@ -26,24 +24,26 @@ class Router {
   }
 
   handleRoute(path) {
-    if (path === "/profile" && !isLoggedIn()) {
-      path = "/login";
-    }
+    let currentPath = path !== "undefined" ? path : window.location.pathname;
 
-    const handler = this.routes[path];
-
-    if (handler) {
-      this.root.innerHTML = handler();
-    }
-  }
-
-  render() {
-    let currentPath = window.location.pathname;
     const routeList = Object.keys(this.routes);
     if (!routeList.includes(currentPath)) {
       currentPath = "/404";
     }
-    this.handleRoute(currentPath);
+
+    if (path === "/profile" && !isLoggedIn()) {
+      currentPath = "/login";
+    }
+
+    this.render(currentPath);
+  }
+
+  render(path) {
+    history.pushState(null, "", path);
+    const handler = this.routes[path];
+    if (handler) {
+      this.root.innerHTML = handler();
+    }
   }
 }
 
