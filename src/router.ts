@@ -3,7 +3,6 @@ import { UserStore } from "./store/userStore";
 export type Routes = "/" | "/profile" | "/login" | "404";
 export type HashRoutes = "#/" | "#/profile" | "#/login";
 
-// 컴포넌트 타입 정의
 type Component = () => string;
 
 export const Router = (function () {
@@ -11,7 +10,7 @@ export const Router = (function () {
     Routes | HashRoutes,
     Component
   >;
-  let currentRoute: () => void;
+
   let current: "hash" | "history";
 
   function addRoute<T extends Routes | HashRoutes>(
@@ -25,14 +24,20 @@ export const Router = (function () {
     const mappingPath = current === "hash" ? mappingHashRoute(path) : path;
 
     history.pushState({}, "", mappingPath);
-    console.log(mappingPath);
-    currentRoute();
+
+    current = mappingPath.startsWith("#") ? "hash" : "history";
+
+    current === "hash" ? handleHashRoute() : handleRoute();
   }
 
   function replace(path: Routes) {
-    history.replaceState({}, "", mappingHashRoute(path));
+    const mappingPath = current === "hash" ? mappingHashRoute(path) : path;
 
-    currentRoute();
+    history.replaceState({}, "", mappingPath);
+
+    current = mappingPath.startsWith("#") ? "hash" : "history";
+
+    current === "hash" ? handleHashRoute() : handleRoute();
   }
 
   function handleRoute() {
@@ -72,6 +77,7 @@ export const Router = (function () {
     const path = location.hash as HashRoutes;
 
     const component = routes[path] || routes["404"];
+    console.log(component);
 
     const root = document.getElementById("root");
 
@@ -99,27 +105,23 @@ export const Router = (function () {
 
   function init() {
     window.addEventListener("popstate", () => {
-      console.log("history");
       current = "history";
-      handleRoute;
+      handleRoute();
     });
     window.addEventListener("hashchange", () => {
-      console.log("hash");
       current = "hash";
-      handleHashRoute;
+      handleHashRoute();
     });
 
     const hash = location.hash;
 
     if (hash) {
-      currentRoute = handleHashRoute;
+      handleHashRoute();
       current = "hash";
     } else {
       current = "history";
-      currentRoute = handleRoute;
+      handleRoute();
     }
-
-    currentRoute();
   }
 
   return {
