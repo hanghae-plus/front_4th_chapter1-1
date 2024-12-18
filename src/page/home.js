@@ -1,10 +1,10 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-const MainPage = () => `
-  <div class="bg-gray-100 min-h-screen flex justify-center">
+const HomePage = () => {
+  const template = `<div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
-      ${Header()}
+      ${Header().template}
 
     <main class="p-4">
       <div class="mb-4 bg-white rounded-lg shadow p-4">
@@ -101,4 +101,20 @@ const MainPage = () => `
 </div>
 `;
 
-export default MainPage;
+  const handleEvent = (event) => {
+    Header().handleEvent(event);
+
+    const target = event.target;
+
+    if (target.id === "logout") {
+      event.preventDefault(); // 기본 동작 막기
+      localStorage.removeItem("user");
+      history.pushState(null, null, "/");
+      return;
+    }
+  };
+
+  return { template, handleEvent };
+};
+
+export default HomePage;
