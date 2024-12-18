@@ -1,5 +1,5 @@
 import { Auth } from "../auth/auth";
-import { PAGES } from "../common/const";
+import { PAGES, ID } from "../common/const";
 
 export const NavBar = () => {
   const isLoggedIn = Auth.isLoggedIn;
@@ -12,7 +12,7 @@ export const NavBar = () => {
           isLoggedIn
             ? `
           <li><a href=${PAGES.PROFILE_PAGE} class="text-gray-600">프로필</a></li>
-          <li><a href=${PAGES.ERROR_PAGE} class="text-gray-600">로그아웃</a></li>
+          <li><a href=${PAGES.LOGIN_PAGE} id=${ID.LOGOUT} class="text-gray-600">로그아웃</a></li>
           `
             : `
           <li><a href=${PAGES.LOGIN_PAGE} class="text-gray-600">로그인</a></li>

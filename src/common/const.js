@@ -6,3 +6,10 @@ export const PAGES = {
   PROFILE_PAGE: "/profile",
   ERROR_PAGE: "#",
 };
+
+export const ID = {
+  LOGIN_FORM: "login-form",
+  LOGOUT: "logout",
+  LOGIN_USER_NAME: "username",
+  LOGIN_PASSWORD: "password",
+};
