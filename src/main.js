@@ -1,13 +1,17 @@
-import { MainPage } from "./pages/MainPage";
-import { LoginPage } from "./pages/LoginPage";
-import { ProfilePage } from "./pages/ProfilePage";
-import { ErrorPage } from "./pages/ErrorPage";
+import { pathRender } from "./pathRender";
+import { Router, HashRouter } from "./router";
+
+const router = window.location.hash ? new HashRouter() : new Router();
 
 const routeHtml = (route) => {
+  route = route == window.location.hash ? window.location.hash.slice(1) : route;
+
   if (!pathRender[route]) {
     route = 404;
   }
-
+  if (route == "/login" && localStorage.getItem("user")) {
+    route = "/";
+  }
   if (route === "/profile" && !localStorage.getItem("user")) {
     route = "/login";
   }
@@ -15,46 +19,6 @@ const routeHtml = (route) => {
   buttonsHandler();
 };
 
-const pathRender = {
-  "/": MainPage,
-  "/login": LoginPage,
-  "/profile": ProfilePage,
-  404: ErrorPage,
-};
-
-class Router {
-  constructor() {
-    this.routes = {};
-    window.addEventListener("popstate", this.handlePopState.bind(this));
-  }
-
-  addRoute(path, handler) {
-    this.routes[path] = handler;
-  }
-
-  navigateTo(path) {
-    if (path == "/profile" && !localStorage.getItem("user")) {
-      path = "/login";
-    }
-    history.pushState(null, "", path);
-    this.handleRoute(path);
-  }
-
-  handlePopState() {
-    this.handleRoute(window.location.pathname);
-  }
-
-  handleRoute(path) {
-    const handler = this.routes[path];
-    if (handler) {
-      handler();
-    } else {
-      document.getElementById("root").innerHTML = pathRender[404]; // 404 페이지 렌더링
-    }
-  }
-}
-
-const router = new Router();
 const routeRender = () => {
   router.addRoute("/", () => routeHtml("/"));
   router.addRoute("/login", () => routeHtml("/login"));
@@ -130,6 +94,8 @@ const buttonsHandler = () => {
 };
 
 window.addEventListener("DOMContentLoaded", () => {
-  routeHtml(window.location.pathname);
+  routeHtml(
+    window.location.hash ? window.location.hash : window.location.pathname,
+  );
 });
 window.addEventListener(" load ", routeRender());
