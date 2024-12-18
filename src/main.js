@@ -350,6 +350,7 @@ const router = () => {
 
   const path = window.location.hash.slice(1) || "/";
   const validPaths = ["/", "/profile", "/login", "/404"];
+
   let page;
 
   if (validPaths.includes(path)) {

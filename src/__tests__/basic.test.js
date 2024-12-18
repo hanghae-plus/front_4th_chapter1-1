@@ -20,10 +20,10 @@ beforeAll(async () => {
 afterAll(() => {
   // 각 테스트 전에 root 엘리먼트 초기화
   document.getElementById("root").innerHTML = "";
-  localStorage.removeItem("user");
+  localStorage.removeItem("userData");
 });
 
-const goTo = (path) => {
+const goTo = path => {
   window.history.pushState({}, "", path);
   window.dispatchEvent(new Event("popstate"));
 };
@@ -75,22 +75,22 @@ describe("기본과제 테스트", () => {
     it("로그인 폼에서 사용자 이름을 입력하고 제출하면 로그인 되고, 로그아웃 버튼 클릭시 로그아웃 된다.", async () => {
       goTo("/login");
 
-      const loginForm = document.getElementById("login-form");
+      const loginForm = document.getElementById("loginForm");
 
-      await user.type(document.getElementById("username"), "testuser");
+      await user.type(document.getElementById("userId"), "testuser");
 
       loginForm.dispatchEvent(
         new SubmitEvent("submit", { bubbles: true, cancelable: true }),
       );
 
-      expect(localStorage.getItem("user")).toEqual(
+      expect(localStorage.getItem("userData")).toEqual(
         `{"username":"testuser","email":"","bio":""}`,
       );
 
       const logoutButton = document.getElementById("logout");
       logoutButton.click();
 
-      expect(localStorage.getItem("user")).toEqual(null);
+      expect(localStorage.getItem("userData")).toEqual(null);
     });
   });
 
@@ -98,9 +98,9 @@ describe("기본과제 테스트", () => {
     beforeEach(async () => {
       goTo("/login");
 
-      const loginForm = document.getElementById("login-form");
+      const loginForm = document.getElementById("loginForm");
 
-      await user.type(document.getElementById("username"), "testuser");
+      await user.type(document.getElementById("userId"), "testuser");
 
       loginForm.dispatchEvent(
         new SubmitEvent("submit", { bubbles: true, cancelable: true }),
@@ -120,7 +120,7 @@ describe("기본과제 테스트", () => {
     });
 
     it("프로필 수정 기능이 동작한다", () => {
-      const profileForm = document.getElementById("profile-form");
+      const profileForm = document.getElementById("profileForm");
       const bioInput = document.getElementById("bio");
 
       bioInput.value = "Updated bio";
@@ -128,7 +128,7 @@ describe("기본과제 테스트", () => {
         new SubmitEvent("submit", { bubbles: true, cancelable: true }),
       );
 
-      expect(localStorage.getItem("user")).toEqual(
+      expect(localStorage.getItem("userData")).toEqual(
         `{"username":"testuser","email":"","bio":"Updated bio"}`,
       );
     });
@@ -138,9 +138,9 @@ describe("기본과제 테스트", () => {
     beforeEach(async () => {
       goTo("/login");
 
-      const loginForm = document.getElementById("login-form");
+      const loginForm = document.getElementById("loginForm");
 
-      await user.type(document.getElementById("username"), "testuser");
+      await user.type(document.getElementById("userId"), "testuser");
 
       loginForm.dispatchEvent(
         new SubmitEvent("submit", { bubbles: true, cancelable: true }),
@@ -184,9 +184,9 @@ describe("기본과제 테스트", () => {
       // 로그인
       goTo("/login");
 
-      const loginForm = document.getElementById("login-form");
+      const loginForm = document.getElementById("loginForm");
 
-      await user.type(document.getElementById("username"), "testuser");
+      await user.type(document.getElementById("userId"), "testuser");
 
       loginForm.dispatchEvent(
         new SubmitEvent("submit", { bubbles: true, cancelable: true }),

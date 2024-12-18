@@ -1,4 +1,5 @@
 import userEvent from "@testing-library/user-event";
+import { waitFor } from "@testing-library/dom";
 import {
   afterAll,
   beforeAll,
@@ -49,6 +50,10 @@ describe("심화과제 테스트", () => {
     it("로그인된 사용자가 로그인 페이지에 접근시 메인 페이지로 리다이렉트 한다.", async () => {
       goTo("/login");
 
+      await waitFor(() => {
+        expect(document.getElementById("userId")).toBeTruthy();
+      });
+
       const loginForm = document.getElementById("loginForm");
 
       await user.type(document.getElementById("userId"), "testuser");
@@ -62,6 +67,13 @@ describe("심화과제 테스트", () => {
       );
 
       goTo("/login");
+
+      await waitFor(() => {
+        expect(
+          document.querySelector("nav .text-blue-600.font-bold"),
+        ).toBeTruthy();
+      });
+
       expect(
         document.querySelector("nav .text-blue-600.font-bold").innerHTML,
       ).toContain("홈");
