@@ -1,7 +1,7 @@
-import UserStore from "../store/userStore";
+import userStore from "../store/userStore";
 
 const Header = () => {
-  const isLogin = !!new UserStore().getUser();
+  const isLogin = !!userStore.getUser();
   const path = window.location.pathname;
   // 석호님 코드 따라하기
   const activeStyle = "text-blue-600 font-bold";

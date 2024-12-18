@@ -22,6 +22,11 @@ class UserStore {
   getUser() {
     return this.user;
   }
+
+  isLogin() {
+    return !!this.user;
+  }
 }
 
-export default UserStore;
+const userStore = new UserStore();
+export default userStore;

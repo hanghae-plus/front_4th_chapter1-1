@@ -1,9 +1,9 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import UserStore from "../store/userStore";
+import userStore from "../store/userStore";
 
 const ProfilePage = () => {
-  const { username, email, bio } = new UserStore().getUser();
+  const { username, email, bio } = userStore.getUser();
 
   return `
   <div id="root">

@@ -1,5 +1,5 @@
 import { createRouter } from "@/router/createRouter";
-import UserStore from "@/store/userStore";
+import userStore from "@/store/userStore";
 
 const { navigator } = createRouter();
 
@@ -11,7 +11,7 @@ export function clickEventHandler(e) {
     const { href } = e.target;
     let path = new URL(href).pathname;
     if (id === "logout") {
-      new UserStore().deleteUser();
+      userStore.deleteUser();
       path = "/login";
     }
     navigator(path);

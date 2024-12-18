@@ -1,5 +1,5 @@
 import { createRouter } from "@/router/createRouter";
-import UserStore from "@/store/userStore";
+import userStore from "@/store/userStore";
 
 const { navigator } = createRouter();
 
@@ -21,7 +21,7 @@ export function submitEventHandler(e) {
 function login(formData) {
   const username = formData.get("username");
   if (username) {
-    new UserStore().setUser({ username, email: "", bio: "" });
+    userStore.setUser({ username, email: "", bio: "" });
     navigator("/profile");
   }
 }
@@ -30,6 +30,6 @@ function updateProfile(formData) {
   const username = formData.get("username");
   const email = formData.get("email");
   const bio = formData.get("bio");
-  new UserStore().setUser({ username, email, bio });
+  userStore.setUser({ username, email, bio });
   navigator("/profile");
 }
