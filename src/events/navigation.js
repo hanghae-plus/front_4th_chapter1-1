@@ -1,4 +1,3 @@
-import { ROUTES } from "../constants/routes.js";
 import { navigateTo } from "../router/router.js";
 import { clearStorage } from "../utils/storageHandler.js";
 import { setState } from "./../store/store";
@@ -12,7 +11,7 @@ export const handleNavigation = (e) => {
   if (isLogoutBtn) {
     clearStorage();
     setState({ user: null }); // 상태 초기화
-    navigateTo(ROUTES.LOGIN);
+    navigateTo("/login");
   } else {
     const path = selected.getAttribute("href");
     navigateTo(path);

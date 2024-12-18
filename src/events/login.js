@@ -1,4 +1,3 @@
-import { ROUTES } from "../constants/routes.js";
 import { navigateTo } from "../router/router.js";
 import { setState } from "../store/store.js";
 import { setStorage } from "../utils/storageHandler.js";
@@ -13,7 +12,7 @@ export const handleLogin = () => {
 
     setStorage("user", userInfo);
 
-    navigateTo(ROUTES.HOME);
+    navigateTo("/");
   } else {
     alert("아이디 혹은 비밀번호를 확인해주세요.");
   }

@@ -6,12 +6,11 @@ import { state, subscribe } from "../store/store";
 import { initLogin } from "./../events/login";
 import { initProfile } from "./../events/profile";
 import { initNavigation } from "./../events/navigation";
-import { ROUTES } from "../constants/routes";
 
 const routes = {
-  [ROUTES.HOME]: { page: MainPage, init: initNavigation },
-  [ROUTES.LOGIN]: { page: LoginPage, init: initLogin },
-  [ROUTES.PROFILE]: { page: ProfilePage, init: initProfile },
+  "/": { page: MainPage, init: initNavigation },
+  "/login": { page: LoginPage, init: initLogin },
+  "/profile": { page: ProfilePage, init: initProfile },
 };
 
 export const router = () => {
@@ -22,13 +21,13 @@ export const router = () => {
   const route = routes[path] || { page: ErrorPage };
 
   // 비로그인 사용자는 프로필 접근 불가 → 로그인 페이지로 이동
-  if (!state.user && path === ROUTES.PROFILE) {
+  if (!state.user && path === "/profile") {
     root.innerHTML = LoginPage();
     return;
   }
 
   // 로그인 사용자는 로그인 페이지 접근 불가 → 메인 페이지로 이동
-  if (state.user && path === ROUTES.LOGIN) {
+  if (state.user && path === "/login") {
     root.innerHTML = MainPage();
     return;
   }
