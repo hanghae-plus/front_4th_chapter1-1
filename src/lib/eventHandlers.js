@@ -6,7 +6,6 @@ export const setupEventHandlers = (router) => {
   root.addEventListener("click", (e) => {
     if (e.target.id === "logout") {
       userStore.logout();
-      router.navigate("/login");
     }
   });
 
