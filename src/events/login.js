@@ -4,7 +4,7 @@ import { setState } from "../store/store.js";
 import { setStorage } from "../utils/storageHandler.js";
 
 export const handleLogin = () => {
-  const username = document.getElementById("username").value;
+  const username = document.getElementById("username")?.value || "";
 
   const userInfo = { username, email: "", bio: "" };
 
