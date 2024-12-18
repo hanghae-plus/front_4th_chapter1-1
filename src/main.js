@@ -3,8 +3,9 @@ import { NotFoundPage } from "./pages/not-found-page";
 import { LoginPage } from "./pages/login-page";
 import { HomePage } from "./pages/home-page";
 import { removeUser, isLoggedIn, saveUser } from "./utils/local-storage";
+import { HashRouter } from "./main.hash";
 
-class Router {
+class HistoryRouter {
   constructor() {
     this.routes = {};
     this.root = document.getElementById("root");
@@ -52,7 +53,20 @@ class Router {
   }
 }
 
-const router = new Router();
+const historyRouter = new HistoryRouter();
+// historyRouter.addRoute("/", () => HomePage());
+// historyRouter.addRoute("/login", () => LoginPage());
+// historyRouter.addRoute("/profile", () => ProfilePage());
+// historyRouter.addRoute("/404", () => NotFoundPage());
+
+const hashRouter = new HashRouter();
+// hashRouter.addHashRoute("/index.hash.html#/", () => HomePage())
+// hashRouter.addHashRoute("/index.hash.html#/login", () => LoginPage())
+// hashRouter.addHashRoute("/index.hash.html#/profile", () => ProfilePage())
+// router.addHashRoute("/index.hash.html#/", () => NotFoundPage())
+const type = "history";
+const router = type === "history" ? historyRouter : hashRouter;
+
 router.addRoute("/", () => HomePage());
 router.addRoute("/login", () => LoginPage());
 router.addRoute("/profile", () => ProfilePage());

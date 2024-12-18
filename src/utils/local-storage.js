@@ -1,3 +1,4 @@
+//TODO: class 로 만들기.
 export const set = (key, value) => {
   localStorage.setItem(key, value);
 };
