@@ -10,14 +10,16 @@ const PATHNAME_PAGE_MAP = {
   "/profile": () => renderProfilePage(),
 };
 
-export const useRouter = () => {
+export const useRouter = (type) => {
   const routeGuard = (path) => {
     let pathname = path;
     const isLogin = useUserStore.isLogin();
 
-    if (pathname === "/profile" && !isLogin) {
-      pathname = "/login";
-    } else if (pathname === "/login" && isLogin) {
+    const refinedPathname = pathname.replace("#", "");
+
+    if (refinedPathname === "/profile" && !isLogin) {
+      pathname = `${type === "hash" ? "#" : ""}/login`;
+    } else if (refinedPathname === "/login" && isLogin) {
       pathname = "/";
     }
 
@@ -37,7 +39,20 @@ export const useRouter = () => {
     render();
   };
 
-  return { router: historyRouter };
+  const hashRouter = (hash) => {
+    let newHash = hash || window.location.hash;
+    newHash = routeGuard(newHash);
+
+    let render = PATHNAME_PAGE_MAP[newHash.replace("#", "")];
+    if (!render) {
+      render = () => renderNotFoundPage();
+    }
+
+    history.pushState(null, "", newHash);
+    render();
+  };
+
+  return { router: type === "history" ? historyRouter : hashRouter };
 };
 
 const renderMainPage = () => {
