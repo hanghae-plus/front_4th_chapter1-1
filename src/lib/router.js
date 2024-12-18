@@ -31,9 +31,51 @@ const routerTypes = {
       window.addEventListener("popstate", popstateHandler);
 
       const clickHandler = (e) => {
-        if (e.target.matches("[data-link]")) {
+        const link = e.target.closest("[data-link]");
+        if (link) {
           e.preventDefault();
-          const path = routerTypes.history.updateURL(e.target.href);
+          const path = routerTypes.history.updateURL(link.href);
+          handleRoute(path);
+        }
+      };
+      document.removeEventListener("click", clickHandler);
+      document.addEventListener("click", clickHandler);
+    },
+  },
+  hash: {
+    getPath: () => {
+      const hash = window.location.hash.replace(/^#/, "");
+      return hash ? hash : "/";
+    },
+
+    updateURL: (url, { replace = false } = {}) => {
+      const hashPath = url.startsWith("http")
+        ? new URL(url).hash.replace(/^#/, "")
+        : url.replace(/^#/, "");
+      const targetHash = hashPath.startsWith("/") ? hashPath : `/${hashPath}`;
+
+      if (replace) {
+        const currentURL = new URL(window.location.href);
+        currentURL.hash = targetHash;
+        history.replaceState(null, null, currentURL.href);
+      } else {
+        window.location.hash = targetHash;
+      }
+
+      return targetHash;
+    },
+
+    setupListeners: (handleRoute) => {
+      const hashChangeHandler = () => handleRoute(routerTypes.hash.getPath());
+      window.removeEventListener("hashchange", hashChangeHandler);
+      window.addEventListener("hashchange", hashChangeHandler);
+
+      const clickHandler = (e) => {
+        const link = e.target.closest("[data-link]");
+        if (link) {
+          e.preventDefault();
+          const href = link.getAttribute("href");
+          const path = routerTypes.hash.updateURL(href);
           handleRoute(path);
         }
       };
@@ -86,4 +128,4 @@ const createRouter = (type = "history") => {
   return { init, navigate };
 };
 
-export const router = createRouter("history");
+export default createRouter;

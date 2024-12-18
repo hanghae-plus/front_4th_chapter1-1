@@ -3,9 +3,9 @@ import { Layout } from "../components/Layout";
 
 export const ProfilePage = () => {
   const user = userStore.getUser() || {
-    username: "홍길동",
-    email: "hong@example.com",
-    bio: "안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.",
+    username: "testuser",
+    email: "",
+    bio: "",
   };
 
   return Layout(`

@@ -1,7 +1,6 @@
 import userStore from "./store.js";
-import { router } from "./router.js";
 
-export const setupEventHandlers = () => {
+export const setupEventHandlers = (router) => {
   const root = document.getElementById("root");
 
   root.addEventListener("click", (e) => {
