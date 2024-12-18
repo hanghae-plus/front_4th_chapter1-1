@@ -1,14 +1,12 @@
 import { router } from "../router/router.js";
 import { setState } from "../store/store.js";
 
-export const handleLogin = (e) => {
-  e.preventDefault();
-
+export const handleLogin = () => {
   const username = document.getElementById("username").value;
 
   const userInfo = { username, email: "", bio: "" };
 
-  if (username && !localStorage.getItem("user")) {
+  if (username) {
     setState({ user: userInfo }); // 상태 업데이트
 
     localStorage.setItem("user", JSON.stringify(userInfo));
@@ -20,5 +18,13 @@ export const handleLogin = (e) => {
 };
 
 export const initLogin = () => {
-  document.body.addEventListener("submit", handleLogin);
+  document.body.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    // login-form을 정확히 찾기 위해 closest 사용
+    const loginForm = e.target.closest("#login-form");
+    if (!loginForm) return;
+
+    handleLogin();
+  });
 };
