@@ -1,47 +1,67 @@
 import { UserStore } from "./store/userStore";
 
 export type Routes = "/" | "/profile" | "/login" | "404";
-export type HashRoutes = "#/" | "#/profile" | "#/login";
-
 type Component = () => string;
 
+interface createRoutesType<T extends Routes> {
+  route: Record<T, Component>;
+  isHash: boolean;
+}
+
 export const Router = (function () {
-  const routes: Record<Routes | HashRoutes, Component> = {} as Record<
-    Routes | HashRoutes,
-    Component
-  >;
+  const routes: Record<Routes, Component> = {} as Record<Routes, Component>;
 
-  let current: "hash" | "history";
+  let routeMode: "hash" | "history";
 
-  function addRoute<T extends Routes | HashRoutes>(
-    path: T,
-    component: Component,
-  ) {
-    routes[path] = component;
+  function createRoutes<T extends Routes>(props: createRoutesType<T>) {
+    (Object.keys(props.route) as (keyof typeof props.route)[]).forEach(
+      (prop) => {
+        routes[prop] = props.route[prop];
+      },
+    );
+
+    const { isHash } = props;
+
+    if (isHash) {
+      attatchHistoryEvent();
+      attatchHashEvent();
+    } else {
+      attatchHistoryEvent();
+    }
+
+    routeMode = isHash && location.hash ? "hash" : "history";
+
+    handleRoute();
   }
 
   function push(path: Routes) {
-    const mappingPath = current === "hash" ? mappingHashRoute(path) : path;
+    const pathName = getMappingPathByRoutingMode(path);
+    history.pushState({}, "", pathName);
 
-    history.pushState({}, "", mappingPath);
-
-    current = mappingPath.startsWith("#") ? "hash" : "history";
-
-    current === "hash" ? handleHashRoute() : handleRoute();
+    handleRoute();
   }
 
   function replace(path: Routes) {
-    const mappingPath = current === "hash" ? mappingHashRoute(path) : path;
+    const pathName = getMappingPathByRoutingMode(path);
 
-    history.replaceState({}, "", mappingPath);
+    history.replaceState({}, "", pathName);
 
-    current = mappingPath.startsWith("#") ? "hash" : "history";
+    handleRoute();
+  }
 
-    current === "hash" ? handleHashRoute() : handleRoute();
+  function getMappingPathByRoutingMode(path: Routes) {
+    if (location.hash) {
+      return `#${path}`;
+    } else {
+      return path;
+    }
   }
 
   function handleRoute() {
-    const path = location.pathname as Routes;
+    const path =
+      routeMode === "history"
+        ? (location.pathname as Routes)
+        : (location.hash.replace("#", "") as Routes);
 
     const redirectPath = routeGuard(path);
     const shouldRedirect = !!redirectPath;
@@ -60,74 +80,34 @@ export const Router = (function () {
     }
   }
 
-  function mappingHashRoute(path: Routes) {
-    switch (path) {
-      case "/":
-        return "#/";
-      case "/login":
-        return "#/login";
-      case "/profile":
-        return "#/profile";
-      default:
-        return path;
-    }
-  }
-
-  function handleHashRoute() {
-    const path = location.hash as HashRoutes;
-
-    const component = routes[path] || routes["404"];
-    console.log(component);
-
-    const root = document.getElementById("root");
-
-    if (root) {
-      root.innerHTML = component();
-    }
-  }
-
   function routeGuard(path: Routes): Routes | undefined {
     switch (path) {
       case "/login":
-        if (UserStore.state.userInfo) {
-          return "/";
-        }
-        break;
+        return UserStore.state.userInfo ? "/" : undefined;
       case "/profile":
-        if (!UserStore.state.userInfo) {
-          return "/login";
-        }
-        break;
+        return !UserStore.state.userInfo ? "/login" : undefined;
       default:
         return undefined;
     }
   }
 
-  function init() {
+  function attatchHistoryEvent() {
     window.addEventListener("popstate", () => {
-      current = "history";
+      routeMode = "history";
       handleRoute();
     });
+  }
+
+  function attatchHashEvent() {
     window.addEventListener("hashchange", () => {
-      current = "hash";
-      handleHashRoute();
-    });
-
-    const hash = location.hash;
-
-    if (hash) {
-      handleHashRoute();
-      current = "hash";
-    } else {
-      current = "history";
+      routeMode = "hash";
       handleRoute();
-    }
+    });
   }
 
   return {
-    init,
     replace,
     push,
-    addRoute,
+    createRoutes,
   };
 })();
