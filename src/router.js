@@ -7,6 +7,7 @@ function renderPage() {
   const currentPath = window.location.pathname;
   let page;
 
+  console.log("renderPage", currentPath, page);
   switch (currentPath) {
     case routes.home:
       page = MainPage();
@@ -52,6 +53,7 @@ function renderPage() {
 }
 
 const navigate = (path) => {
+  console.log("navigate", path);
   window.history.pushState({}, "", path);
   renderPage();
 };

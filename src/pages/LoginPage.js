@@ -37,16 +37,16 @@ export const LoginPage = () => {
       return { username, password };
     };
 
-    const handleCreateAccount = (createAccountParams) => {
-      const { id, password } = createAccountParams;
-      if (!id || !password) {
-        alert("아이디와 비밀번호를 입력하세요.");
-        return;
-      }
+    const handleCreateAccount = (username) => {
+      // const { , password } = createAccountParams;
+      // if (!id || !password) {
+      //   alert("아이디와 비밀번호를 입력하세요.");
+      //   return;
+      // }
       try {
-        const result = signUp(createAccountParams);
+        const result = signUp(username);
         if (result.success) {
-          alert(result.message);
+          // alert(result.message);
           // navigate("/");
         }
       } catch (error) {
@@ -55,15 +55,15 @@ export const LoginPage = () => {
     };
 
     const handleLogin = (loginParams) => {
-      const { id, password } = loginParams;
-      if (!id || !password) {
+      const { username } = loginParams;
+      if (!username) {
         alert("아이디와 비밀번호를 입력하세요.");
         return;
       }
       try {
-        const result = signIn(loginParams);
+        const result = signIn(username);
         if (result.success) {
-          alert(result.message);
+          // alert(result.message);
           navigate("/profile");
         }
       } catch (error) {
@@ -74,9 +74,9 @@ export const LoginPage = () => {
     if (signupButton) {
       signupButton.addEventListener("click", (event) => {
         event.preventDefault();
-        const { username, password } = getUsernameAndPassword();
+        const { username } = getUsernameAndPassword();
 
-        handleCreateAccount({ id: username, password });
+        handleCreateAccount({ id: username });
       });
     }
 
@@ -85,7 +85,7 @@ export const LoginPage = () => {
         event.preventDefault();
         const { username, password } = getUsernameAndPassword();
 
-        handleLogin({ id: username, password });
+        handleLogin({ username, password });
       });
     }
   };

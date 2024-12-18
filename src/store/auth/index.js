@@ -4,20 +4,19 @@ import {
 } from "../../constants";
 
 const authService = () => ({
-  signUp: ({ id, password }) => {
+  signUp: (username) => {
     try {
-      const accounts =
-        JSON.parse(localStorage.getItem(ACCOUNT_STORAGE_KEY)) || {};
+      // const accounts =
+      //   JSON.parse(localStorage.getItem(ACCOUNT_STORAGE_KEY)) || {};
 
-      if (accounts[id]) {
-        throw new Error("이미 존재하는 계정");
-      }
+      // if (accounts[username]) {
+      //   throw new Error("이미 존재하는 계정");
+      // }
 
-      accounts[id] = { password };
       localStorage.setItem(
         ACCOUNT_STORAGE_KEY,
         JSON.stringify({
-          username: id,
+          username,
           email: "",
           bio: "",
         }),
@@ -29,17 +28,16 @@ const authService = () => ({
     }
   },
 
-  signIn: ({ id, password }) => {
+  signIn: (username) => {
     try {
       localStorage.setItem(
-        "user",
+        ACCOUNT_STORAGE_KEY,
         JSON.stringify({
-          username: id,
+          username,
           email: "",
           bio: "",
         }),
       );
-      console.log(id, password);
       localStorage.setItem(LOGGED_IN_STATE_STORAGE_KEY, JSON.stringify(true));
 
       return { success: true, message: "로그인 성공" };
@@ -59,8 +57,6 @@ const authService = () => ({
   },
 });
 
-export const signUp = ({ id, password }) =>
-  authService().signUp({ id, password });
-export const signIn = ({ id, password }) =>
-  authService().signIn({ id, password });
+export const signUp = (username) => authService().signUp(username);
+export const signIn = (username) => authService().signIn(username);
 export const signOut = () => authService().signOut();
