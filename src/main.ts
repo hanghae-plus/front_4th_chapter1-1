@@ -8,11 +8,12 @@ const loginPage = new LoginPage(document.querySelector("#root")!);
 const prifilePage = new ProfilePage(document.querySelector("#root")!);
 const mainPage = new MainPage(document.querySelector("#root")!);
 
-Router.addRoute("/", () => mainPage.render());
-Router.addRoute("/profile", () => prifilePage.render());
-Router.addRoute("/login", () => loginPage.render());
-Router.addRoute("404", ErrorPage);
-Router.addRoute("#/", () => mainPage.render());
-Router.addRoute("#/profile", () => prifilePage.render());
-Router.addRoute("#/login", () => loginPage.render());
-Router.init();
+Router.createRoutes({
+  route: {
+    "/": () => mainPage.render(),
+    "/profile": () => prifilePage.render(),
+    "/login": () => loginPage.render(),
+    "404": ErrorPage,
+  },
+  isHash: true,
+});
