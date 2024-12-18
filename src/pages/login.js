@@ -4,7 +4,7 @@ import {
   passwordInputName,
 } from "../constants/html";
 import { USER_INFO_LOCALSTORAGE_KEY } from "../constants/user";
-import router from "../router/router";
+import browserRouter from "../router/browser-router";
 
 const LoginPage = () => `
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
@@ -34,7 +34,7 @@ export default function renderLogin() {
   const userInfo = localStorage.getItem(USER_INFO_LOCALSTORAGE_KEY);
 
   if (userInfo) {
-    router("/");
+    browserRouter("/");
     return;
   }
 
@@ -58,6 +58,6 @@ export default function renderLogin() {
         }),
       );
 
-      router("/");
+      browserRouter("/");
     });
 }

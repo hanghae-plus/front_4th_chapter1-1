@@ -1,6 +1,6 @@
 import ROUTES from "./routes";
 
-export default function router(pathname, push = true) {
+export default function browserRouter(pathname, push = true) {
   if (ROUTES[pathname]) {
     if (push) {
       history.pushState({}, "", pathname);

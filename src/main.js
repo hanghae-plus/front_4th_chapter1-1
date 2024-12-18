@@ -1,7 +1,7 @@
-import router from "./router/router";
+import browserRouter from "./router/browser-router";
 
-router(location.pathname);
+browserRouter(location.pathname);
 
 window.addEventListener("popstate", () => {
-  router(location.pathname, false);
+  browserRouter(location.pathname, false);
 });

@@ -7,7 +7,7 @@ import {
   usernameInputName,
 } from "../constants/html";
 import { USER_INFO_LOCALSTORAGE_KEY } from "../constants/user";
-import router from "../router/router";
+import browserRouter from "../router/browser-router";
 
 const ProfilePage = () => {
   const userInfo = JSON.parse(localStorage.getItem(USER_INFO_LOCALSTORAGE_KEY));
@@ -87,7 +87,7 @@ export default function renderProfile() {
   const userInfo = localStorage.getItem(USER_INFO_LOCALSTORAGE_KEY);
 
   if (!userInfo) {
-    router("/login");
+    browserRouter("/login");
     return;
   }
 
@@ -106,11 +106,11 @@ export default function renderProfile() {
 
         if (e.target.id === LOGOUT_BTN_ID) {
           localStorage.removeItem(USER_INFO_LOCALSTORAGE_KEY);
-          router("/login");
+          browserRouter("/login");
           return;
         }
 
-        router(e.target.pathname);
+        browserRouter(e.target.pathname);
       }
     });
 

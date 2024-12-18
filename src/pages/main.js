@@ -2,7 +2,7 @@ import Footer from "../components/footer";
 import Header from "../components/header";
 import { GLOBAL_NAVIGATION_ID, LOGOUT_BTN_ID } from "../constants/html";
 import { USER_INFO_LOCALSTORAGE_KEY } from "../constants/user";
-import router from "../router/router";
+import browserRouter from "../router/browser-router";
 
 const MainPage = () => `
   <div class="bg-gray-100 min-h-screen flex justify-center">
@@ -119,11 +119,11 @@ export default function renderMain() {
 
         if (e.target.id === LOGOUT_BTN_ID) {
           localStorage.removeItem(USER_INFO_LOCALSTORAGE_KEY);
-          router("/login");
+          browserRouter("/login");
           return;
         }
 
-        router(e.target.pathname);
+        browserRouter(e.target.pathname);
       }
     });
 }
