@@ -342,7 +342,6 @@ const navigation = path => {
 const router = () => {
   const pathName = window.location.pathname;
   const validPathName = ["/", ""];
-
   if (!validPathName.includes(pathName)) {
     window.location.replace(`${window.location.origin}/#/404`);
     return;

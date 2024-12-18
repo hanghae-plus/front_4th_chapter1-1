@@ -20,7 +20,7 @@ beforeAll(async () => {
 afterAll(() => {
   // 각 테스트 전에 root 엘리먼트 초기화
   document.getElementById("root").innerHTML = "";
-  localStorage.removeItem("user");
+  localStorage.removeItem("userData");
 });
 
 const goTo = path => {
