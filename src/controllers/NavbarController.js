@@ -1,19 +1,22 @@
-import { getAuth, logout } from "../auth/auth";
-import Router from "../router/router";
+import UserService from "../service/UserService";
+import Router from "../router/Router";
 import Controller from "../core/Controller";
 
 class NavbarController extends Controller {
   attachListeners() {
+    // 네비게이션 링크 클릭 시 라우팅 처리
     this.addListener("click", ".nav-link", (e) => {
       const target = e.target.closest("a");
       if (!(target instanceof HTMLAnchorElement)) return;
 
       e.preventDefault();
 
+      // 로그아웃 버튼 처리
       if (target.id === "logout") {
         this.handleLogout();
       }
 
+      // 대상 URL로 네비게이션
       const targetURL = e.target.getAttribute("href");
       const router = new Router();
       router.navigate(targetURL);
@@ -21,23 +24,19 @@ class NavbarController extends Controller {
   }
 
   handleLogout() {
-    logout();
+    UserService.logout();
   }
 
+  // 인증 정보 반환
   get auth() {
-    return getAuth();
+    return UserService.getAuth();
   }
 
+  // 현재 페이지가 메인 페이지인지 판단
   isMainPage() {
     const currentPath = window.location.pathname;
     const currentHash = window.location.hash;
-
-    // 현재 경로가 "/"이고 해시가 없거나 "#"인 경우
-    if (currentPath === "/" || currentHash === "#/") {
-      return true;
-    }
-
-    return false;
+    return currentPath === "/" || currentHash === "#/";
   }
 }
 

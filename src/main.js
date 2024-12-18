@@ -1,7 +1,7 @@
 import createBindings from "./bindings";
 import createPageFactory from "./pages";
 import { loginGuard, profileGuard } from "./router/guards";
-import Router from "./router/router";
+import Router from "./router/Router";
 import { ROUTES } from "./router/routes";
 
 const $app = document.querySelector("#root");

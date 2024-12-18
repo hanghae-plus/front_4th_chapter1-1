@@ -1,9 +1,10 @@
-import { getUser, saveUser } from "../auth/auth";
+import UserService from "../service/UserService";
 import Controller from "../core/Controller";
 
 class ProfileController extends Controller {
   onInit() {
-    const user = getUser();
+    // 사용자 정보 로드 및 상태 초기화
+    const user = UserService.getUser();
     this.state = {
       username: user?.username || "",
       email: user?.email || "",
@@ -13,6 +14,7 @@ class ProfileController extends Controller {
   }
 
   attachListeners() {
+    // 프로필 폼 제출 시 사용자 정보 업데이트
     this.addListener("submit", "#profile-form", (e) => {
       e.preventDefault();
 
@@ -21,14 +23,9 @@ class ProfileController extends Controller {
       const email = form.querySelector("#email").value;
       const bio = form.querySelector("#bio").value;
 
-      saveUser(username, email, bio);
+      UserService.saveUser(username, email, bio);
 
-      this.setState({
-        username,
-        email,
-        bio,
-      });
-
+      this.setState({ username, email, bio });
       alert("프로필이 업데이트 되었습니다");
     });
   }
