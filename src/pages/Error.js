@@ -14,4 +14,9 @@ const ErrorPage = () => `
   </main>
 `;
 
-export default ErrorPage;
+export default function renderError() {
+  const root = document.querySelector("#root");
+  const targetElement = root ? root : document.body;
+  targetElement.innerHTML = `
+    ${ErrorPage()}`;
+}
