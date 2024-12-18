@@ -1,4 +1,4 @@
-import { postsStore } from "../stores/postsStore";
+import { postsStore } from "../stores/posts-store";
 
 class MainPage extends HTMLElement {
   constructor() {

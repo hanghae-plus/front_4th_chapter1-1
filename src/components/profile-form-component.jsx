@@ -1,4 +1,4 @@
-import { userStore, userStoreActions } from "@/stores/userStore";
+import { userStore, userStoreActions } from "@/stores/user-store";
 import { navigateTo } from "@/utils/router";
 
 class ProfileFormComponent extends HTMLElement {

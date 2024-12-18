@@ -1,4 +1,4 @@
-import { userStore } from "@/stores/userStore";
+import { userStore } from "@/stores/user-store";
 import { navigateTo } from "@/utils/router";
 
 class ProfilePage extends HTMLElement {

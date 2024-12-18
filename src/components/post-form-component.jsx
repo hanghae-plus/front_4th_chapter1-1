@@ -1,5 +1,5 @@
-import { postsStoreActions } from "../stores/postsStore";
-import { userStore } from "../stores/userStore";
+import { postsStoreActions } from "../stores/posts-store";
+import { userStore } from "../stores/user-store";
 
 class PostFormComponent extends HTMLElement {
   constructor() {
