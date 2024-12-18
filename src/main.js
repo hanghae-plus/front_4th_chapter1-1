@@ -153,11 +153,10 @@ function loginPageEventController() {
 
 function navbarEventController() {
   const navbar = document.querySelector("nav");
-
   if (navbar) {
     navbar.addEventListener("click", (e) => {
       if (e.target.tagName === "A") {
-        e.preventDefault(); // 기본 링크 클릭 동작을 막음
+        e.preventDefault();
         const path = e.target.getAttribute("href");
         router.navigateTo(path);
       }

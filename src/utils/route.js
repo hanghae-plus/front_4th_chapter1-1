@@ -9,6 +9,9 @@ export class HistoryRouter {
   }
 
   navigateTo(path) {
+    if (event && event.isPropagationStopped?.()) {
+      return;
+    }
     history.pushState(null, "", path);
     this.handleRoute(path);
   }
@@ -32,7 +35,6 @@ export class HashRouter {
   constructor() {
     this.routes = {};
     window.addEventListener("hashchange", this.handleHashChange.bind(this));
-    this.handleHashChange(); // 처음 세팅 된
   }
 
   // 라우트 등록
