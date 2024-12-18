@@ -35,9 +35,7 @@ export const getRoutes = () => {
       isProtectedRoute: false,
     },
     [PATHNAMES.PROFILE]: {
-      setUp: () => {
-        setUpProfilePage();
-      },
+      setUp: setUpProfilePage,
       component: ProfilePage,
       isProtectedRoute: true,
     },
