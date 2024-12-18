@@ -7,15 +7,17 @@ import { ErrorPage } from "./pages/errorPage.js";
 let isHashMode = false;
 
 // 링크 이벤트 처리
-const routeHandlers = () => {
-  document.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      const href = link.getAttribute("href");
+document.addEventListener("click", (e) => {
+  const target = e.target.closest("a");
+  if (target) {
+    e.preventDefault();
+    e.stopPropagation();
+    const href = target.getAttribute("href");
+    if (href) {
       navigateTo(href);
-    });
-  });
-};
+    }
+  }
+});
 
 const Routes = {
   "/": () => MainPage(),
@@ -37,16 +39,17 @@ const getCurrentPath = () => {
 export const resolveRoute = (isHash = false) => {
   isHashMode = isHash;
   const path = getCurrentPath();
-  const user = JSON.parse(localStorage.getItem("user") || null);
+  const user = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
+    : null;
   const root = document.getElementById("root");
-  console.log("user", user);
 
   // 인증 경로 가드
-  if (path === "/profile" && user == null) {
+  if (path === "/profile" && user === null) {
     navigateTo("/login");
     return;
   }
-  if (path === "/login" && user != null) {
+  if (path === "/login" && user !== null) {
     navigateTo("/");
     return;
   }
@@ -63,7 +66,6 @@ export const resolveRoute = (isHash = false) => {
   if (path === "/login") {
     loginHandles();
   }
-  routeHandlers();
 };
 
 // 페이지 이동 함수
@@ -73,5 +75,5 @@ export const navigateTo = (path) => {
   } else {
     window.history.pushState(null, null, path);
   }
-  resolveRoute();
+  resolveRoute(isHashMode);
 };
