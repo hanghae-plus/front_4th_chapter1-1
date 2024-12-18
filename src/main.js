@@ -26,6 +26,7 @@ class Router {
   handleRoute(path) {
     console.log(`handleRoute called, path: ${path}`);
     let currentPath = path !== undefined ? path : window.location.pathname;
+
     console.log(
       `current path from handleRoute: ${currentPath}, window pathname: ${window.location.pathname}`,
     );
@@ -34,11 +35,19 @@ class Router {
     if (!routeList.includes(currentPath)) {
       currentPath = "/404";
     }
+    const loggedIn = isLoggedIn();
 
-    if (path === "/profile" && !isLoggedIn()) {
+    if (currentPath === "/login" && loggedIn) {
+      currentPath = "/";
+    }
+
+    if (!loggedIn && currentPath === "/profile") {
+      // if (currentPath === "/profile" ) {
+      console.log(`currentPath changed to /login`);
       currentPath = "/login";
     }
 
+    console.log(`render called, currentPath: ${currentPath}`);
     this.render(currentPath);
   }
 
@@ -63,8 +72,17 @@ router.handleRoute();
 
 document.addEventListener("click", (event) => {
   if (event.target.tagName === "A") {
-    event.preventDefault();
-    router.navigateTo(event.target.getAttribute("href"));
+    // 로그아웃 버튼 눌렀을 때 안됨
+    // console.log(`tag tapped, target: ${event.target.id}`)
+    if (event.target.id === "logout") {
+      console.log(`removeUser called`);
+      removeUser();
+      router.navigateTo("/login");
+    } else {
+      console.log("others called");
+      event.preventDefault();
+      router.navigateTo(event.target.getAttribute("href"));
+    }
   }
 });
 
@@ -84,15 +102,5 @@ document.body.addEventListener("submit", (e) => {
     const bio = form.querySelector("#bio").value;
     saveUser(username, email, bio);
     alert("프로필이 업데이트되었습니다.");
-  }
-});
-
-document.getElementById("root").addEventListener("click", (e) => {
-  // if (e.target && e.target.nodeName === "A") {
-  if (e.target && e.target.nodeName === "BUTTON") {
-    if (e.target.id === "logout") {
-      removeUser();
-      router.navigateTo("/login");
-    }
   }
 });

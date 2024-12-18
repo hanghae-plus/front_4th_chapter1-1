@@ -7,7 +7,7 @@ export const ProfilePage = () => {
   const header = Header();
   const footer = Footer();
 
-  const { username, email, bio } = getUser() || {};
+  const { username = "", email = "", bio = "" } = getUser() || {};
   const value = getUser();
   console.log(`user: ${JSON.stringify(value)}`);
 

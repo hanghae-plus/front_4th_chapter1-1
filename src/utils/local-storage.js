@@ -4,10 +4,13 @@ export const set = (key, value) => {
 
 export const isLoggedIn = () => {
   const user = getUser();
-  console.log(`isLoggedIn called, user: ${user}`);
+  console.log(`isLoggedIn called, user: ${JSON.stringify(user)}`);
+
   if (user && user.username !== "") {
+    console.log(`is logged in`);
     return true;
   } else {
+    console.log(`is not logged in`);
     return false;
   }
 };

@@ -20,7 +20,7 @@ export const Header = () => {
                       loggedIn
                         ? `
                         <li><a href="/profile" class="${path === "/profile" ? activatedStyle : deactivatedStyle}">프로필</a></li>
-                        <li><button id="logout" class="${deactivatedStyle}">로그아웃</button></li>
+                        <li><a id="logout" href="#" class="${deactivatedStyle}">로그아웃</a></li>
                     `
                         : `
                         <li><a href="/login" class="${deactivatedStyle}">로그인</a></li>
