@@ -1,6 +1,6 @@
 import { getAuth, logout } from "../auth/auth";
 import Router from "../router/router";
-import Controller from "./Controller";
+import Controller from "../core/Controller";
 
 class NavbarController extends Controller {
   attachListeners() {

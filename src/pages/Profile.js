@@ -1,20 +1,13 @@
 import Component from "../core/component";
-import { getUser, saveUser } from "../auth/auth";
+import { getUser } from "../auth/auth";
 import Router from "../router/router";
 import Navbar from "../components/NavBar";
+import NavbarController from "../controllers/NavbarController";
 
 class ProfilePage extends Component {
-  init() {
-    const user = getUser();
-    this.state = {
-      username: user?.username || "",
-      email: user?.email || "",
-      bio: user?.bio || "",
-    };
-  }
-
   render() {
     const user = getUser();
+    // 라우트 가드 : 비로그인 유저는 프로필 접근 방지
     if (!user) {
       const router = new Router();
       router.navigate("/login");
@@ -23,41 +16,8 @@ class ProfilePage extends Component {
     super.render();
   }
 
-  isMainPage() {
-    const currentPath = window.location.pathname;
-    const currentHash = window.location.hash;
-
-    // 현재 경로가 "/"이고 해시가 없거나 "#"인 경우
-    if (currentPath === "/" || currentHash === "#/") {
-      return true;
-    }
-
-    return false;
-  }
-
-  setEvent() {
-    this.addEvent("submit", "#profile-form", (e) => {
-      e.preventDefault();
-
-      const form = e.target.closest("form");
-      const username = form.querySelector("#username").value;
-      const email = form.querySelector("#email").value;
-      const bio = form.querySelector("#bio").value;
-
-      saveUser(username, email, bio);
-
-      this.setState({
-        username,
-        email,
-        bio,
-      });
-
-      alert("프로필이 업데이트 되었습니다");
-    });
-  }
-
   template() {
-    const navbar = new Navbar(this.$target);
+    const navbar = new Navbar(this.$target, new NavbarController(this.$target));
     return `
     <div id="root">
       <div class="bg-gray-100 min-h-screen flex justify-center">
@@ -82,7 +42,7 @@ class ProfilePage extends Component {
                     type="text"
                     id="username"
                     name="username"
-                    value="${this.state.username}"
+                    value="${this.controller.state.username}"
                     class="w-full p-2 border rounded"
                   />
                 </div>
@@ -96,7 +56,7 @@ class ProfilePage extends Component {
                     type="email"
                     id="email"
                     name="email"
-                    value="${this.state.email}"
+                    value="${this.controller.state.email}"
                     class="w-full p-2 border rounded"
                   />
                 </div>
@@ -111,7 +71,7 @@ class ProfilePage extends Component {
                     name="bio"
                     rows="4"
                     class="w-full p-2 border rounded"
-                  >${this.state.bio}</textarea>
+                  >${this.controller.state.bio}</textarea>
                 </div>
                 <button
                   type="submit"

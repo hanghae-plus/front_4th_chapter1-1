@@ -30,12 +30,11 @@ class Router extends Component {
 
   // 페이지 URL 변경 추적 이벤트 생성 및 리스너 등록
   trackRouteState() {
-    window.addEventListener("popstate", () => {
-      this.handleRoute();
-    });
+    // window.addEventListener("popstate", () => {
+    //   this.handleRoute();
+    // });
 
     window.addEventListener("hashchange", () => {
-      console.log("hash changed");
       this.handleRoute();
     });
 
@@ -62,6 +61,7 @@ class Router extends Component {
     };
 
     window.addEventListener("replaceState", () => {
+      console.log("replace");
       this.handleRoute();
     });
   }
@@ -73,7 +73,6 @@ class Router extends Component {
       this.state.routes = this.state.routes.filter(
         (routeObj) => routeObj.fragment !== fragment,
       );
-      console.log("remove route", this.state.routes);
     }
 
     this.state.routes.push({ fragment, page });

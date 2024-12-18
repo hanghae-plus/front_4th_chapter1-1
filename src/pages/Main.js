@@ -1,26 +1,10 @@
 import Component from "../core/component";
-import { logout } from "../auth/auth";
 import Navbar from "../components/NavBar";
+import NavbarController from "../controllers/NavbarController";
 
 class MainPage extends Component {
-  handleLogout() {
-    logout();
-  }
-
-  isMainPage() {
-    const currentPath = window.location.pathname;
-    const currentHash = window.location.hash;
-
-    // 현재 경로가 "/"이고 해시가 없거나 "#"인 경우
-    if (currentPath === "/" || currentHash === "#/") {
-      return true;
-    }
-
-    return false;
-  }
-
   template() {
-    const navbar = new Navbar(this.$target);
+    const navbar = new Navbar(this.$target, new NavbarController(this.$target));
     return `
     <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">

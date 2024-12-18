@@ -9,6 +9,7 @@ class Controller {
     }
     this.constructor.instance = this;
     this.$target = $target;
+    this.onStateChange = null;
     this.state = {};
     this.onInit();
   }
@@ -22,8 +23,6 @@ class Controller {
       if (!event.target.closest(selector)) return false;
       callback(event);
     };
-
-    console.log(this.$target);
     this.$target.removeEventListener(eventType, boundCallback);
     this.$target.addEventListener(eventType, boundCallback);
   }
@@ -35,6 +34,11 @@ class Controller {
       ...this.state,
       ...newState,
     };
+    this.onStateChange();
+  }
+
+  setOnStateChange(callback) {
+    this.onStateChange = callback;
   }
 
   dispose() {

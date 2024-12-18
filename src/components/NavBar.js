@@ -1,11 +1,6 @@
 import Component from "../core/component";
-import NavbarController from "../controllers/NavbarController";
 
 class Navbar extends Component {
-  setContoller() {
-    this.controller = new NavbarController(this.$target);
-  }
-
   template() {
     return `
       <nav class="navbar bg-white shadow-md p-2 sticky top-14">

@@ -3,16 +3,17 @@ class Component {
   state;
   controller;
 
-  constructor($target) {
+  constructor($target, controller) {
     this.$target = $target;
-    this.setContoller();
+    this.controller = controller;
+    if (this.controller) {
+      this.controller.setOnStateChange(() => this.render());
+    }
     this.init();
     this.setEvent();
   }
 
   init() {}
-
-  setContoller() {}
 
   template() {
     return ``;

@@ -1,28 +1,8 @@
 import Component from "../core/component";
-import { getUser, login } from "../auth/auth";
+import { getUser } from "../auth/auth";
 import Router from "../router/router";
-import ProfilePage from "./Profile";
 
 class LoginPage extends Component {
-  setEvent() {
-    this.addEvent("submit", "#login-form", (e) => {
-      e.preventDefault();
-      const username = this.$target.querySelector(".username").value.trim();
-      // const password = this.$target.querySelector(".password").value.trim();
-
-      if (!username) {
-        return;
-      }
-
-      login(username);
-
-      const router = new Router();
-      const profileInstnace = new ProfilePage(this.$target);
-      router.addRoute("/profile", () => profileInstnace);
-      router.navigate("/");
-    });
-  }
-
   render() {
     const user = getUser();
     if (user) {
