@@ -1,6 +1,7 @@
 import Component from "../core/component";
-import { getAuth, getUser, saveUser } from "../auth/auth";
+import { getUser, saveUser } from "../auth/auth";
 import Router from "../router/router";
+import Navbar from "../components/NavBar";
 
 class ProfilePage extends Component {
   init() {
@@ -35,17 +36,6 @@ class ProfilePage extends Component {
   }
 
   setEvent() {
-    // this.addEvent("click", ".nav-link", (e) => {
-    //   const target = e.target.closest("a");
-    //   if (!(target instanceof HTMLAnchorElement)) return;
-
-    //   e.preventDefault();
-    //   const targetURL = e.target.getAttribute("href");
-    //   const router = Router.instance;
-    //   console.log("navigate : profile");
-    //   router.navigate(targetURL);
-    // });
-
     this.addEvent("submit", "#profile-form", (e) => {
       e.preventDefault();
 
@@ -67,8 +57,7 @@ class ProfilePage extends Component {
   }
 
   template() {
-    const auth = getAuth();
-
+    const navbar = new Navbar(this.$target);
     return `
     <div id="root">
       <div class="bg-gray-100 min-h-screen flex justify-center">
@@ -76,19 +65,7 @@ class ProfilePage extends Component {
         <header class="bg-blue-600 text-white p-4 sticky top-0">
           <h1 class="text-2xl font-bold">항해플러스</h1>
         </header>
-
-         <nav class="navbar bg-white shadow-md p-2 sticky top-14">
-        <ul class="flex justify-around">
-          <li><a href="/" class="nav-link ${this.isMainPage() ? "text-blue-600 font-bold" : "text-gray-600"}">홈</a></li>
-          ${
-            auth
-              ? `<li><a href="/profile" class="nav-link ${!this.isMainPage() ? "text-blue-600 font-bold" : "text-gray-600"}">프로필</a></li>
-              <li><a href="/login" id="logout" class="nav-link text-gray-600">로그아웃</a></li>`
-              : `<li><a href="/login" id="login" class="nav-link text-gray-600">로그인</a></li>`
-          }
-        </ul>
-      </nav>
-
+        ${navbar.template()}
         <main class="p-4">
           <div class="bg-white p-8 rounded-lg shadow-md">
               <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">

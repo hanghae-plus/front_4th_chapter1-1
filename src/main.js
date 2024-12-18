@@ -1,7 +1,10 @@
+import ComponentBinding from "./bindings/ComponentBinding";
 import createPageFactory from "./pages";
 import Router from "./router/router";
 
 const $app = document.querySelector("#root");
+
+new ComponentBinding($app);
 
 // 페이지 인스턴스 생성
 const pages = createPageFactory($app);

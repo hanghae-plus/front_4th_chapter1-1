@@ -1,14 +1,18 @@
 class Component {
   $target;
   state;
+  controller;
 
   constructor($target) {
     this.$target = $target;
+    this.setContoller();
     this.init();
     this.setEvent();
   }
 
   init() {}
+
+  setContoller() {}
 
   template() {
     return ``;
@@ -33,7 +37,6 @@ class Component {
       callback(event);
     };
 
-    // 기존에 동일한 이벤트 리스너가 있는지 확인 후 제거
     this.$target.removeEventListener(eventType, boundCallback);
     this.$target.addEventListener(eventType, boundCallback);
   }
