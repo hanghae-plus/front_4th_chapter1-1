@@ -1,4 +1,4 @@
-import Component from "../core/component";
+import Component from "../core/Component";
 
 class Router extends Component {
   static _instance = null;

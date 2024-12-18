@@ -1,4 +1,4 @@
-import Component from "../core/component";
+import Component from "../core/Component";
 import Navbar from "../components/NavBar";
 import NavbarController from "../controllers/NavbarController";
 
