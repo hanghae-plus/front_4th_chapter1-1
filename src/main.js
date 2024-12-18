@@ -13,6 +13,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
 window.addEventListener("popstate", () => {
   const pathname = location.pathname;
-  console.log(pathname);
   router.replace(pathname);
 });
