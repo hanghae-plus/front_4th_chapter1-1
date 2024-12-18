@@ -67,7 +67,6 @@ router.addRoute("/login", () => LoginPage());
 router.addRoute("/profile", () => ProfilePage());
 router.addRoute("/404", () => NotFoundPage());
 
-// router.render();
 router.handleRoute();
 
 document.addEventListener("click", (event) => {
@@ -76,6 +75,7 @@ document.addEventListener("click", (event) => {
     // console.log(`tag tapped, target: ${event.target.id}`)
     if (event.target.id === "logout") {
       console.log(`removeUser called`);
+      event.preventDefault();
       removeUser();
       router.navigateTo("/login");
     } else {
