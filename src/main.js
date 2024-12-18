@@ -1,21 +1,11 @@
-import MainPage from "./pages/MainPage";
-import ProfilePage from "./pages/ProfilePage";
-import LoginPage from "./pages/LoginPage";
-import ErrorPage from "./pages/ErrorPage";
 import Layout from "./components/Layout";
 
+import { ROUTE_DATA } from "./constants/Route";
 import {
   getLocalStorage,
   removeLocalStorage,
   setLocalStorage,
 } from "./utils/storage";
-
-const routes = [
-  { path: "/", view: MainPage() },
-  { path: "/login", view: LoginPage() },
-  { path: "/profile", view: ProfilePage() },
-  { path: "/404", view: ErrorPage() },
-];
 
 async function router() {
   const root = document.getElementById("root");
@@ -28,8 +18,7 @@ async function router() {
     navigateTo("/login");
     return;
   }
-
-  const potentialMatch = routes.find(
+  const potentialMatch = ROUTE_DATA.find(
     (route) => route.path === location.pathname,
   );
 
