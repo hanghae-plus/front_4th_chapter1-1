@@ -274,7 +274,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderNav();
   pageEventListeners();
 
-  // hash
+  // hash 초기 경로 설정
   const initialPath = window.location.hash.slice(1) || "/";
   navigation(initialPath);
 
@@ -342,14 +342,15 @@ const navigation = path => {
 const router = () => {
   const pathName = window.location.pathname;
   const validPathName = ["/", ""];
+  // 잘못된 주소로 접근시 errorpage
   if (!validPathName.includes(pathName)) {
     window.location.replace(`${window.location.origin}/#/404`);
     return;
   }
-
+  // hash 경로 바뀔때 호출
   const path = window.location.hash.slice(1) || "/";
   const validPaths = ["/", "/profile", "/login", "/404"];
-
+  // 경로별 페이지 렌더링
   let page;
 
   if (validPaths.includes(path)) {
