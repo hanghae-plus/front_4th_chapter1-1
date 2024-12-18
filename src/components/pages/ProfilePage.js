@@ -1,11 +1,13 @@
 import Header from "../common/Header";
 import Footer from "../common/Footer";
+import { state } from "../../store/store";
 
-export const ProfilePage = (userInfo) => `
+export const ProfilePage = () => {
+  return `
   <div id="root">
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
-       ${Header(userInfo)}
+       ${Header()}
         <main class="p-4">
           <div class="bg-white p-8 rounded-lg shadow-md">
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
@@ -22,7 +24,7 @@ export const ProfilePage = (userInfo) => `
                   type="text"
                   id="username"
                   name="username"
-                  value=${userInfo?.username}
+                  value="${state.user?.username || ""}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -36,7 +38,7 @@ export const ProfilePage = (userInfo) => `
                   type="email"
                   id="email"
                   name="email"
-                  value=${userInfo?.email || "''"}
+                  value="${state.user?.email || ""}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -51,7 +53,7 @@ export const ProfilePage = (userInfo) => `
                   name="bio"
                   rows="4"
                   class="w-full p-2 border rounded"
-                >${userInfo?.bio}</textarea
+                >${state.user?.bio || ""}</textarea
                 >
               </div>
               <button
@@ -69,3 +71,4 @@ export const ProfilePage = (userInfo) => `
     </div>
   </div>
 `;
+};
