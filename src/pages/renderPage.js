@@ -38,7 +38,7 @@ export const renderMainPage = () => {
   const content = /*html*/ `
         <div class="bg-gray-100 min-h-screen flex justify-center">
             <div class="max-w-md w-full">
-                ${Header()}
+                ${Header(Auth.isLoggedIn())}
                 <main class="p-4">
                     ${MainPage()}
                 </main>
@@ -61,7 +61,7 @@ export const renderProfilePage = () => {
   const content = /*html*/ `
         <div class="bg-gray-100 min-h-screen flex justify-center">
             <div class="max-w-md w-full">
-                ${Header()}
+                ${Header(Auth.isLoggedIn())}
                 <main class="p-4">
                     ${ProfilePage(user.username, user.email, user.bio)}
                 </main>

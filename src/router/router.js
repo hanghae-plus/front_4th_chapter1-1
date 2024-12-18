@@ -13,6 +13,11 @@ export const createRouter = (routes) => {
       routes["/login"]();
       return;
     }
+    if (["/login"].includes(path) && Auth.isLoggedIn()) {
+      window.history.pushState(null, "", "/");
+      routes["/"]();
+      return;
+    }
 
     const route = routes[path] || routes["/404"];
     route();
@@ -29,8 +34,13 @@ export const createRouter = (routes) => {
     }
   });
 
+  const handleHashChange = () => {
+    const path = window.location.hash.slice(1) || "/";
+    window.history.pushState(null, "", path);
+    renderRoute();
+  };
   window.addEventListener("popstate", renderRoute);
-  // window.addEventListener("hashchange", renderRoute);
+  window.addEventListener("hashchange", handleHashChange);
   // window.addEventListener("load", renderRoute);
 
   renderRoute();
