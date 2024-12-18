@@ -23,7 +23,7 @@ export class HistoryRouter {
     if (handler) {
       handler(); // 핸들러가 있으면 실행
     } else {
-      this.routes["/404"]; // path 가 비어있다면 핸들러가 없을테니 에러 페이지 로드
+      this.routes["/404"];
     }
   }
 }
@@ -41,20 +41,13 @@ export class HashRouter {
   }
 
   // 새로운 경로로 네비게이션
-  navigateTo(path, replace = false) {
-    if (replace) {
-      const href = window.location.href.replace(
-        window.location.hash,
-        "#" + path,
-      );
-      window.location.replace(href);
-    } else {
-      window.location.hash = `#${path}`;
-    }
+  navigateTo(path) {
+    window.location.hash = `#${path}`;
+    this.handleRoute(path);
   }
 
   handleHashChange() {
-    const path = window.location.hash.slice(1) || "#/";
+    const path = window.location.hash.slice(1);
     this.handleRoute(path);
   }
 
