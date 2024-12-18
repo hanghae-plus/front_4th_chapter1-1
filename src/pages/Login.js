@@ -8,7 +8,7 @@ class LoginPage extends Component {
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
       <form id="login-form">
         <div class="mb-4">
-          <input type="text" id="username" placeholder="이메일 또는 전화번호" class="username w-full p-2 border rounded">
+          <input type="text" id="username" placeholder="사용자 이름" class="username w-full p-2 border rounded">
         </div>
         <div class="mb-6">
           <input type="password" id="password" placeholder="비밀번호" class="password w-full p-2 border rounded">
