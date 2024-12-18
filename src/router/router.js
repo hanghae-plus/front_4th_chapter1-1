@@ -13,9 +13,11 @@ class Router extends Component {
   }
 
   navigate = (to, isReplace = false) => {
-    const hash = window.location.hash;
-    if (hash !== "") to = "#" + to;
-    // 페이지 교체 혹은 중복 페이지 방지
+    const currentHash = window.location.hash;
+
+    // 해시가 존재하면 해시 기반으로 이동, 없으면 히스토리 기반으로 이동
+    if (currentHash !== "") to = "#" + to;
+
     if (isReplace || to === location.pathname) history.replaceState({}, "", to);
     else history.pushState({}, "", to);
   };
@@ -24,12 +26,11 @@ class Router extends Component {
     this.state = {
       routes: [],
     };
-
-    this.trackRouteState();
+    this._trackRouteState();
   }
 
   // 페이지 URL 변경 추적 이벤트 생성 및 리스너 등록
-  trackRouteState() {
+  _trackRouteState() {
     window.addEventListener("popstate", () => {
       this.handleRoute();
     });
@@ -65,8 +66,16 @@ class Router extends Component {
     });
   }
 
+  // 라우트 문자열을 정규식 패턴으로 컴파일
+  _compileRoutePattern(fragment) {
+    const escaped = fragment.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return new RegExp(`^(?:#)?${escaped}$`);
+  }
+
   // 라우트 추가
   addRoute(fragment, page, guard = null, redirect = null) {
+    const pattern = this._compileRoutePattern(fragment);
+
     // 기존 라우트와 중복되는 라우트는 신규 라우트로 대체
     if (this.state.routes.some((route) => route.fragment === fragment)) {
       this.state.routes = this.state.routes.filter(
@@ -74,28 +83,32 @@ class Router extends Component {
       );
     }
 
-    this.state.routes.push({ fragment, page, guard, redirect });
+    this.state.routes.push({ fragment, pattern, page, guard, redirect });
   }
 
   // 라우트 예외처리 및 렌더링
   handleRoute() {
-    // 현재 라우트를 기준으로 페이지 추출
     const hash = window.location.hash;
     const fragment = window.location.pathname;
 
-    const pathname = hash !== "" ? hash : fragment;
+    // 해시가 있으면 해시를 사용, 없으면 pathname 사용
+    const currentPath = hash !== "" ? hash : fragment;
 
-    const currentRoute = this.state.routes.find(
-      (route) => route.fragment === pathname,
+    // 라우트 매칭
+    const currentRoute = this.state.routes.find((route) =>
+      route.pattern.test(currentPath),
     );
 
     if (!currentRoute) {
-      this.handleError();
+      this._handleError();
       return;
     }
 
     // 라우트 가드가 있는 경우 실행
     if (currentRoute.guard && !currentRoute.guard()) {
+      if (!currentRoute.redirect) {
+        this._handleError();
+      }
       this.navigate(currentRoute.redirect, true);
       return;
     }
@@ -105,7 +118,7 @@ class Router extends Component {
   }
 
   // 에러 핸들링
-  handleError() {
+  _handleError() {
     const errorRoute = this.state.routes.find(
       (route) => route.fragment === "/error",
     );
