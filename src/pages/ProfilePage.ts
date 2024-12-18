@@ -1,5 +1,8 @@
+import Store from "../core/Store";
 import Footer from "../shared/components/Footer";
 import Header from "../shared/components/Header";
+
+const userStore = new Store<User>("user");
 
 const setUpProfilePage = () => {
   const form = document.getElementById("profile-form") as HTMLFormElement;
@@ -13,24 +16,21 @@ const setUpProfilePage = () => {
 
 const handleProfile = (form: HTMLFormElement) => {
   const formData = new FormData(form);
-  const userData = {
-    username: formData.get("username"),
-    email: formData.get("email"),
-    bio: formData.get("bio"),
+  const userData: User = {
+    username: formData.get("username")?.toString(),
+    email: formData.get("email")?.toString(),
+    bio: formData.get("bio")?.toString(),
   };
 
-  const originUser = JSON.parse(localStorage.getItem("user") || "{}");
-  localStorage.setItem(
-    "user",
-    JSON.stringify({
-      ...originUser,
-      ...userData,
-    }),
-  );
+  const currentUser = userStore.get();
+  userStore.set({
+    ...currentUser,
+    ...userData,
+  });
 };
 
 const ProfilePage = () => {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const user = userStore.get();
 
   return /* html */ `
   <div id="root">

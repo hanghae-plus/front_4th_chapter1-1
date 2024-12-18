@@ -1,5 +1,8 @@
+import Store from "../core/Store";
 import { useRouter } from "../main";
 import { getPathnames } from "../routes";
+
+const userStore = new Store<User>("user");
 
 const setupLoginPage = () => {
   const form = document.getElementById("login-form") as HTMLFormElement;
@@ -17,13 +20,13 @@ const handleLogin = (form: HTMLFormElement) => {
 
   const formData = new FormData(form);
 
-  const loginData = {
-    username: formData.get("username"),
+  const loginData: User = {
+    username: formData.get("username")?.toString() || "",
     email: "",
     bio: "",
   };
 
-  localStorage.setItem("user", JSON.stringify(loginData));
+  userStore.set(loginData);
 
   router.navigate(PATHNAMES.HOME);
 };
