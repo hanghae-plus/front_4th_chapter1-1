@@ -35,6 +35,15 @@ const handleAfterRender = (route) => {
       document.getElementById(ID.LOGOUT).addEventListener("click", () => {
         Auth.logout();
       });
+      document
+        .getElementById(ID.PROFILE_FORM)
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+          const username = document.getElementById(ID.LOGIN_USER_NAME).value;
+          const email = document.getElementById(ID.EMAIL).value;
+          const bio = document.getElementById(ID.BIO).value;
+          Auth.setUser({ username, email, bio });
+        });
       break;
   }
 };

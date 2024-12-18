@@ -12,4 +12,7 @@ export const ID = {
   LOGOUT: "logout",
   LOGIN_USER_NAME: "username",
   LOGIN_PASSWORD: "password",
+  PROFILE_FORM: "profile-form",
+  EMAIL: "email",
+  BIO: "bio",
 };

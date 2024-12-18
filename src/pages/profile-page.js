@@ -1,3 +1,5 @@
+import { Auth } from "../auth/auth";
+import { ID } from "../common/const";
 import { NavBar } from "../components/nav-bar";
 
 export const ProfilePage = () => `
@@ -15,7 +17,7 @@ export const ProfilePage = () => `
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
               내 프로필
             </h2>
-            <form>
+            <form id=${ID.PROFILE_FORM}>
               <div class="mb-4">
                 <label
                   for="username"
@@ -26,7 +28,7 @@ export const ProfilePage = () => `
                   type="text"
                   id="username"
                   name="username"
-                  value="홍길동"
+                  value="${Auth.user.username}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -40,7 +42,7 @@ export const ProfilePage = () => `
                   type="email"
                   id="email"
                   name="email"
-                  value="hong@example.com"
+                  value="${Auth.user.email}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -55,8 +57,7 @@ export const ProfilePage = () => `
                   name="bio"
                   rows="4"
                   class="w-full p-2 border rounded"
-                >
-안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.</textarea
+                >${Auth.user.bio}</textarea
                 >
               </div>
               <button

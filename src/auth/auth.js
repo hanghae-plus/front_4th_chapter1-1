@@ -6,10 +6,18 @@ export class Auth {
   }
 
   static login(user) {
+    this.setUser(user);
+  }
+
+  static setUser(user) {
     localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 
   static logout() {
     this.isLoggedIn && localStorage.removeItem(USER_KEY);
+  }
+
+  static get user() {
+    return JSON.parse(localStorage.getItem(USER_KEY));
   }
 }
