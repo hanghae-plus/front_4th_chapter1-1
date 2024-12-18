@@ -4,7 +4,7 @@ import NavbarController from "../controllers/NavbarController";
 
 class MainPage extends Component {
   template() {
-    const navbar = new Navbar(this.$target, new NavbarController(this.$target));
+    const navbar = new Navbar(this.$target, NavbarController.instance);
     return `
     <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">

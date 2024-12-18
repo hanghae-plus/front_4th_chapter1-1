@@ -1,22 +1,29 @@
 class Controller {
   state;
-  static instance = null;
+  static _instance = null;
+
+  static get instance() {
+    if (!this._instance) {
+      throw new Error(`Instance of ${this.name} has not been created yet.`);
+    }
+    return this._instance;
+  }
 
   constructor($target) {
     // 싱글톤 패턴
-    if (this.constructor.instance) {
-      return this.constructor.instance;
+    if (this.constructor._instance) {
+      return this.constructor._instance;
     }
-    this.constructor.instance = this;
+    this.constructor._instance = this;
 
     this.$target = $target;
     this.onStateChange = null;
     this.state = {};
-    this.onInit();
+    this._onInit();
   }
 
   // 초기화 시 attachListeners 호출
-  onInit() {
+  _onInit() {
     this.attachListeners();
   }
 

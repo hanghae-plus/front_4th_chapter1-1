@@ -2,7 +2,7 @@ import UserService from "../service/UserService";
 import Controller from "../core/Controller";
 
 class ProfileController extends Controller {
-  onInit() {
+  _onInit() {
     // 사용자 정보 로드 및 상태 초기화
     const user = UserService.getUser();
     this.state = {
@@ -10,7 +10,11 @@ class ProfileController extends Controller {
       email: user?.email || "",
       bio: user?.bio || "",
     };
-    super.onInit();
+    super._onInit();
+  }
+
+  onRefresh() {
+    this._onInit();
   }
 
   attachListeners() {

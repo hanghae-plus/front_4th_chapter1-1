@@ -16,10 +16,9 @@ class NavbarController extends Controller {
         this.handleLogout();
       }
 
-      // 대상 URL로 네비게이션
+      // 대상 네비게이션 탭 URL로 이동
       const targetURL = e.target.getAttribute("href");
-      const router = new Router();
-      router.navigate(targetURL);
+      Router.instance.navigate(targetURL);
     });
   }
 

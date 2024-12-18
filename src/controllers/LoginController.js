@@ -1,4 +1,4 @@
-import UserService from "../service/UserService";
+import UserService from "../service/UserService.js";
 import Controller from "../core/Controller";
 import ProfilePage from "../pages/Profile";
 import Router from "../router/Router";
@@ -15,14 +15,14 @@ class LoginController extends Controller {
 
       UserService.login(username);
 
-      const router = new Router();
-
       // 새 프로필 컨트롤러 및 페이지 생성, 라우트 등록
-      const profileController = new ProfileController();
-      profileController.onInit();
-      const profileInstnace = new ProfilePage(this.$target, profileController);
-      router.addRoute("/profile", () => profileInstnace);
-      router.navigate("/");
+      ProfileController.instance.onRefresh();
+      const profileInstnace = new ProfilePage(
+        this.$target,
+        ProfileController.instance,
+      );
+      Router.instance.addRoute("/profile", () => profileInstnace);
+      Router.instance.navigate("/");
     });
   }
 }

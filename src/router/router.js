@@ -1,15 +1,22 @@
 import Component from "../core/component";
 
 class Router extends Component {
-  static instance = null;
+  static _instance = null;
+
+  static get instance() {
+    if (!this._instance) {
+      throw new Error(`Instance of ${this.name} has not been created yet.`);
+    }
+    return this._instance;
+  }
 
   constructor($target) {
     // Router를 싱글톤으로 관리
-    if (Router.instance) {
-      return Router.instance;
+    if (Router._instance) {
+      return Router._instance;
     }
     super($target);
-    Router.instance = this;
+    Router._instance = this;
   }
 
   // 특정 경로로 네비게이션 수행 (해시,히스토리 모두 지원)
