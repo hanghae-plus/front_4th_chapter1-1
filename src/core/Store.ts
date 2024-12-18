@@ -21,11 +21,7 @@ class Store<T> {
 
   clear(): void {
     localStorage.removeItem(this.key);
-    this.value = {
-      username: "",
-      email: "",
-      bio: "",
-    } as T;
+    this.value = {} as T;
   }
 }
 
