@@ -27,6 +27,14 @@ const router = (path) => {
     }
   }
 
+  if (path === "/login" && isLogin()) {
+    console.log("heres");
+    window.history.pushState({}, "", "/");
+    const component = makeComponent("/");
+    render(component);
+    return;
+  }
+
   window.history.pushState({}, "", path);
   const component = makeComponent(path);
   render(component);

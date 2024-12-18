@@ -23,7 +23,6 @@ document.addEventListener("click", (e) => {
       router("/login");
     } else {
       const path = e.target.getAttribute("href");
-      console.log("nav click>>", path);
       router(path);
       handleProfile();
     }

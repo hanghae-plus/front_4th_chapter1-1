@@ -15,9 +15,7 @@ const makeComponent = (path) => {
 };
 
 const hashRouter = (path) => {
-  console.log("dfaf");
   path = path || window.location.hash;
-  console.log("hash>>", path);
 
   if (path === "#/profile") {
     if (!isLogin()) {
@@ -26,6 +24,13 @@ const hashRouter = (path) => {
       render(component);
       return;
     }
+  }
+
+  if (path === "#/login" && isLogin()) {
+    window.history.pushState({}, "", "#/");
+    const component = makeComponent("#/");
+    render(component);
+    return;
   }
 
   window.history.pushState({}, "", path);
