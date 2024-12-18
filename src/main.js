@@ -2,12 +2,10 @@ import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
-
-import { navClick } from "./utils/event";
-import Router from "./utils/route";
+import { HistoryRouter, HashRouter } from "./utils/route";
 
 // 라우터 초기화
-const router = new Router();
+const router = window.location.hash ? new HashRouter() : new HistoryRouter();
 
 // 경로와 그에 대응하는 핸들러 추가
 router.addRoute("/", () => loadRoute(MainPage())); // 메인 페이지
@@ -26,8 +24,6 @@ router.addRoute("/login", () => {
 router.addRoute("/404", () => loadRoute(NotFoundPage())); // 에러 페이지
 
 router.navigateTo(window.location.pathname);
-
-navClick(router);
 
 // 콘텐츠를 문서 본문에 로드하는 함수
 function loadRoute(content) {
@@ -131,4 +127,16 @@ function loadRoute(content) {
       });
     }
   }
+}
+
+// 전역 네비게이션 링크 클릭 처리
+const navbar = document.querySelector("nav");
+if (navbar) {
+  navbar.addEventListener("click", (e) => {
+    if (e.target.tagName === "A") {
+      e.preventDefault(); // 기본 링크 클릭 동작을 막음
+      const path = e.target.getAttribute("href");
+      setTimeout(() => router.navigateTo(path), 0);
+    }
+  });
 }
