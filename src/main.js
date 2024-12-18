@@ -5,19 +5,18 @@ const MainPage = (user) => `
         <h1 class="text-2xl font-bold">항해플러스</h1>
       </header>
 
-      <nav aria-label="navigation" class="bg-white shadow-md p-2 sticky top-14">
+      <nav id="nav-link" aria-label="navigation" class="bg-white shadow-md p-2 sticky top-14">
         <ul id="main-link" class="flex justify-around">
-          <li><a id="home-link" href="/" class="text-blue-600">홈</a></li>
+          <li><a id="home-link" href="/" class="text-blue-600 font-bold">홈</a></li>
             ${
               user
                 ? `
               
                 <li><a id="profile-link" href="/profile" className="text-blue-600">프로필</a></li>
                 <li><a id="logout" href="/login" className="text-gray-600">로그아웃</a></li>
-              
             `
                 : `
-                <li><a id="login" href="/login" aria-label="로그인" className="text-gray-600">로그인</a></li>
+                <li><a id="login-link" href="/login" aria-label="로그인" className="text-gray-600">로그인</a></li>
             `
             }
         </ul>
@@ -166,9 +165,9 @@ const ProfilePage = (user) => `
           <h1 class="text-2xl font-bold">항해플러스</h1>
         </header>
 
-        <nav aria-label="navigation" class="bg-white shadow-md p-2 sticky top-14">
+        <nav id="nav-link" aria-label="navigation" class="bg-white shadow-md p-2 sticky top-14">
           <ul class="flex justify-around">
-            <li><a id="home-link" href="/" class="text-gray-600">홈</a></li>
+            <li><a id="home-link" href="/" class="text-gray-600 text-blue-600 font-bold">홈</a></li>
             ${
               user
                 ? `
@@ -178,7 +177,7 @@ const ProfilePage = (user) => `
               
             `
                 : `
-                <li><a id="login" aria-label="로그인" href="/login" className="text-gray-600">로그인</a></li>
+                <li><a id="login-link" aria-label="로그인" href="/login" className="text-gray-600">로그인</a></li>
             `
             }
           </ul>
@@ -270,10 +269,38 @@ function createRouter() {
     return;
   }
 
+  function handleRouteChange() {
+    const currentHash = window.location.hash.slice(1) || "/"; // '#' 제거 후 경로 확인
+
+    const routeCallback = routes[currentHash];
+    console.log("여기는 반드시", location.hash, routeCallback, currentHash);
+
+    if (routeCallback) {
+      const userInfo = JSON.parse(localStorage.getItem("user"));
+      if (userInfo && currentHash == "/login") {
+        document.getElementById("root").innerHTML = MainPage(userInfo);
+      } else {
+        document.getElementById("root").innerHTML = routeCallback(); // 해당 콜백 실행
+      }
+    } else {
+      document.getElementById("root").innerHTML = ErrorPage(); // 404 처리
+    }
+    registerEventListeners(); // 이벤트 리스너 재등록
+  }
+
+  // 해시 변경 감지 이벤트 리스너 등록
+  window.addEventListener("hashchange", handleRouteChange);
+
   function navigateTo(path) {
-    console.log("path", path);
-    history.pushState(null, "", path);
-    handleRoute(path);
+    if (location.hash.includes("#")) {
+      console.log("path보기", path);
+      location.hash = path;
+      // handleRoute(path);
+    } else {
+      console.log("path", path);
+      history.pushState(null, "", path);
+      handleRoute(path);
+    }
   }
 
   function handlePopState() {
@@ -283,8 +310,15 @@ function createRouter() {
   function handleRoute(path) {
     const handler = routes[path];
     if (handler) {
-      document.getElementById("root").innerHTML = handler(); // 적절한 컴포넌트 렌더링
+      const userInfo = JSON.parse(localStorage.getItem("user"));
+      if (userInfo && path == "/login") {
+        document.getElementById("root").innerHTML = MainPage(userInfo);
+      } else {
+        document.getElementById("root").innerHTML = handler(); // 적절한 컴포넌트 렌더링
+      }
     } else {
+      console.log("반드시2", path);
+
       document.getElementById("root").innerHTML = ErrorPage(); // 404 처리
     }
     registerEventListeners(); // 이벤트 리스너 재등록
@@ -312,63 +346,90 @@ router.addRoute("/profile", () => {
 });
 router.addRoute("/login", () => LoginPage());
 // 첫 화면
-const curPath = window.location.pathname;
-
-console.log("curPath", curPath);
+let curPath = window.location.pathname;
+if (location.hash.includes("#")) {
+  curPath = location.hash.slice(1);
+}
 if (!router.getRoutesList().includes(curPath)) {
   document.getElementById("root").innerHTML = `
     ${ErrorPage()}
   `;
 } else {
   const userInfo = JSON.parse(localStorage.getItem("user")) || {};
-  document.getElementById("root").innerHTML = `
+  if (userInfo && curPath == "/login") {
+    document.getElementById("root").innerHTML = `
+    ${router.getRouterPage("/", userInfo)}
+  `;
+  } else {
+    document.getElementById("root").innerHTML = `
     ${router.getRouterPage(curPath, userInfo)}
   `;
-  if (curPath === "/profile") {
-    document.getElementById("username").value = userInfo?.username || "";
-    document.getElementById("email").value = userInfo?.email || "";
-    document.getElementById("bio").value = userInfo?.bio || "";
+    if (curPath === "/profile") {
+      document.getElementById("username").value = userInfo?.username || "";
+      document.getElementById("email").value = userInfo?.email || "";
+      document.getElementById("bio").value = userInfo?.bio || "";
+    }
   }
 }
 registerEventListeners();
 
+console.log("이게 뭐야?", document.querySelector('nav a[href="/login"]'));
+
 // 페이지 이동 이벤트를 담는 함수
 function registerEventListeners() {
-  document
-    .querySelector("#profile-link")
-    ?.addEventListener("click", (event) => {
-      event.preventDefault();
-      // document.body.innerHTML = `${ProfilePage()}`
+  document.getElementById("nav-link")?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    console.log("클릭클릭", event.target);
+    if (event.target.id === "profile-link") {
       router.navigateTo("/profile");
       const userInfo = JSON.parse(localStorage.getItem("user")) || {};
       document.getElementById("username").value = userInfo?.username || "";
       document.getElementById("email").value = userInfo?.email || "";
       document.getElementById("bio").value = userInfo?.bio || "";
-    });
-  document.querySelector("#home-link")?.addEventListener("click", (event) => {
-    event.preventDefault();
-    // document.body.innerHTML = `
-    //   ${MainPage()}
-    // `;
-    router.navigateTo("/");
+    } else if (event.target.id === "home-link") {
+      router.navigateTo("/");
+    } else if (event.target.id === "logout") {
+      localStorage.removeItem("user");
+      router.navigateTo("/login");
+    } else if (event.target.id === "login-link") {
+      localStorage.removeItem("user");
+      router.navigateTo("/login");
+    }
   });
 
-  document.querySelector("#logout")?.addEventListener("click", (event) => {
-    event.preventDefault();
-    localStorage.removeItem("user");
-    router.navigateTo("/login");
-  });
-
-  document.querySelector("#login")?.addEventListener("click", (event) => {
-    event.preventDefault();
-    localStorage.removeItem("user");
-    router.navigateTo("/login");
-  });
+  // document
+  //   .querySelector("#profile-link")
+  //   ?.addEventListener("click", (event) => {
+  //     event.preventDefault();
+  //     router.navigateTo("/profile");
+  //     const userInfo = JSON.parse(localStorage.getItem("user")) || {};
+  //     document.getElementById("username").value = userInfo?.username || "";
+  //     document.getElementById("email").value = userInfo?.email || "";
+  //     document.getElementById("bio").value = userInfo?.bio || "";
+  //   });
+  // document.querySelector("#home-link")?.addEventListener("click", (event) => {
+  //   event.preventDefault();
+  //   router.navigateTo("/");
+  // });
+  //
+  // document.querySelector("#logout")?.addEventListener("click", (event) => {
+  //   event.stopPropagation();
+  //   event.preventDefault();
+  //   localStorage.removeItem("user");
+  //   router.navigateTo("/login");
+  // });
+  //
+  // document.querySelector("#login")?.addEventListener("click", (event) => {
+  //   event.stopPropagation();
+  //   event.preventDefault();
+  //   localStorage.removeItem("user");
+  //   router.navigateTo("/login");
+  // });
 
   // 사용자 로그인
   document.getElementById("login-form")?.addEventListener("submit", (event) => {
     event.preventDefault();
-    console.log("dfsdfsdf");
     const email = document.getElementById("username").value;
     // const password = document.getElementById("password").value;
     // if (email && password) {
