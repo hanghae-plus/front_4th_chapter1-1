@@ -17,7 +17,11 @@ export const router = () => {
   const root = document.getElementById("root");
   if (!root) return;
 
-  const path = window.location.pathname;
+  const BrowserPath = location.pathname;
+  const hashPath = location.hash.slice(1);
+
+  const path = hashPath || BrowserPath;
+
   const route = routes[path] || { page: ErrorPage };
 
   // 비로그인 사용자는 프로필 접근 불가 → 로그인 페이지로 이동
