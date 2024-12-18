@@ -1,4 +1,5 @@
-import GlobalNavigation from "../components/gnb";
+import Footer from "../components/footer";
+import Header from "../components/header";
 import { GLOBAL_NAVIGATION_ID, LOGOUT_BTN_ID } from "../constants/html";
 import { USER_INFO_LOCALSTORAGE_KEY } from "../constants/user";
 import router from "../router/router";
@@ -6,12 +7,7 @@ import router from "../router/router";
 const MainPage = () => `
   <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
-      <header class="bg-blue-600 text-white p-4 sticky top-0">
-        <h1 class="text-2xl font-bold">항해플러스</h1>
-      </header>
-
-     ${GlobalNavigation()}
-
+     ${Header()}
       <main class="p-4">
         <div class="mb-4 bg-white rounded-lg shadow p-4">
           <textarea class="w-full p-2 border rounded" placeholder="무슨 생각을 하고 계신가요?"></textarea>
@@ -102,15 +98,16 @@ const MainPage = () => `
         </div>
       </main>
 
-      <footer class="bg-gray-200 p-4 text-center">
-        <p>&copy; 2024 항해플러스. All rights reserved.</p>
-      </footer>
+      ${Footer()}
     </div>
   </div>
 `;
 
 export default function renderMain() {
-  document.body.innerHTML = `
+  const root = document.querySelector("#root");
+  const targetElement = root ? root : document.body;
+
+  targetElement.innerHTML = `
   ${MainPage()}
 `;
 

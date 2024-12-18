@@ -1,4 +1,5 @@
-import GlobalNavigation from "../components/gnb";
+import Footer from "../components/footer";
+import Header from "../components/header";
 import {
   GLOBAL_NAVIGATION_ID,
   LOGOUT_BTN_ID,
@@ -15,12 +16,7 @@ const ProfilePage = () => {
   <div id="root">
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
-        <header class="bg-blue-600 text-white p-4 sticky top-0">
-          <h1 class="text-2xl font-bold">항해플러스</h1>
-        </header>
-
-        ${GlobalNavigation()}
-
+       ${Header()}
         <main class="p-4">
           <div class="bg-white p-8 rounded-lg shadow-md">
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
@@ -80,9 +76,7 @@ ${userInfo.bio}</textarea
           </div>
         </main>
 
-        <footer class="bg-gray-200 p-4 text-center">
-          <p>&copy; 2024 항해플러스. All rights reserved.</p>
-        </footer>
+      ${Footer()}
       </div>
     </div>
   </div>
@@ -97,7 +91,10 @@ export default function renderProfile() {
     return;
   }
 
-  document.body.innerHTML = `
+  const root = document.querySelector("#root");
+  const targetElement = root ? root : document.body;
+
+  targetElement.innerHTML = `
     ${ProfilePage()}
   `;
 
@@ -127,9 +124,9 @@ export default function renderProfile() {
       );
       const newUserInfo = {
         ...userInfo,
-        username: e.target[usernameInputName].value,
-        email: e.target["email"].value,
-        bio: e.target["bio"].value,
+        username: e.target.elements[usernameInputName].value,
+        email: e.target.elements["email"].value,
+        bio: e.target.elements["bio"].value,
       };
 
       localStorage.setItem(

@@ -12,10 +12,10 @@ const LoginPage = () => `
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
       <form id=${LOGIN_FORM_ID}>
         <div class="mb-4">
-          <input type="text" name=${usernameInputName} placeholder="사용자 이름" class="w-full p-2 border rounded">
+          <input type="text" id=${usernameInputName} name=${usernameInputName} placeholder="사용자 이름" class="w-full p-2 border rounded">
         </div>
         <div class="mb-6">
-          <input type="password" name=${passwordInputName} placeholder="비밀번호" class="w-full p-2 border rounded">
+          <input type="password" id=${passwordInputName} name=${passwordInputName} placeholder="비밀번호" class="w-full p-2 border rounded">
         </div>
         <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</button>
       </form>
@@ -38,20 +38,21 @@ export default function renderLogin() {
     return;
   }
 
-  document.body.innerHTML = `
+  const root = document.querySelector("#root");
+  const targetElement = root ? root : document.body;
+
+  targetElement.innerHTML = `
     ${LoginPage()}`;
 
   document.body
     .querySelector(`#${LOGIN_FORM_ID}`)
     .addEventListener("submit", (e) => {
       e.preventDefault();
-      const username = e.target[usernameInputName].value;
-      const password = e.target[passwordInputName].value;
+      const username = e.target.elements[usernameInputName].value;
       localStorage.setItem(
         USER_INFO_LOCALSTORAGE_KEY,
         JSON.stringify({
           username,
-          password,
           email: "",
           bio: "",
         }),
