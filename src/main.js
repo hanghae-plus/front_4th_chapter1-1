@@ -24,7 +24,11 @@ class Router {
   }
 
   handleRoute(path) {
-    let currentPath = path !== "undefined" ? path : window.location.pathname;
+    console.log(`handleRoute called, path: ${path}`);
+    let currentPath = path !== undefined ? path : window.location.pathname;
+    console.log(
+      `current path from handleRoute: ${currentPath}, window pathname: ${window.location.pathname}`,
+    );
 
     const routeList = Object.keys(this.routes);
     if (!routeList.includes(currentPath)) {
@@ -39,6 +43,7 @@ class Router {
   }
 
   render(path) {
+    console.log(`current path: ${path}`);
     history.pushState(null, "", path);
     const handler = this.routes[path];
     if (handler) {
@@ -53,12 +58,12 @@ router.addRoute("/login", () => LoginPage());
 router.addRoute("/profile", () => ProfilePage());
 router.addRoute("/404", () => NotFoundPage());
 
-router.render();
+// router.render();
+router.handleRoute();
 
 document.addEventListener("click", (event) => {
   if (event.target.tagName === "A") {
-    // 모든 <a> 태그에 대해 처리
-    event.preventDefault(); // 기본 동작(페이지 이동) 방지
+    event.preventDefault();
     router.navigateTo(event.target.getAttribute("href"));
   }
 });
@@ -83,6 +88,7 @@ document.body.addEventListener("submit", (e) => {
 });
 
 document.getElementById("root").addEventListener("click", (e) => {
+  // if (e.target && e.target.nodeName === "A") {
   if (e.target && e.target.nodeName === "BUTTON") {
     if (e.target.id === "logout") {
       removeUser();

@@ -4,6 +4,7 @@ export const set = (key, value) => {
 
 export const isLoggedIn = () => {
   const user = getUser();
+  console.log(`isLoggedIn called, user: ${user}`);
   if (user && user.username !== "") {
     return true;
   } else {
