@@ -30,9 +30,9 @@ class Router extends Component {
 
   // 페이지 URL 변경 추적 이벤트 생성 및 리스너 등록
   trackRouteState() {
-    // window.addEventListener("popstate", () => {
-    //   this.handleRoute();
-    // });
+    window.addEventListener("popstate", () => {
+      this.handleRoute();
+    });
 
     window.addEventListener("hashchange", () => {
       this.handleRoute();
@@ -61,13 +61,12 @@ class Router extends Component {
     };
 
     window.addEventListener("replaceState", () => {
-      console.log("replace");
       this.handleRoute();
     });
   }
 
   // 라우트 추가
-  addRoute(fragment, page) {
+  addRoute(fragment, page, guard = null, redirect = null) {
     // 기존 라우트와 중복되는 라우트는 신규 라우트로 대체
     if (this.state.routes.some((route) => route.fragment === fragment)) {
       this.state.routes = this.state.routes.filter(
@@ -75,7 +74,7 @@ class Router extends Component {
       );
     }
 
-    this.state.routes.push({ fragment, page });
+    this.state.routes.push({ fragment, page, guard, redirect });
   }
 
   // 라우트 예외처리 및 렌더링
@@ -86,14 +85,18 @@ class Router extends Component {
 
     const pathname = hash !== "" ? hash : fragment;
 
-    console.log(pathname);
-
     const currentRoute = this.state.routes.find(
       (route) => route.fragment === pathname,
     );
 
     if (!currentRoute) {
       this.handleError();
+      return;
+    }
+
+    // 라우트 가드가 있는 경우 실행
+    if (currentRoute.guard && !currentRoute.guard()) {
+      this.navigate(currentRoute.redirect, true);
       return;
     }
 

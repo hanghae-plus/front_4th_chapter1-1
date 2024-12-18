@@ -1,5 +1,6 @@
 import createBindings from "./bindings";
 import createPageFactory from "./pages";
+import { loginGuard, profileGuard } from "./router/guards";
 import Router from "./router/router";
 
 const $app = document.querySelector("#root");
@@ -14,12 +15,12 @@ const router = new Router($app);
 
 // 히스토리 기반 라우트 등록
 router.addRoute("/", pages.main);
-router.addRoute("/profile", pages.profile);
-router.addRoute("/login", pages.login);
+router.addRoute("/profile", pages.profile, profileGuard, "/login");
+router.addRoute("/login", pages.login, loginGuard, "/");
 router.addRoute("/error", pages.error);
 // 해시 기반 라우트 등록
 router.addRoute("#/", pages.main);
-router.addRoute("#/profile", pages.profile);
-router.addRoute("#/login", pages.login);
+router.addRoute("#/profile", pages.profile, profileGuard, "/login");
+router.addRoute("#/login", pages.login, loginGuard, "/");
 router.addRoute("#/error", pages.error);
 router.handleRoute();

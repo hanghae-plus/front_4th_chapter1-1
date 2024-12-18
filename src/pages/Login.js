@@ -1,18 +1,6 @@
 import Component from "../core/component";
-import { getUser } from "../auth/auth";
-import Router from "../router/router";
 
 class LoginPage extends Component {
-  render() {
-    const user = getUser();
-    if (user) {
-      const router = new Router();
-      router.navigate("/");
-      return;
-    }
-    super.render();
-  }
-
   template() {
     return `
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">

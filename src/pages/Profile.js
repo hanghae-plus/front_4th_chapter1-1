@@ -1,21 +1,8 @@
 import Component from "../core/component";
-import { getUser } from "../auth/auth";
-import Router from "../router/router";
 import Navbar from "../components/NavBar";
 import NavbarController from "../controllers/NavbarController";
 
 class ProfilePage extends Component {
-  render() {
-    const user = getUser();
-    // 라우트 가드 : 비로그인 유저는 프로필 접근 방지
-    if (!user) {
-      const router = new Router();
-      router.navigate("/login");
-      return;
-    }
-    super.render();
-  }
-
   template() {
     const navbar = new Navbar(this.$target, new NavbarController(this.$target));
     return `
