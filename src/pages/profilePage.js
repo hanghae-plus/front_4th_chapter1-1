@@ -77,6 +77,7 @@ export const ProfilePage = () => {
 
 // 프로필 수정
 document.addEventListener("submit", (e) => {
+  e.preventDefault();
   if (e.target && e.target.id === "profile-form") {
     const updatedUser = {
       username: document.getElementById("username").value,

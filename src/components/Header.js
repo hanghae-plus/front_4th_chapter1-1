@@ -13,7 +13,6 @@ export const Header = () => `
 function renderLoginStatus() {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const path = window.location.pathname;
-  // console.log("user", user);
 
   if (user.username) {
     return `

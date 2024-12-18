@@ -25,9 +25,9 @@ export const LoginPage = () => `
 `;
 
 export const attachLoginHandler = () => {
-  const form = document.querySelector("#login-form");
-  const emailInput = document.querySelector("#username");
-  const passwordInput = document.querySelector("#passwordInput");
+  const form = document.getElementById("login-form");
+  const emailInput = document.getElementById("username");
+  const passwordInput = document.getElementById("passwordInput");
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -35,7 +35,6 @@ export const attachLoginHandler = () => {
     const password = passwordInput.value.trim();
 
     if (validateForm(email, password)) {
-      localStorage.clear();
       localStorage.setItem(
         "user",
         JSON.stringify({ username: email, email: "", bio: "" }),
