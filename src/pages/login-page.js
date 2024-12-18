@@ -1,7 +1,3 @@
-// import { saveUser } from "../utils/local-storage";
-// import { navigate } from "../main";
-// import { validateUsername } from "../utils/validator";
-
 export const LoginPage =
   () => `<main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">

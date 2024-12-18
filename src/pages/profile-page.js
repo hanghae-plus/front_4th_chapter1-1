@@ -1,15 +1,11 @@
 import { Footer } from "../components/footer";
 import { Header } from "../components/header";
 import { getUser } from "../utils/local-storage";
-// import { navigate } from "../main";
 export const ProfilePage = () => {
-  // 페이지 구조 생성
   const header = Header();
   const footer = Footer();
 
   const { username = "", email = "", bio = "" } = getUser() || {};
-  const value = getUser();
-  console.log(`user: ${JSON.stringify(value)}`);
 
   const html = `
       <div id="root">

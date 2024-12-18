@@ -24,12 +24,7 @@ class Router {
   }
 
   handleRoute(path) {
-    console.log(`handleRoute called, path: ${path}`);
     let currentPath = path !== undefined ? path : window.location.pathname;
-
-    console.log(
-      `current path from handleRoute: ${currentPath}, window pathname: ${window.location.pathname}`,
-    );
 
     const routeList = Object.keys(this.routes);
     if (!routeList.includes(currentPath)) {
@@ -42,17 +37,13 @@ class Router {
     }
 
     if (!loggedIn && currentPath === "/profile") {
-      // if (currentPath === "/profile" ) {
-      console.log(`currentPath changed to /login`);
       currentPath = "/login";
     }
 
-    console.log(`render called, currentPath: ${currentPath}`);
     this.render(currentPath);
   }
 
   render(path) {
-    console.log(`current path: ${path}`);
     history.pushState(null, "", path);
     const handler = this.routes[path];
     if (handler) {
@@ -71,15 +62,11 @@ router.handleRoute();
 
 document.addEventListener("click", (event) => {
   if (event.target.tagName === "A") {
-    // 로그아웃 버튼 눌렀을 때 안됨
-    // console.log(`tag tapped, target: ${event.target.id}`)
     if (event.target.id === "logout") {
-      console.log(`removeUser called`);
       event.preventDefault();
       removeUser();
       router.navigateTo("/login");
     } else {
-      console.log("others called");
       event.preventDefault();
       router.navigateTo(event.target.getAttribute("href"));
     }
