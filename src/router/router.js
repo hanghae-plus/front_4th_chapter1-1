@@ -6,41 +6,48 @@ import { state, subscribe } from "../store/store";
 import { initLogin } from "./../events/login";
 import { initProfile } from "./../events/profile";
 import { initNavigation } from "./../events/navigation";
+import { ROUTES } from "../constants/routes";
 
 const routes = {
-  "/": MainPage,
-  "/login": LoginPage,
-  "/profile": ProfilePage,
+  [ROUTES.HOME]: { page: MainPage, init: initNavigation },
+  [ROUTES.LOGIN]: { page: LoginPage, init: initLogin },
+  [ROUTES.PROFILE]: { page: ProfilePage, init: initProfile },
 };
 
 export const router = () => {
   const root = document.getElementById("root");
-
   if (!root) return;
 
   const path = window.location.pathname;
-  const render = routes[path] || ErrorPage;
+  const route = routes[path] || { page: ErrorPage };
 
-  // 404페이지
-  if (!state.user && path === "/profile") {
+  // 비로그인 사용자는 프로필 접근 불가 → 로그인 페이지로 이동
+  if (!state.user && path === ROUTES.PROFILE) {
     root.innerHTML = LoginPage();
     return;
   }
 
-  // 로그인한 사용자가 로그인 페이지 접근 시
-  if ((state.user || localStorage.getItem("user")) && path === "/login") {
+  // 로그인 사용자는 로그인 페이지 접근 불가 → 메인 페이지로 이동
+  if (state.user && path === ROUTES.LOGIN) {
     root.innerHTML = MainPage();
-    alert("이미 로그인이 되어 있습니다.");
     return;
   }
 
-  root.innerHTML = render(render === LoginPage ? null : state.user);
+  // 페이지 렌더링
+  root.innerHTML = route.page(state.user);
 
-  if (path === "/login") initLogin();
-  else if (path === "/profile") initProfile();
-  else if (path === "/") initNavigation();
+  // 페이지 초기화 함수 실행
+  if (route.init) {
+    route.init();
+  }
 };
 
+export const navigateTo = (path) => {
+  history.pushState({}, "", path);
+  router();
+};
+
+// 상태 변경 시 라우터 재실행
 subscribe(() => {
   router();
 });

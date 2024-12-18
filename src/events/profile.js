@@ -1,3 +1,4 @@
+import { setStorage } from "../utils/storageHandler";
 import { setState } from "./../store/store";
 
 const handleProfileUpdate = () => {
@@ -11,7 +12,7 @@ const handleProfileUpdate = () => {
     bio: bioInput,
   };
 
-  localStorage.setItem("user", JSON.stringify(updatedInfo));
+  setStorage("user", updatedInfo);
 
   setState({ user: updatedInfo });
 };

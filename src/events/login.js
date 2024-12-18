@@ -1,5 +1,7 @@
-import { router } from "../router/router.js";
+import { ROUTES } from "../constants/routes.js";
+import { navigateTo } from "../router/router.js";
 import { setState } from "../store/store.js";
+import { setStorage } from "../utils/storageHandler.js";
 
 export const handleLogin = () => {
   const username = document.getElementById("username").value;
@@ -9,9 +11,9 @@ export const handleLogin = () => {
   if (username) {
     setState({ user: userInfo }); // 상태 업데이트
 
-    localStorage.setItem("user", JSON.stringify(userInfo));
-    history.pushState({}, "", "/");
-    router();
+    setStorage("user", userInfo);
+
+    navigateTo(ROUTES.HOME);
   } else {
     alert("아이디 혹은 비밀번호를 확인해주세요.");
   }
