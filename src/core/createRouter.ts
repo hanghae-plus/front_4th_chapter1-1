@@ -1,10 +1,13 @@
 import { getPathnames, getRoutes } from "../routes";
+import Store from "./Store";
 
 type Router = {
   render: (pathname: string) => void;
   navigate: (pathname: string) => void;
   init: () => void;
 };
+
+const userStore = new Store<User>("user");
 
 const createBaseRouter = (
   container: HTMLElement,
@@ -56,7 +59,7 @@ const createBaseRouter = (
       const logoutButton = target.closest('[data-action="logout"]');
       if (logoutButton) {
         e.preventDefault();
-        localStorage.removeItem("user");
+        userStore.clear();
         navigate(PATHNAMES.LOGIN);
         return;
       }
