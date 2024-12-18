@@ -32,7 +32,7 @@ export class HashRouter {
   constructor() {
     this.routes = {};
     window.addEventListener("hashchange", this.handleHashChange.bind(this));
-    this.handleHashChange();
+    this.handleHashChange(); // 처음 세팅 된
   }
 
   // 라우트 등록
@@ -42,7 +42,7 @@ export class HashRouter {
 
   // 새로운 경로로 네비게이션
   navigateTo(path) {
-    window.location.hash = `#${path}`;
+    window.location.hash = `${path}`;
     this.handleRoute(path);
   }
 
