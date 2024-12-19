@@ -1,8 +1,12 @@
 let routes = [];
 let target = null;
 
-function render(element) {
-  target.innerHTML = element();
+function render(pageComponent) {
+  target.innerHTML = pageComponent();
+}
+
+export function setRenderTarget(element) {
+  target = element;
 }
 
 function findRoutes(path, routeList) {
@@ -20,16 +24,12 @@ function findRoutes(path, routeList) {
   return routeList.find((route) => route.path === "*").element;
 }
 
-export function setRenderTarget(element) {
-  target = element;
-}
-
 export function addRoutes(...newRoutes) {
   routes = [...routes, ...newRoutes];
 }
 
 export function navigator(path) {
-  const element = findRoutes(path, routes);
+  const pageComponent = findRoutes(path, routes);
   window.history.pushState(null, "", path);
-  render(element);
+  render(pageComponent);
 }
