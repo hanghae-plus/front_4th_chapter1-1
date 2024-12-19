@@ -9,6 +9,7 @@ export const renderProfilePage = () => {
   }
 
   document.body.innerHTML = ProfilePage();
+  document.addEventListener("submit", handleProfileUpdate);
 };
 
 const ProfilePage = () => {
@@ -72,8 +73,6 @@ const ProfilePage = () => {
       </div>
     </main>
 `;
-
-  document.addEventListener("submit", handleProfileUpdate);
 
   return DefaultLayout(content);
 };

@@ -1,5 +1,3 @@
-import { clearUser } from "@/state/handle-state";
-
 class CreateRouter {
   constructor(routes = {}, { mode = "history" }) {
     this.routes = routes;
@@ -19,10 +17,6 @@ class CreateRouter {
 
   addEventListeners() {
     document.addEventListener("click", (e) => {
-      if (e.target.id === "logout") {
-        e.preventDefault();
-        clearUser();
-      }
       if (e.target.tagName === "A") {
         e.preventDefault();
         const path = e.target.getAttribute("href");

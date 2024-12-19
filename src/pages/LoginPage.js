@@ -9,6 +9,7 @@ export const renderLoginPage = () => {
   }
 
   document.body.innerHTML = LoginPage();
+  document.addEventListener("submit", handleSubmitLogin);
 };
 
 const LoginPage = () => {
@@ -33,8 +34,6 @@ const LoginPage = () => {
         </div>
       </div>
   `;
-
-  document.addEventListener("submit", handleSubmitLogin);
 
   return PlainLayout(content);
 };
