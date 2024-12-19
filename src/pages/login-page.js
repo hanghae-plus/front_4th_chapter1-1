@@ -6,7 +6,7 @@ export const LoginPage = () => `
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
       <form id=${ID.LOGIN_FORM}>
         <div class="mb-4">
-          <input type="text" id=${ID.LOGIN_USER_NAME} placeholder="이름" class="w-full p-2 border rounded">
+          <input type="text" id=${ID.LOGIN_USER_NAME} placeholder="사용자 이름" class="w-full p-2 border rounded">
         </div>
         <div class="mb-6">
           <input type="password" id=${ID.LOGIN_PASSWORD} placeholder="비밀번호" class="w-full p-2 border rounded">
