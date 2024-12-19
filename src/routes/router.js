@@ -5,7 +5,15 @@ export const createRoutes = () => {
 
   const { handlePopState, ...instance } = getInstance();
 
-  window.addEventListener("popstate", handlePopState);
+  window.addEventListener("popstate", (event) => {
+    event.preventDefault();
+    handlePopState();
+  });
+
+  window.addEventListener("load", (event) => {
+    event.preventDefault();
+    handlePopState();
+  });
 
   return { handlePopState, ...instance };
 };

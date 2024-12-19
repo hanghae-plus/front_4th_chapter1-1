@@ -14,9 +14,6 @@ const render = (htmlTemplateLiteral) => {
   document.body.innerHTML = htmlTemplateLiteral;
 };
 
-// 초기화면
-render(RenderingEnum[PagesNameEnum.HOME]);
-
 // 라우트 추가
 Object.keys(PathToPageEnum).forEach((path) => {
   addRoute(path, () => {
