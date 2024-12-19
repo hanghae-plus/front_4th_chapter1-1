@@ -6,10 +6,19 @@ const RoutesSingleton = () => {
   let instance;
 
   // 라우터 관련된 로직은 전체 프로그램에서 여러가지일 필요가 없으므로 하나만 적용
+  // 여기서 다시한번 클로저, 싱글톤 패턴 이용
   const initializeRoutes = () => {
+    // 캡슐화
+    const routes = {};
+
+    // 라우트 추가 함수
+    const addRoute = (path, page) => {
+      routes[path] = page;
+    };
+
     return {
-      routes: {},
-      addRoute: () => {},
+      routes,
+      addRoute,
     };
   };
 
@@ -26,4 +35,10 @@ const RoutesSingleton = () => {
   };
 };
 
-console.log(RoutesSingleton);
+const createRoutes = () => {
+  const { getInstance } = RoutesSingleton();
+  return getInstance();
+};
+
+const { addRoute } = createRoutes();
+addRoute("/", "MainPage");
