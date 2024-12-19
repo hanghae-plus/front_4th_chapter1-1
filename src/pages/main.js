@@ -1,9 +1,7 @@
 import { Layout } from "../components/layout";
-import { Page } from "./page";
 
-export default class MainPage extends Page {
+export default class MainPage {
   constructor() {
-    super();
     this.render = this.render.bind(this);
   }
 

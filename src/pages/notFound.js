@@ -1,9 +1,4 @@
-import { Page } from "./page";
-
-export default class NotFoundPage extends Page {
-  constructor() {
-    super();
-  }
+export default class NotFoundPage {
   render() {
     return `
       <main class="bg-gray-100 flex items-center justify-center min-h-screen">
