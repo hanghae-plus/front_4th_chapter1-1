@@ -28,7 +28,7 @@ const routeHtml = (route) => {
   if (route === "/profile" && !localStorage.getItem("user")) {
     route = "/login";
   }
-  document.getElementById("root").innerHTML = "";
+  //document.getElementById("root").innerHTML = "";
   document.getElementById("root").innerHTML = pathRender[route]();
   buttonsHandler();
 };
@@ -117,3 +117,10 @@ window.addEventListener("DOMContentLoaded", () => {
   );
 });
 window.addEventListener(" load ", routeRender());
+window.addEventListener("hashchange", () => {
+  routeHtml(
+    window.location.hash
+      ? window.location.hash.slice(1) || "/"
+      : window.location.pathname,
+  );
+});
