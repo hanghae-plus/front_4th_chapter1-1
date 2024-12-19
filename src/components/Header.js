@@ -6,7 +6,7 @@ const Header = () => {
     { href: "/", title: "홈" },
     { href: "/profile", title: "프로필" },
     userStore.LoginState()
-      ? { href: "/login", title: "로그아웃" }
+      ? { href: "/", title: "로그아웃" }
       : { href: "/login", title: "로그인" },
   ];
 
