@@ -1,8 +1,8 @@
 export function withObserver(instance = {}) {
   const observers = [];
 
-  instance.subscribe = function (fn) {
-    observers.push(fn);
+  instance.subscribe = function (observer) {
+    observers.push(observer);
   };
 
   instance.notify = function () {
