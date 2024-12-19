@@ -1,4 +1,1 @@
-window.addEventListener("popstate", (event) => {
-  event.preventDefault();
-  console.log(event);
-});
+import "./event/eventHandler.js";
