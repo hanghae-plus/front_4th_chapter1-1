@@ -1,5 +1,6 @@
 import { navigateTo } from "../router/router.js";
 import { saveLocalStorage } from "../storage/storage.js";
+import { PATHS } from "../router/routes.js";
 
 export const loginEvents = () => {
   const form = document.getElementById("login-form");
@@ -15,7 +16,7 @@ export const loginEvents = () => {
     if (validateForm(email, password)) {
       saveLocalStorage("user", { username: email, email: "", bio: "" });
       console.log(localStorage.getItem("user"));
-      navigateTo("/profile");
+      navigateTo(PATHS.PROFILE);
     }
   });
 

@@ -1,6 +1,6 @@
 import { ErrorPage } from "../pages/errorPage.js";
 import { getLocalStorage } from "../storage/storage.js";
-import { eventRegister, Routes } from "./routes.js";
+import { eventRegister, PATHS, Routes } from "./routes.js";
 
 // 초기 URL 모드
 let isHashMode = false;
@@ -19,12 +19,12 @@ export const resolveRoute = (isHash = false) => {
   const user = getLocalStorage("user");
   const root = document.getElementById("root");
 
-  if (path === "/profile" && !user) {
-    navigateTo("/login");
+  if (path === PATHS.PROFILE && !user) {
+    navigateTo(PATHS.LOGIN);
     return;
   }
-  if (path === "/login" && user) {
-    navigateTo("/");
+  if (path === PATHS.LOGIN && user) {
+    navigateTo(PATHS.MAIN);
     return;
   }
 

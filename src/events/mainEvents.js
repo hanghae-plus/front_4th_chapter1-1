@@ -1,5 +1,6 @@
 import { navigateTo } from "../router/router.js";
 import { clearLocalStorage, saveLocalStorage } from "../storage/storage.js";
+import { PATHS } from "../router/routes.js";
 
 export const mainEvents = () => {
   // 헤더 이동
@@ -35,7 +36,7 @@ export const mainEvents = () => {
     if (e.target && e.target.id === "logout") {
       e.preventDefault();
       clearLocalStorage();
-      navigateTo("/login");
+      navigateTo(PATHS.LOGIN);
     }
   });
 };
