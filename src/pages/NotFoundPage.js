@@ -1,14 +1,12 @@
 import { Component } from "../utils/lib/component.js";
 
 class NotFoundPage extends Component {
-  constructor(template) {
+  constructor() {
     super();
-
-    this.template = template;
   }
 
   render() {
-    document.getElementById("root").innerHTML = this.template();
+    this.setHTMLContent(NotFoundTemplate());
   }
 }
 
@@ -28,4 +26,4 @@ const NotFoundTemplate = () => `
   </main>
 `;
 
-export const notFoundPage = new NotFoundPage(NotFoundTemplate);
+export const notFoundPage = new NotFoundPage();

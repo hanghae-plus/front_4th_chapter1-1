@@ -13,7 +13,7 @@ class LoginPage extends Component {
       return;
     }
 
-    document.getElementById("root").innerHTML = LoginTemplate();
+    this.setHTMLContent(LoginTemplate());
 
     this.loginEventListener();
   }

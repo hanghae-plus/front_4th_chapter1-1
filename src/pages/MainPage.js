@@ -10,7 +10,7 @@ class MainPage extends Component {
   }
 
   render() {
-    document.getElementById("root").innerHTML = MainTemplate(this.isLogin());
+    this.setHTMLContent(MainTemplate(this.isLogin()));
 
     this.logoutEventListener();
   }

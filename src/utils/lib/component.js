@@ -3,8 +3,8 @@ export class Component {
     this.router = null;
   }
 
-  render(template) {
-    return (document.getElementById("root").innerHTML = template);
+  setHTMLContent(html) {
+    document.getElementById("root").innerHTML = html;
   }
 
   setRouter(router) {

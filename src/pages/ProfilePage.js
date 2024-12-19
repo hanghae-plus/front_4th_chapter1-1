@@ -5,10 +5,8 @@ import { Component } from "../utils/lib/component.js";
 import { PATH } from "../utils/const/path.js";
 
 class ProfilePage extends Component {
-  constructor(template) {
+  constructor() {
     super();
-
-    this.template = template;
   }
 
   render() {
@@ -17,7 +15,7 @@ class ProfilePage extends Component {
       return;
     }
 
-    document.getElementById("root").innerHTML = this.template();
+    this.setHTMLContent(ProfileTemplate());
 
     this.editEventListeners();
     this.updateProfileTemplate();
@@ -130,4 +128,4 @@ const ProfileTemplate = () => `
     </div>
 `;
 
-export const profilePage = new ProfilePage(ProfileTemplate);
+export const profilePage = new ProfilePage();
