@@ -1,6 +1,6 @@
 import { getLocalStorage } from "../utils/storage";
 const NavBar = () => {
-  const user = getLocalStorage("user");
+  const user = JSON.parse(getLocalStorage("user"));
   return `
     <nav class="bg-white shadow-md p-2 sticky top-14">
         <ul class="flex justify-around">
