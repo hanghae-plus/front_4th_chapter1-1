@@ -1,14 +1,6 @@
 import { MainPage, ErrorPage, ProfilePage, LoginPage } from "./pages/index.js";
 import { createRoutes, PagesNameEnum, PathToPageEnum } from "./routes/index.js";
 
-// ${ProfilePage()}
-// ${LoginPage()}
-// ${ErrorPage()}
-
-document.body.innerHTML = `
-  ${MainPage()}
-`;
-
 const { addRoute, navigateTo } = createRoutes();
 
 const RenderingEnum = {
@@ -18,12 +10,21 @@ const RenderingEnum = {
   [PagesNameEnum.ERROR]: ErrorPage(),
 };
 
+const render = (htmlTemplateLiteral) => {
+  document.body.innerHTML = htmlTemplateLiteral;
+};
+
+// 초기화면
+render(RenderingEnum[PagesNameEnum.HOME]);
+
+// 라우트 추가
 Object.keys(PathToPageEnum).forEach((path) => {
   addRoute(path, () => {
-    document.body.innerHTML = RenderingEnum[PathToPageEnum[path]];
+    render(RenderingEnum[PathToPageEnum[path]]);
   });
 });
 
+// TODO: 앵커태그시 새로고침 안되게 수정, 지금은 앵커태그 전체에 적용되는데...?
 window.addEventListener("click", (e) => {
   if (e.target.tagName === "A") {
     e.preventDefault();
