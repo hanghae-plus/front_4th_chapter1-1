@@ -1,9 +1,9 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import router from "../router/Router";
 
 class MainPage {
-  constructor() {
+  constructor(router) {
+    this.router = router;
     this.root = document.querySelector("#root");
   }
   render() {
@@ -117,7 +117,7 @@ class MainPage {
     if (logout)
       logout.addEventListener("click", () => {
         localStorage.clear();
-        router.navigateTo("/login");
+        this.router.navigateTo("/login");
       });
   }
 }
