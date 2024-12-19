@@ -139,7 +139,6 @@ describe("기본과제 테스트", () => {
       goTo("/login");
 
       const loginForm = document.getElementById("login-form");
-
       await user.type(document.getElementById("username"), "testuser");
 
       loginForm.dispatchEvent(
