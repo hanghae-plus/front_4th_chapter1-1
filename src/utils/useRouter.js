@@ -52,15 +52,15 @@ export const useRouter = () => {
     render();
   };
 
-  return {
-    router(value) {
-      if (window.location.hash) {
-        hashRouter(value);
-      } else {
-        historyRouter(value);
-      }
-    },
+  const router = (value) => {
+    if (window.location.hash) {
+      hashRouter(value);
+    } else {
+      historyRouter(value);
+    }
   };
+
+  return { router };
 };
 
 const renderMainPage = () => {
