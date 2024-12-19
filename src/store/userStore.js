@@ -1,31 +1,28 @@
-class UserStore {
-  constructor() {
-    if (UserStore.instance) {
-      return UserStore.instance;
-    }
-    UserStore.instance = this;
-    this.user = localStorage.getItem("user")
-      ? JSON.parse(localStorage.getItem("user"))
-      : null;
-  }
+let user = JSON.parse(localStorage.getItem("user"));
 
-  setUser(user) {
-    localStorage.setItem("user", JSON.stringify(user));
-    this.user = user;
-  }
-
-  deleteUser() {
-    localStorage.removeItem("user");
-    this.user = null;
-  }
-
-  getUser() {
-    return this.user;
-  }
-
-  isLogin() {
-    return !!this.user;
-  }
+function setUser(newUser) {
+  localStorage.setItem("user", JSON.stringify(newUser));
+  user = newUser;
 }
 
-export default new UserStore();
+function deleteUser() {
+  localStorage.removeItem("user");
+  user = null;
+}
+
+function getUser() {
+  return user;
+}
+
+function isLogin() {
+  return !!user;
+}
+
+const userStore = {
+  setUser,
+  deleteUser,
+  getUser,
+  isLogin,
+};
+
+export default userStore;

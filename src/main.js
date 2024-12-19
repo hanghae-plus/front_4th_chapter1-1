@@ -25,16 +25,16 @@ addRoutes(
 );
 
 function validateRouteUser(path) {
-  const user = userStore.getUser();
-  if (!user && path === "/profile") path = "/login";
-  if (user && path === "/login") path = "/";
+  const isLogin = userStore.isLogin();
+  if (!isLogin && path === "/profile") path = "/login";
+  if (isLogin && path === "/login") path = "/";
   return path;
 }
 
 function validateHashRouteUser(hash) {
-  const user = userStore.getUser();
-  if (!user && hash === "#/profile") hash = "#/login";
-  if (user && hash === "#/login") hash = "#/";
+  const isLogin = userStore.isLogin();
+  if (!isLogin && hash === "#/profile") hash = "#/login";
+  if (isLogin && hash === "#/login") hash = "#/";
   return hash;
 }
 
