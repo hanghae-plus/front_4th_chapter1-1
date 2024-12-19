@@ -15,7 +15,6 @@ export const loginEvents = () => {
 
     if (validateForm(email, password)) {
       saveLocalStorage("user", { username: email, email: "", bio: "" });
-      console.log(localStorage.getItem("user"));
       navigateTo(PATHS.PROFILE);
     }
   });

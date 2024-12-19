@@ -27,7 +27,6 @@ export const eventRegister = (path) => {
       loginEvents();
       break;
     default:
-      console.warn(`No events to register for path: ${path}`);
       break;
   }
 };
