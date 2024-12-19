@@ -18,15 +18,29 @@ const HASH_PATHNAME_COMPONENT_MAP = Object.freeze({
 
 const historyRouteGuard = (path) => {
   const isLogin = userManager.isLogin();
-  if (path === "/login" && isLogin) return "/";
-  if (path === "/profile" && !isLogin) return "/login";
+
+  if (path === "/login" && isLogin) {
+    return "/";
+  }
+
+  if (path === "/profile" && !isLogin) {
+    return "/login";
+  }
+
   return path;
 };
 
 const hashRouteGuard = (hash) => {
   const isLogin = userManager.isLogin();
-  if (hash === "#/login" && isLogin) return "#/";
-  if (hash === "#/profile" && !isLogin) return "#/login";
+
+  if (hash === "#/login" && isLogin) {
+    return "#/";
+  }
+
+  if (hash === "#/profile" && !isLogin) {
+    return "#/login";
+  }
+
   return hash;
 };
 
