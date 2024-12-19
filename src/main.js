@@ -234,11 +234,11 @@ const ProfilePage = () => `
 `;
 
 const state = {
-  isLoggedIn: JSON.parse(localStorage.getItem("isLoggedIn")) || false,
-  userData: JSON.parse(localStorage.getItem("userData")) || {
-    username: "testuser",
-    email: "a@a.aa",
-    bio: "자기소개입니다.",
+  isLoggedIn: JSON.parse(localStorage.getItem('isLoggedIn')) || false,
+  userData: JSON.parse(localStorage.getItem('userData')) || {
+    username: 'testuser',
+    email: 'a@a.aa',
+    bio: '자기소개입니다.',
   },
 };
 
@@ -246,137 +246,136 @@ const state = {
 const saveProfile = userData => {
   if (JSON.stringify(state.userData) !== JSON.stringify(userData)) {
     state.userData = { ...state.userData, ...userData };
-    localStorage.setItem("userData", JSON.stringify(state.userData));
+    localStorage.setItem('userData', JSON.stringify(state.userData));
 
     const { username, email, bio } = state.userData;
-    document.querySelector("#username").value = username;
-    document.querySelector("#email").value = email;
-    document.querySelector("#bio").value = bio;
+    document.querySelector('#username').value = username;
+    document.querySelector('#email').value = email;
+    document.querySelector('#bio').value = bio;
 
-    alert("프로필이 업데이트되었습니다.");
+    alert('프로필이 업데이트되었습니다.');
   }
 };
 
 const updateLogin = isLoggedIn => {
   state.isLoggedIn = isLoggedIn;
-  localStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn));
+  localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
 };
 
 const loadProfile = () => {
-  const savedData = localStorage.getItem("userData");
+  const savedData = localStorage.getItem('userData');
   if (savedData) {
     state.userData = JSON.parse(savedData);
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   loadProfile();
   renderNav();
   pageEventListeners();
 
   // hash 초기 경로 설정
-  const initialPath = window.location.hash.slice(1) || "/";
+  const initialPath = window.location.hash.slice(1) || '/';
   navigation(initialPath);
 
-  window.addEventListener("hashchange", router);
+  window.addEventListener('hashchange', router);
+
+  setTimeout(router, 0);
 });
 
 const pageEventListeners = () => {
-  document.body.removeEventListener("click", handleClick);
-  document.body.addEventListener("click", handleClick);
+  document.body.removeEventListener('click', handleClick);
+  document.body.addEventListener('click', handleClick);
 
-  document.body.removeEventListener("submit", handleSubmit);
-  document.body.addEventListener("submit", handleSubmit);
+  document.body.removeEventListener('submit', handleSubmit);
+  document.body.addEventListener('submit', handleSubmit);
 };
 
 const loginSubmitHandle = e => {
   e.preventDefault();
-  const userId = document.querySelector("#userId").value;
-  const password = document.querySelector("#password").value;
+  const userId = document.querySelector('#userId').value;
+  const password = document.querySelector('#password').value;
 
   if (userId && password) {
     updateLogin(true);
-    navigation("/profile");
+    navigation('/profile');
   } else {
-    alert("아이디와 비밀번호를 입력해주세요.");
+    alert('아이디와 비밀번호를 입력해주세요.');
   }
 };
 const handleClick = e => {
-  if (e.target.tagName === "A" && e.target.getAttribute("href")) {
+  if (e.target.tagName === 'A' && e.target.getAttribute('href')) {
     e.preventDefault();
-    const path = e.target.getAttribute("href");
+    const path = e.target.getAttribute('href');
     navigation(path);
   }
-  if (e.target.id === "logoutBtn") {
+  if (e.target.id === 'logoutBtn') {
     e.preventDefault();
     updateLogin(false);
-    navigation("/login");
+    navigation('/login');
   }
 };
 const handleSubmit = e => {
   e.preventDefault();
-  if (e.target.id === "loginForm") {
+  if (e.target.id === 'loginForm') {
     loginSubmitHandle(e);
-  } else if (e.target.id === "profileForm") {
-    const username = document.querySelector("#username").value;
-    const email = document.querySelector("#email").value;
-    const bio = document.querySelector("#bio").value;
+  } else if (e.target.id === 'profileForm') {
+    const username = document.querySelector('#username').value;
+    const email = document.querySelector('#email').value;
+    const bio = document.querySelector('#bio').value;
     saveProfile({ username, email, bio });
   }
 };
 
 const navigation = path => {
-  const validPaths = ["/", "/profile", "/login"];
-  if (path && !path.startsWith("/")) {
+  const validPaths = ['/', '/profile', '/login'];
+  if (path && !path.startsWith('/')) {
     path = `/${path}`;
   }
 
   if (validPaths.includes(path)) {
     window.location.hash = `#${path}`;
   } else {
-    window.location.hash = "#/404";
+    window.location.hash = '#/404';
   }
 };
 
 // router
 const router = () => {
   const pathName = window.location.pathname;
-  const validPathName = ["/", ""];
+  const validPathName = ['/', ''];
   // 잘못된 주소로 접근시 errorpage
   if (!validPathName.includes(pathName)) {
     window.location.replace(`${window.location.origin}/#/404`);
     return;
   }
   // hash 경로 바뀔때 호출
-  const path = window.location.hash.slice(1) || "/";
-  const validPaths = ["/", "/profile", "/login", "/404"];
+  const path = window.location.hash.slice(1) || '/';
+  const validPaths = ['/', '/profile', '/login', '/404'];
   // 경로별 페이지 렌더링
   let page;
 
   if (validPaths.includes(path)) {
-    if (path === "/profile") {
+    if (path === '/profile') {
       page = ProfilePage();
-    } else if (path === "/login") {
+    } else if (path === '/login') {
       page = LoginPage();
-    } else if (path === "/") {
+    } else if (path === '/') {
       page = MainPage();
-    } else if (path === "/404") {
+    } else if (path === '/404') {
       page = ErrorPage();
     }
   } else {
     page = ErrorPage();
-    window.location.hash = "#/404";
+    window.location.hash = '#/404';
   }
 
-  // login -> /login = /
-  if (path === "/login" && state.isLoggedIn) {
-    navigation("/");
-    return;
-  }
-
-  // !login -> /profile = /login
-  if (path === "/profile" && !state.isLoggedIn) {
-    navigation("/login");
+  // login -> /login = / , !login -> /profile = /login
+  if (
+    (path === '/login' && state.isLoggedIn) ||
+    (path === '/profile' && !state.isLoggedIn)
+  ) {
+    navigation(path === '/login' ? '/' : '/login');
     return;
   }
 
@@ -387,7 +386,7 @@ const router = () => {
 
 // navigation render
 const renderNav = () => {
-  const nav = document.querySelector("nav ul");
+  const nav = document.querySelector('nav ul');
   if (!nav) return;
 
   const isLoggedIn = state.isLoggedIn;
@@ -401,12 +400,3 @@ const renderNav = () => {
     }
   `;
 };
-
-// const routes = {
-//   "/": MainPage,
-//   "/login": LoginPage,
-//   "/profile": ProfilePage,
-//   "/404": ErrorPage,
-// };
-
-router();
