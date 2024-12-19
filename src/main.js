@@ -1,241 +1,186 @@
-const MainPage = () => `
-  <div class="bg-gray-100 min-h-screen flex justify-center">
-    <div class="max-w-md w-full">
-      <header class="bg-blue-600 text-white p-4 sticky top-0">
-        <h1 class="text-2xl font-bold">항해플러스</h1>
-      </header>
+import MainPage from "./pages/MainPage";
+import ProfilePage from "./pages/ProfilePage";
+import LoginPage from "./pages/LoginPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import { setUser, getUser, deleteUser } from "./store/useState.js";
 
-      <nav class="bg-white shadow-md p-2 sticky top-14">
-        <ul class="flex justify-around">
-          <li><a href="/" class="text-blue-600">홈</a></li>
-          <li><a href="/profile" class="text-gray-600">프로필</a></li>
-          <li><a href="#" class="text-gray-600">로그아웃</a></li>
-        </ul>
-      </nav>
+function createRouter(routes) {
+  return function (path) {
+    const route = routes[path] || routes["404"];
+    return route();
+  };
+}
 
-      <main class="p-4">
-        <div class="mb-4 bg-white rounded-lg shadow p-4">
-          <textarea class="w-full p-2 border rounded" placeholder="무슨 생각을 하고 계신가요?"></textarea>
-          <button class="mt-2 bg-blue-600 text-white px-4 py-2 rounded">게시</button>
-        </div>
+const routes = {
+  "/": () => MainPage(),
+  "/profile": () => ProfilePage(),
+  "/login": () => LoginPage(),
+  404: () => NotFoundPage(),
+};
 
-        <div class="space-y-4">
+const hashRoutes = {
+  "#/": () => MainPage(),
+  "#/profile": () => ProfilePage(),
+  "#/login": () => LoginPage(),
+  404: () => NotFoundPage(),
+};
 
-          <div class="bg-white rounded-lg shadow p-4">
-            <div class="flex items-center mb-2">
-              <img src="https://via.placeholder.com/40" alt="프로필" class="rounded-full mr-2">
-              <div>
-                <p class="font-bold">홍길동</p>
-                <p class="text-sm text-gray-500">5분 전</p>
-              </div>
-            </div>
-            <p>오늘 날씨가 정말 좋네요. 다들 좋은 하루 보내세요!</p>
-            <div class="mt-2 flex justify-between text-gray-500">
-              <button>좋아요</button>
-              <button>댓글</button>
-              <button>공유</button>
-            </div>
-          </div>
+const router = createRouter(routes);
+const hashRouter = createRouter(hashRoutes);
 
-          <div class="bg-white rounded-lg shadow p-4">
-            <div class="flex items-center mb-2">
-              <img src="https://via.placeholder.com/40" alt="프로필" class="rounded-full mr-2">
-              <div>
-                <p class="font-bold">김철수</p>
-                <p class="text-sm text-gray-500">15분 전</p>
-              </div>
-            </div>
-            <p>새로운 프로젝트를 시작했어요. 열심히 코딩 중입니다!</p>
-            <div class="mt-2 flex justify-between text-gray-500">
-              <button>좋아요</button>
-              <button>댓글</button>
-              <button>공유</button>
-            </div>
-          </div>
+function updateContent() {
+  let path = window.location.pathname;
+  let hash = window.location.hash;
+  const user = getUser();
 
-          <div class="bg-white rounded-lg shadow p-4">
-            <div class="flex items-center mb-2">
-              <img src="https://via.placeholder.com/40" alt="프로필" class="rounded-full mr-2">
-              <div>
-                <p class="font-bold">이영희</p>
-                <p class="text-sm text-gray-500">30분 전</p>
-              </div>
-            </div>
-            <p>오늘 점심 메뉴 추천 받습니다. 뭐가 좋을까요?</p>
-            <div class="mt-2 flex justify-between text-gray-500">
-              <button>좋아요</button>
-              <button>댓글</button>
-              <button>공유</button>
-            </div>
-          </div>
+  // 로그인된 사용자가 로그인 페이지 접근 시 메인 페이지로 리다이렉트
+  if (user && (path === "/login" || hash === "#/login")) {
+    if (hash) {
+      renderHash("#/");
+    } else {
+      render("/");
+    }
+    return;
+  }
 
-          <div class="bg-white rounded-lg shadow p-4">
-            <div class="flex items-center mb-2">
-              <img src="https://via.placeholder.com/40" alt="프로필" class="rounded-full mr-2">
-              <div>
-                <p class="font-bold">박민수</p>
-                <p class="text-sm text-gray-500">1시간 전</p>
-              </div>
-            </div>
-            <p>주말에 등산 가실 분 계신가요? 함께 가요!</p>
-            <div class="mt-2 flex justify-between text-gray-500">
-              <button>좋아요</button>
-              <button>댓글</button>
-              <button>공유</button>
-            </div>
-          </div>
+  // 비로그인 사용자가 /profile 경로 접근 시 로그인 페이지로 리다이렉트
+  if (!user && (path === "/profile" || hash === "#/profile")) {
+    if (hash) {
+      renderHash("#/login");
+    } else {
+      render("/login");
+    }
+    return; // 추가 렌더링 방지
+  }
 
-          <div class="bg-white rounded-lg shadow p-4">
-            <div class="flex items-center mb-2">
-              <img src="https://via.placeholder.com/40" alt="프로필" class="rounded-full mr-2">
-              <div>
-                <p class="font-bold">정수연</p>
-                <p class="text-sm text-gray-500">2시간 전</p>
-              </div>
-            </div>
-            <p>새로 나온 영화 재미있대요. 같이 보러 갈 사람?</p>
-            <div class="mt-2 flex justify-between text-gray-500">
-              <button>좋아요</button>
-              <button>댓글</button>
-              <button>공유</button>
-            </div>
-          </div>
-        </div>
-      </main>
+  if (hash) {
+    renderHash(hash);
+  } else {
+    render(path);
+  }
 
-      <footer class="bg-gray-200 p-4 text-center">
-        <p>&copy; 2024 항해플러스. All rights reserved.</p>
-      </footer>
-    </div>
-  </div>
-`;
+  // 프로필 페이지인 경우 사용자 정보 렌더링
+  if ((path === "/profile" || hash === "#/profile") && user) {
+    const { username, email, bio } = user;
+    document.getElementById("username").value = username;
+    document.getElementById("email").value = email;
+    document.getElementById("bio").value = bio;
+  }
+}
 
-const ErrorPage = () => `
-  <main class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-md w-full text-center" style="max-width: 480px">
-      <h1 class="text-2xl font-bold text-blue-600 mb-4">항해플러스</h1>
-      <p class="text-4xl font-bold text-gray-800 mb-4">404</p>
-      <p class="text-xl text-gray-600 mb-8">페이지를 찾을 수 없습니다</p>
-      <p class="text-gray-600 mb-8">
-        요청하신 페이지가 존재하지 않거나 이동되었을 수 있습니다.
-      </p>
-      <a href="/" class="bg-blue-600 text-white px-4 py-2 rounded font-bold">
-        홈으로 돌아가기
-      </a>
-    </div>
-  </main>
-`;
+// submit 이벤트 처리 함수
+function handleSubmitEvent(event) {
+  event.preventDefault();
 
-const LoginPage = () => `
-  <main class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-      <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
-      <form>
-        <div class="mb-4">
-          <input type="text" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
-        </div>
-        <div class="mb-6">
-          <input type="password" placeholder="비밀번호" class="w-full p-2 border rounded">
-        </div>
-        <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</button>
-      </form>
-      <div class="mt-4 text-center">
-        <a href="#" class="text-blue-600 text-sm">비밀번호를 잊으셨나요?</a>
-      </div>
-      <hr class="my-6">
-      <div class="text-center">
-        <button class="bg-green-500 text-white px-4 py-2 rounded font-bold">새 계정 만들기</button>
-      </div>
-    </div>
-  </main>
-`;
+  const target = event.target; // 이벤트가 발생한 요소
+  const isHashRouting = window.location.hash !== ""; // 해시 라우팅 여부 확인
 
-const ProfilePage = () => `
-  <div id="root">
-    <div class="bg-gray-100 min-h-screen flex justify-center">
-      <div class="max-w-md w-full">
-        <header class="bg-blue-600 text-white p-4 sticky top-0">
-          <h1 class="text-2xl font-bold">항해플러스</h1>
-        </header>
+  // 로그인 이벤트 처리
+  if (target.id === "login-form") {
+    const username = document.getElementById("username").value;
 
-        <nav class="bg-white shadow-md p-2 sticky top-14">
-          <ul class="flex justify-around">
-            <li><a href="/" class="text-gray-600">홈</a></li>
-            <li><a href="/profile" class="text-blue-600">프로필</a></li>
-            <li><a href="#" class="text-gray-600">로그아웃</a></li>
-          </ul>
-        </nav>
+    // 로컬스토리지에 저장
+    if (username) {
+      setUser({ username, email: "", bio: "" });
 
-        <main class="p-4">
-          <div class="bg-white p-8 rounded-lg shadow-md">
-            <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
-              내 프로필
-            </h2>
-            <form>
-              <div class="mb-4">
-                <label
-                  for="username"
-                  class="block text-gray-700 text-sm font-bold mb-2"
-                  >사용자 이름</label
-                >
-                <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  value="홍길동"
-                  class="w-full p-2 border rounded"
-                />
-              </div>
-              <div class="mb-4">
-                <label
-                  for="email"
-                  class="block text-gray-700 text-sm font-bold mb-2"
-                  >이메일</label
-                >
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value="hong@example.com"
-                  class="w-full p-2 border rounded"
-                />
-              </div>
-              <div class="mb-6">
-                <label
-                  for="bio"
-                  class="block text-gray-700 text-sm font-bold mb-2"
-                  >자기소개</label
-                >
-                <textarea
-                  id="bio"
-                  name="bio"
-                  rows="4"
-                  class="w-full p-2 border rounded"
-                >
-안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.</textarea
-                >
-              </div>
-              <button
-                type="submit"
-                class="w-full bg-blue-600 text-white p-2 rounded font-bold"
-              >
-                프로필 업데이트
-              </button>
-            </form>
-          </div>
-        </main>
+      updateContent();
 
-        <footer class="bg-gray-200 p-4 text-center">
-          <p>&copy; 2024 항해플러스. All rights reserved.</p>
-        </footer>
-      </div>
-    </div>
-  </div>
-`;
+      if (isHashRouting) {
+        renderHash("#/profile");
+      } else {
+        render("/profile");
+      }
+    } else {
+      console.error("사용자 ID 또는 비밀번호가 비어 있습니다.");
+    }
+  } else if (target.id === "profile-form") {
+    // 프로필 업데이트 이벤트 처리
+    const username = document.getElementById("username").value;
+    const email = document.getElementById("email").value;
+    const bio = document.getElementById("bio").value;
 
-document.body.innerHTML = `
-  ${MainPage()}
-  ${ProfilePage()}
-  ${LoginPage()}
-  ${ErrorPage()}
-`;
+    setUser({ username, email, bio });
+  }
+}
+
+// 클릭 이벤트 처리
+function handleClickEvent(event) {
+  if (event.target.type === "submit") return;
+  event.preventDefault();
+
+  const target = event.target; // 이벤트가 발생한 요소
+  const isHashRouting = window.location.hash !== ""; // 해시 라우팅 여부 확인
+
+  if (target.id === "logout") {
+    logout(isHashRouting);
+  } else if (target.id === "profile") {
+    moveToProfile(isHashRouting);
+  } else if (target.id === "home") {
+    moveToHome(isHashRouting);
+  }
+}
+
+function logout(isHashRouting) {
+  deleteUser();
+  if (isHashRouting) {
+    renderHash("#/login");
+  } else {
+    render("/login");
+  }
+}
+
+function moveToProfile(isHashRouting) {
+  if (isHashRouting) {
+    renderHash("#/profile");
+  } else {
+    render("/profile");
+  }
+
+  const user = getUser();
+
+  if (!user) {
+    console.error("사용자 정보가 없습니다.");
+    return;
+  }
+
+  // 사용자 정보 입력
+  const usernameField = document.getElementById("username");
+  const emailField = document.getElementById("email");
+  const bioField = document.getElementById("bio");
+
+  if (usernameField) usernameField.value = JSON.parse(user).username || "";
+  if (emailField) emailField.value = JSON.parse(user).email || "";
+  if (bioField) bioField.value = JSON.parse(user).bio || "";
+}
+
+function moveToHome(isHashRouting) {
+  if (isHashRouting) {
+    renderHash("#/");
+  } else {
+    render("/");
+  }
+}
+
+// 렌더 함수
+function render(path) {
+  console.log("path", path);
+  window.history.pushState(null, "", path);
+  document.getElementById("root").innerHTML = router(path);
+}
+
+function renderHash(hash) {
+  window.history.pushState(null, "", hash);
+  document.getElementById("root").innerHTML = hashRouter(hash);
+}
+
+const root = document.getElementById("root");
+root.removeEventListener("submit", handleSubmitEvent);
+root.addEventListener("submit", handleSubmitEvent);
+
+// 클릭 이벤트도 정리 후 추가
+root.removeEventListener("click", handleClickEvent);
+root.addEventListener("click", handleClickEvent);
+
+window.addEventListener("hashchange", updateContent);
+window.addEventListener("popstate", updateContent);
+window.addEventListener("load", updateContent);
