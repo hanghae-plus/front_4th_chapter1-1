@@ -1,7 +1,5 @@
-import { createRouter } from "@/router/createRouter";
+import Router from "@/router/Router";
 import userStore from "@/store/userStore";
-
-const { navigator } = createRouter();
 
 export function clickEventHandler(e) {
   const { id, tagName } = e.target;
@@ -14,6 +12,6 @@ export function clickEventHandler(e) {
       userStore.deleteUser();
       path = "/login";
     }
-    navigator(path);
+    Router.navigator(path);
   }
 }

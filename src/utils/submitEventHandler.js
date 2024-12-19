@@ -1,7 +1,5 @@
-import { createRouter } from "@/router/createRouter";
+import Router from "@/router/Router";
 import userStore from "@/store/userStore";
-
-const { navigator } = createRouter();
 
 export function submitEventHandler(e) {
   e.preventDefault();
@@ -22,7 +20,7 @@ function login(formData) {
   const username = formData.get("username");
   if (username) {
     userStore.setUser({ username, email: "", bio: "" });
-    navigator("/profile");
+    Router.navigator("/profile");
   }
 }
 
@@ -31,5 +29,5 @@ function updateProfile(formData) {
   const email = formData.get("email");
   const bio = formData.get("bio");
   userStore.setUser({ username, email, bio });
-  navigator("/profile");
+  Router.navigator("/profile");
 }
