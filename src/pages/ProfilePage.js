@@ -1,6 +1,6 @@
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import userStore from "../store/userStore";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import userStore from "@/store/userStore";
 
 const ProfilePage = () => {
   const { username, email, bio } = userStore.getUser();

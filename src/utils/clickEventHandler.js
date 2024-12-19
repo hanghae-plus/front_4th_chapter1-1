@@ -1,4 +1,4 @@
-import Router from "@/router/Router";
+import { navigator } from "@/router/router";
 import userStore from "@/store/userStore";
 
 export function clickEventHandler(e) {
@@ -12,6 +12,6 @@ export function clickEventHandler(e) {
       userStore.deleteUser();
       path = "/login";
     }
-    Router.navigator(path);
+    navigator(path);
   }
 }

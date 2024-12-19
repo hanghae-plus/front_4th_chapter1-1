@@ -1,29 +1,22 @@
-class Router {
-  routes = [];
+let routes = [];
+let target = null;
 
-  constructor() {
-    if (Router.instance) {
-      return Router.instance;
-    }
-    Router.instance = Router;
-  }
-
-  addRoutes = (path, element) => {
-    this.routes = [...this.routes, { path, element }];
-  };
-
-  navigator = (path) => {
-    const route =
-      this.routes.find((route) => route.path === path) ||
-      this.routes.find((route) => route.path === "*");
-    window.history.pushState(null, "", path);
-    this.render(route);
-  };
-
-  render = (route) => {
-    const root = document.getElementById("root");
-    root.innerHTML = route.element();
-  };
+function render(route) {
+  target.innerHTML = route.element();
 }
 
-export default new Router();
+export function setRenderTarget(element) {
+  target = element;
+}
+
+export function addRoutes(path, element) {
+  routes = [...routes, { path, element }];
+}
+
+export function navigator(path) {
+  const route =
+    routes.find((route) => route.path === path) ||
+    routes.find((route) => route.path === "*");
+  window.history.pushState(null, "", path);
+  render(route);
+}
