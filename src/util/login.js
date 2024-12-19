@@ -32,14 +32,15 @@ class Login {
                 error++;
             }
 
-            if (!passwordValue) {
-                alert("비밀번호를 입력해주세요.");
-                error++;
-            }
+            // if (!passwordValue) {
+            //     alert("비밀번호를 입력해주세요.");
+            //     error++;
+            // }
             
             if (error === 0) {
                 localStorage.setItem("user", JSON.stringify({username: usernameValue, email: "", bio: ""}));
-                router.navigateTo("/profile");
+                if(localStorage.getItem("user")) router.navigateTo("/profile");
+                
             }
         })
     }

@@ -5,21 +5,18 @@ import ErrorPage from "../pages/ErrorPage";
 
 class Router {
     constructor() {
-        this.updateRoute();
+        this.setRoute();
         this.isLoggedIn = !!localStorage.getItem("user");
         window.addEventListener("popstate", this.handlePopState.bind(this));
     }
 
-    updateRoute() {
+    setRoute() {
         this.isLoggedIn = !!localStorage.getItem("user");
-        this.routes = this.isLoggedIn ? [
-            { path: "/", name: "홈", id: "home", page: MainPage },
-            { path: "/profile", name: "프로필", id: "profile", page: ProfilePage },
-            { path: "/login", name: "로그아웃", id: "logout", page: LoginPage }
-        ] : [
-            { path: "/", name: "홈", id: "home", page: MainPage },
-            { path: "/login", name: "로그인", id: "login", page: LoginPage }
-        ];
+        this.routes = [
+            { path: "/", page: MainPage },
+            { path: "/profile", page: ProfilePage },
+            { path: "/login",  page: LoginPage}
+        ]
     }
 
     addRoute(path, handler) {
@@ -27,13 +24,6 @@ class Router {
     }
 
     navigateTo(path) {        
-        if (path === "/login" && this.isLoggedIn) {
-            localStorage.removeItem("user");
-            this.updateRoute();
-            this.handleRoute("/login");
-        }
-
-        this.updateRoute();
         history.pushState(null, null, path);
         this.handleRoute(path);
     }
@@ -46,13 +36,23 @@ class Router {
         const route = this.routes.find((route) => route.path === path);
         const $root = document.querySelector("#root");
 
-        if (path === "/profile" && !this.isLoggedIn) {
-            history.pushState(null, null, "/login")
+        if (path === "/profile" && !localStorage.getItem("user")) {
+            this.navigateTo("/login");
+            return;
+        } else if (path === "/logout") {
+            this.handleLogout();
+            return;
         } else if (route && route.page) {
             new route.page($root);
         } else {
             new ErrorPage($root);
         }
+    }
+
+    handleLogout() {
+        localStorage.removeItem("user");  
+        this.setRoute(); 
+        this.navigateTo("/login");
     }
 
     getRoutes() {
