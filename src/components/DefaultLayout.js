@@ -1,11 +1,14 @@
 import Header from "./Header";
 import Footer from "./Footer";
 
-const DefaultLayout = (component) => `
-    <div class="max-w-md w-full">
+const DefaultLayout = (component) => {
+  return `
+      <div>
         ${Header()}
-        ${component}
+        ${component()}  
         ${Footer()}
-    </div>
-`;
+      </div>
+    `;
+};
+
 export default DefaultLayout;
