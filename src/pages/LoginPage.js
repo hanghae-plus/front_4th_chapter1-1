@@ -1,3 +1,4 @@
+import { PlainLayout } from "@/layout";
 import { setUser, getUser } from "@/state/handle-state";
 import { router } from "@/router";
 
@@ -12,7 +13,6 @@ export const renderLoginPage = () => {
 
 const LoginPage = () => {
   const content = `
-    <main class="bg-gray-100 flex items-center justify-center min-h-screen" id="root">
       <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
         <form id="login-form">
@@ -32,12 +32,11 @@ const LoginPage = () => {
           <button class="bg-green-500 text-white px-4 py-2 rounded font-bold">새 계정 만들기</button>
         </div>
       </div>
-    </main>
   `;
 
   document.addEventListener("submit", handleSubmitLogin);
 
-  return content;
+  return PlainLayout(content);
 };
 
 const handleSubmitLogin = (e) => {
