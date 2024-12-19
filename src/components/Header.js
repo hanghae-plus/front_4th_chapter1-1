@@ -1,5 +1,5 @@
 import userStore from "../store/UserStore.js";
-import router from "../router/router";
+import router from "../router/Router.js";
 
 const Header = () => {
   const navItemList = [
