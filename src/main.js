@@ -111,7 +111,7 @@ const MainPage = () => `
 `;
 
 const ErrorPage = () => `
-    <main id="root" class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <main class="bg-gray-100 flex items-center justify-center min-h-screen">
       <div class="bg-white p-8 rounded-lg shadow-md w-full text-center" style="max-width: 480px">
         <h1 class="text-2xl font-bold text-blue-600 mb-4">항해플러스</h1>
         <p class="text-4xl font-bold text-gray-800 mb-4">404</p>
@@ -127,15 +127,15 @@ const ErrorPage = () => `
 `;
 
 const LoginPage = () => `
-    <main id="root" class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <main class="bg-gray-100 flex items-center justify-center min-h-screen">
       <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
-        <form id="loginForm">
+        <form id="login-form">
           <div class="mb-4">
-            <input id="userId" type="text" placeholder="사용자 이름" class="w-full p-2 border rounded">
+            <input id="username" type="text" autocomplete="username" placeholder="사용자 이름" class="w-full p-2 border rounded">
           </div>
           <div class="mb-6">
-            <input id="password" type="password" placeholder="비밀번호" class="w-full p-2 border rounded">
+            <input id="password" type="password" autocomplete="current-password" placeholder="비밀번호" class="w-full p-2 border rounded">
           </div>
           <button type="submit" id="loginConfirm" class="w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</button>
         </form>
@@ -182,7 +182,7 @@ const ProfilePage = () => `
                   type="text"
                   id="username"
                   name="username"
-                  value="${state.userData.username}"
+                  value="${state.user.username}"
                   autocomplete="username"
                   class="w-full p-2 border rounded"
                 />
@@ -197,7 +197,7 @@ const ProfilePage = () => `
                   type="email"
                   id="email"
                   name="email"
-                  value="${state.userData.email}"
+                  value="${state.user.email}"
                   autocomplete="email"
                   class="w-full p-2 border rounded"
                 />
@@ -213,7 +213,7 @@ const ProfilePage = () => `
                   name="bio"
                   rows="4"
                   class="w-full p-2 border rounded"
-                >${state.userData.bio}</textarea>
+                >${state.user.bio}</textarea>
               </div>
               <button
                 type="submit"
@@ -234,7 +234,7 @@ const ProfilePage = () => `
 `;
 const state = {
   isLoggedIn: JSON.parse(localStorage.getItem('isLoggedIn')) || false,
-  userData: JSON.parse(localStorage.getItem('userData')) || {
+  user: JSON.parse(localStorage.getItem('user')) || {
     username: 'testuser',
     email: 'a@a.aa',
     bio: '자기소개입니다.',
@@ -242,12 +242,12 @@ const state = {
 };
 
 // profile save / update
-const saveProfile = userData => {
-  if (JSON.stringify(state.userData) !== JSON.stringify(userData)) {
-    state.userData = { ...state.userData, ...userData };
-    localStorage.setItem('userData', JSON.stringify(state.userData));
+const saveProfile = user => {
+  if (JSON.stringify(state.user) !== JSON.stringify(user)) {
+    state.user = { ...state.user, ...user };
+    localStorage.setItem('user', JSON.stringify(state.user));
 
-    const { username, email, bio } = state.userData;
+    const { username, email, bio } = state.user;
     document.querySelector('#username').value = username;
     document.querySelector('#email').value = email;
     document.querySelector('#bio').value = bio;
@@ -262,23 +262,11 @@ const updateLogin = isLoggedIn => {
 };
 
 const loadProfile = () => {
-  const savedData = localStorage.getItem('userData');
+  const savedData = localStorage.getItem('user');
   if (savedData) {
-    state.userData = JSON.parse(savedData);
+    state.user = JSON.parse(savedData);
   }
 };
-
-document.addEventListener('DOMContentLoaded', () => {
-  loadProfile();
-  renderNav();
-  pageEventListeners();
-
-  // hash 초기 경로 설정
-  const initialPath = window.location.hash.slice(1) || '/';
-  navigation(initialPath);
-
-  window.addEventListener('hashchange', router);
-});
 
 const pageEventListeners = () => {
   document.body.removeEventListener('click', handleClick);
@@ -290,10 +278,10 @@ const pageEventListeners = () => {
 
 const loginSubmitHandle = e => {
   e.preventDefault();
-  const userId = document.querySelector('#userId').value;
+  const username = document.querySelector('#username').value;
   const password = document.querySelector('#password').value;
 
-  if (userId && password) {
+  if (username && password) {
     updateLogin(true);
     navigation('/profile');
   } else {
@@ -314,7 +302,7 @@ const handleClick = e => {
 };
 const handleSubmit = e => {
   e.preventDefault();
-  if (e.target.id === 'loginForm') {
+  if (e.target.id === 'login-form') {
     loginSubmitHandle(e);
   } else if (e.target.id === 'profileForm') {
     const username = document.querySelector('#username').value;
@@ -325,9 +313,12 @@ const handleSubmit = e => {
 };
 
 const navigation = path => {
+  console.log('path -> ', path);
+  console.log('hash path ->', window.location.hash);
+
   const validPaths = ['/', '/profile', '/login'];
   if (path && !path.startsWith('/')) {
-    path = `/${path}`;
+    path = `/${path}/`;
   }
 
   if (validPaths.includes(path)) {
@@ -372,22 +363,17 @@ const router = () => {
     (path === '/login' && state.isLoggedIn) ||
     (path === '/profile' && !state.isLoggedIn)
   ) {
-    navigation(path === '/login' ? '/' : '/login');
+    setTimeout(() => {
+      navigation(path === '/login' ? '/' : '/login');
+    }, 0);
     return;
   }
 
-  document.body.innerHTML = page;
-
-  if (path !== '/login' && path !== '/404') {
-    renderHeader();
-  }
+  // document.body.innerHTML = page;
+  const root = document.getElementById('root');
+  root.innerHTML = page;
   renderNav();
   pageEventListeners();
-};
-
-const renderHeader = () => {
-  const header = document.querySelector('header');
-  if (!header) return;
 };
 
 // navigation render
@@ -419,4 +405,18 @@ const renderNav = () => {
   });
 };
 
-router();
+const main = () => {
+  loadProfile();
+  renderNav();
+  pageEventListeners();
+
+  // hash 초기 경로 설정
+  const initialPath = window.location.hash.slice(1) || '/';
+  navigation(initialPath);
+
+  router();
+  window.addEventListener('hashchange', router);
+  window.addEventListener('popstate', router);
+};
+
+main();

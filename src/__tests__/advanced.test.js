@@ -19,7 +19,7 @@ beforeAll(async () => {
 afterAll(() => {
   // 각 테스트 전에 root 엘리먼트 초기화
   document.getElementById('root').innerHTML = '';
-  localStorage.removeItem('userData');
+  localStorage.removeItem('user');
 });
 
 const goTo = path => {
@@ -41,23 +41,23 @@ describe('심화과제 테스트', () => {
 
   describe('2. 라우트 가드 구현', () => {
     it('비로그인 사용자가 프로필 페이지에 접근시 로그인 페이지로 리다이렉트 한다.', async () => {
-      goTo('#/profile');
+      goTo('/profile');
 
       expect(document.body.innerHTML).toContain('로그인');
     });
 
     it('로그인된 사용자가 로그인 페이지에 접근시 메인 페이지로 리다이렉트 한다.', async () => {
-      goTo('#/login');
+      goTo('/login');
 
-      const loginForm = document.getElementById('loginForm');
+      const loginForm = document.getElementById('login-form');
 
-      await user.type(document.getElementById('userId'), 'testuser');
+      await user.type(document.getElementById('username'), 'testuser');
 
       loginForm.dispatchEvent(
         new SubmitEvent('submit', { bubbles: true, cancelable: true }),
       );
 
-      goTo('#/login');
+      goTo('/login');
       expect(
         document.querySelector('nav .text-blue-600.font-bold').innerHTML,
       ).toContain('홈');
@@ -66,7 +66,7 @@ describe('심화과제 테스트', () => {
 
   describe('3. 이벤트 위임 활용', () => {
     it('네비게이션의 링크를 클릭에서 이벤트 전파를 막았을 때, 아무일도 일어나지 않는다.', async () => {
-      goTo('#/');
+      goTo('/');
 
       const firstTarget = document.querySelector('nav a[href="/login"]');
 
