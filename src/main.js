@@ -1,12 +1,12 @@
 import LoginPage from "./page/LoginPage";
 import MainPage from "./page/MainPage";
 import ProfilePage from "./page/ProfilePage";
-import router from "./router/Router";
+import browserRouter from "./router/Router";
 import userStore from "./store/userStore";
 
-router.addRoute("/", new MainPage());
-router.addRoute("/login", new LoginPage());
-router.addRoute("/profile", new ProfilePage());
+browserRouter.addRoute("/", new MainPage(browserRouter));
+browserRouter.addRoute("/login", new LoginPage(browserRouter));
+browserRouter.addRoute("/profile", new ProfilePage(browserRouter));
 
 if (localStorage.getItem("user")) {
   const { username, email, bio } = JSON.parse(localStorage.getItem("user"));
@@ -17,4 +17,4 @@ if (localStorage.getItem("user")) {
   });
 }
 
-router.navigateTo(window.location.pathname);
+browserRouter.navigateTo(window.location.pathname);
