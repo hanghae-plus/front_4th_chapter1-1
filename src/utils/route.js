@@ -62,16 +62,3 @@ export class HashRouter {
     }
   }
 }
-
-export function navbarEventController(router) {
-  const navbar = document.querySelector("nav");
-  if (navbar) {
-    navbar.addEventListener("click", (e) => {
-      if (e.target.tagName === "A") {
-        e.preventDefault();
-        const path = e.target.getAttribute("href");
-        router.navigateTo(path);
-      }
-    });
-  }
-}
