@@ -233,7 +233,6 @@ const ProfilePage = () => `
   </div>
 `;
 const state = {
-  isLoggedIn: JSON.parse(localStorage.getItem('user')) || false,
   user: JSON.parse(localStorage.getItem('user')) || {
     username: '',
     email: '',
