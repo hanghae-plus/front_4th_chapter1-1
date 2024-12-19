@@ -2,19 +2,15 @@ import { ErrorPage } from "../pages/errorPage.js";
 import { getLocalStorage } from "../storage/storage.js";
 import { eventRegister, PATHS, Routes } from "./routes.js";
 
-// 초기 URL 모드
-let isHashMode = false;
-
 const getCurrentPath = () => {
-  if (isHashMode) {
+  if (window.location.hash) {
     return window.location.hash.slice(1) || "/";
   } else {
     return window.location.pathname;
   }
 };
 
-export const resolveRoute = (isHash = false) => {
-  isHashMode = isHash;
+export const resolveRoute = () => {
   const path = getCurrentPath();
   const user = getLocalStorage("user");
   const root = document.getElementById("root");
@@ -38,10 +34,10 @@ export const resolveRoute = (isHash = false) => {
 };
 
 export const navigateTo = (path) => {
-  if (isHashMode) {
+  if (window.location.hash) {
     window.location.hash = `#${path}`;
   } else {
     window.history.pushState(null, null, path);
   }
-  resolveRoute(isHashMode);
+  resolveRoute();
 };
