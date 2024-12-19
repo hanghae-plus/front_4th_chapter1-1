@@ -1,4 +1,5 @@
 import { postsStore } from "../stores/posts-store";
+import { renderChild } from "../utils/element";
 
 class MainPage extends HTMLElement {
   constructor() {
@@ -10,9 +11,9 @@ class MainPage extends HTMLElement {
     this.render();
   }
 
-  render() {
+  get element() {
     const posts = postsStore.getState();
-    const element = (
+    return (
       <div class="bg-gray-100 min-h-screen flex justify-center">
         <div class="max-w-md w-full">
           <header-component></header-component>
@@ -29,12 +30,10 @@ class MainPage extends HTMLElement {
         </div>
       </div>
     );
+  }
 
-    if (this.firstChild) {
-      this.replaceChild(element, this.firstChild);
-    } else {
-      this.appendChild(element);
-    }
+  render() {
+    renderChild(this);
   }
 }
 

@@ -1,3 +1,5 @@
+import { renderChild } from "../utils/element";
+
 class HeaderComponent extends HTMLElement {
   constructor() {
     super();
@@ -7,18 +9,16 @@ class HeaderComponent extends HTMLElement {
     this.render();
   }
 
-  render() {
-    const element = (
+  get element() {
+    return (
       <header class="bg-blue-600 text-white p-4 sticky top-0">
         <h1 class="text-2xl font-bold">항해플러스</h1>
       </header>
     );
+  }
 
-    if (this.firstChild) {
-      this.replaceChild(element, this.firstChild);
-    } else {
-      this.appendChild(element);
-    }
+  render() {
+    renderChild(this);
   }
 }
 

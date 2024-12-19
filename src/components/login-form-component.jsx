@@ -1,21 +1,10 @@
 import { authStoreActions } from "@/stores/auth-store";
 import { navigateTo } from "@/utils/router";
+import { renderChild } from "../utils/element";
 
 class LoginFormComponent extends HTMLElement {
   constructor() {
     super();
-  }
-
-  addEvent() {
-    const loginForm = this.querySelector("#login-form");
-
-    this.addEventListener("submit", (event) => {
-      event.preventDefault();
-
-      if (event.target === loginForm) {
-        this.handleLogin();
-      }
-    });
   }
 
   connectedCallback() {
@@ -40,8 +29,8 @@ class LoginFormComponent extends HTMLElement {
     authStoreActions.login(user);
   }
 
-  render() {
-    const element = (
+  get element() {
+    return (
       <form id="login-form">
         <div class="mb-4">
           <input
@@ -69,12 +58,22 @@ class LoginFormComponent extends HTMLElement {
         </button>
       </form>
     );
+  }
 
-    if (this.firstChild) {
-      this.replaceChild(element, this.firstChild);
-    } else {
-      this.appendChild(element);
-    }
+  addEvent() {
+    const loginForm = this.querySelector("#login-form");
+
+    this.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      if (event.target === loginForm) {
+        this.handleLogin();
+      }
+    });
+  }
+
+  render() {
+    renderChild(this);
     this.addEvent();
   }
 }

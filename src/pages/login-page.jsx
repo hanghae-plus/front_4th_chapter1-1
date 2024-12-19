@@ -1,28 +1,16 @@
-import { authStore } from "@/stores/auth-store";
-import { navigateTo } from "@/utils/router";
+import { renderChild } from "../utils/element";
 
 class LoginPage extends HTMLElement {
   constructor() {
     super();
-    authStore.subscribe(this.render.bind(this));
   }
 
   connectedCallback() {
     this.render();
   }
 
-  disconnectedCallback() {
-    authStore.unsubscribe(this.render.bind(this));
-  }
-
-  render() {
-    const { isLogin } = authStore.getState();
-
-    if (isLogin) {
-      navigateTo(window.isHash ? "#/" : "/", { hash: window.isHash });
-    }
-
-    const element = (
+  get element() {
+    return (
       <main class="bg-gray-100 flex items-center justify-center min-h-screen">
         <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
           <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">
@@ -43,12 +31,10 @@ class LoginPage extends HTMLElement {
         </div>
       </main>
     );
+  }
 
-    if (this.firstChild) {
-      this.replaceChild(element, this.firstChild);
-    } else {
-      this.appendChild(element);
-    }
+  render() {
+    renderChild(this);
   }
 }
 

@@ -1,33 +1,14 @@
 import { authStore, authStoreActions } from "@/stores/auth-store";
 import { navigateTo } from "@/utils/router";
+import { renderChild } from "../utils/element";
 
 class ProfileFormComponent extends HTMLElement {
   constructor() {
     super();
-    authStore.subscribe(this.render.bind(this));
-  }
-
-  addEvent() {
-    const profileForm = this.querySelector("#profile-form");
-
-    const handleSubmit = (event) => {
-      if (event.target === profileForm) {
-        event.preventDefault();
-
-        this.handleUpdateProfile();
-      }
-    };
-
-    this.removeEventListener("submit", handleSubmit);
-    this.addEventListener("submit", handleSubmit);
   }
 
   connectedCallback() {
     this.render();
-  }
-
-  disconnectedCallback() {
-    authStore.unsubscribe(this.render.bind(this));
   }
 
   handleUpdateProfile() {
@@ -45,17 +26,11 @@ class ProfileFormComponent extends HTMLElement {
     navigateTo("/profile");
   }
 
-  render() {
-    const { isLogin, user } = authStore.getState();
-
-    if (!isLogin) {
-      return;
-    }
-
+  get element() {
+    const { user } = authStore.getState();
     const { username, email, bio } = user;
-
-    const element = (
-      <form id="profile-form" onSubmit={this.handleUpdateProfile}>
+    return (
+      <form id="profile-form">
         <div class="mb-4">
           <label
             for="username"
@@ -104,12 +79,25 @@ class ProfileFormComponent extends HTMLElement {
         </button>
       </form>
     );
+  }
 
-    if (this.firstChild) {
-      this.replaceChild(element, this.firstChild);
-    } else {
-      this.appendChild(element);
-    }
+  addEvent() {
+    const profileForm = this.querySelector("#profile-form");
+
+    const handleSubmit = (event) => {
+      if (event.target === profileForm) {
+        event.preventDefault();
+
+        this.handleUpdateProfile();
+      }
+    };
+
+    this.removeEventListener("submit", handleSubmit);
+    this.addEventListener("submit", handleSubmit);
+  }
+
+  render() {
+    renderChild(this, this.element);
     this.addEvent();
   }
 }

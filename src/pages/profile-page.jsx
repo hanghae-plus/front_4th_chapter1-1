@@ -1,5 +1,4 @@
-import { authStore } from "@/stores/auth-store";
-import { navigateTo } from "@/utils/router";
+import { renderChild } from "../utils/element";
 
 class ProfilePage extends HTMLElement {
   constructor() {
@@ -7,18 +6,11 @@ class ProfilePage extends HTMLElement {
   }
 
   connectedCallback() {
-    const { isLogin } = authStore.getState();
-
-    if (!isLogin) {
-      navigateTo("/login", { hash: window.isHash });
-      return;
-    }
-
     this.render();
   }
 
-  render() {
-    const element = (
+  get element() {
+    return (
       <div class="bg-gray-100 min-h-screen flex justify-center">
         <div class="max-w-md w-full">
           <header-component></header-component>
@@ -35,12 +27,10 @@ class ProfilePage extends HTMLElement {
         </div>
       </div>
     );
+  }
 
-    if (this.firstChild) {
-      this.replaceChild(element, this.firstChild);
-    } else {
-      this.appendChild(element);
-    }
+  render() {
+    renderChild(this);
   }
 }
 

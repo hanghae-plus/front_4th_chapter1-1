@@ -1,3 +1,5 @@
+import { renderChild } from "../utils/element";
+
 class PostCardComponent extends HTMLElement {
   constructor() {
     super();
@@ -7,12 +9,12 @@ class PostCardComponent extends HTMLElement {
     this.render();
   }
 
-  render() {
+  get element() {
     const name = this.getAttribute("name");
     const createdAt = this.getAttribute("createdAt");
     const content = this.getAttribute("content");
 
-    const element = (
+    return (
       <div class="bg-white rounded-lg shadow p-4">
         <div class="flex items-center mb-2">
           <img
@@ -33,12 +35,10 @@ class PostCardComponent extends HTMLElement {
         </div>
       </div>
     );
+  }
 
-    if (this.firstChild) {
-      this.replaceChild(element, this.firstChild);
-    } else {
-      this.appendChild(element);
-    }
+  render() {
+    renderChild(this);
   }
 }
 

@@ -1,31 +1,11 @@
 import { authStore, authStoreActions } from "@/stores/auth-store";
 import { navigateTo } from "@/utils/router";
+import { renderChild } from "../utils/element";
 
 class NavComponent extends HTMLElement {
   constructor() {
     super();
     authStore.subscribe(this.render.bind(this));
-  }
-
-  addEvent() {
-    const logoutButton = this.querySelector("#logout");
-
-    this.addEventListener("click", (event) => {
-      Array.from([...this.querySelectorAll("a")]).forEach((el) => {
-        event.preventDefault();
-        const url = new URL(el.href);
-
-        if (event.target === logoutButton) {
-          this.handleLogout();
-          return;
-        }
-
-        if (event.target === el) {
-          this.handleNavigate(url.pathname);
-          return;
-        }
-      });
-    });
   }
 
   connectedCallback() {
@@ -45,9 +25,9 @@ class NavComponent extends HTMLElement {
     navigateTo("/login", { hash: window.isHash });
   }
 
-  render() {
+  get element() {
     const { isLogin } = authStore.getState();
-    const element = (
+    return (
       <nav class="bg-white shadow-md p-2 sticky top-14">
         <ul class="flex justify-around">
           <li>
@@ -98,13 +78,31 @@ class NavComponent extends HTMLElement {
         </ul>
       </nav>
     );
+  }
 
-    if (this.firstChild) {
-      this.replaceChild(element, this.firstChild);
-    } else {
-      this.appendChild(element);
-    }
+  addEvent() {
+    const logoutButton = this.querySelector("#logout");
 
+    this.addEventListener("click", (event) => {
+      Array.from([...this.querySelectorAll("a")]).forEach((el) => {
+        event.preventDefault();
+        const url = new URL(el.href);
+
+        if (event.target === logoutButton) {
+          this.handleLogout();
+          return;
+        }
+
+        if (event.target === el) {
+          this.handleNavigate(url.pathname);
+          return;
+        }
+      });
+    });
+  }
+
+  render() {
+    renderChild(this);
     this.addEvent();
   }
 }

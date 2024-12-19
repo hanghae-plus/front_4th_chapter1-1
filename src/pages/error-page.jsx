@@ -1,3 +1,5 @@
+import { renderChild } from "../utils/element";
+
 class ErrorPage extends HTMLElement {
   constructor() {
     super();
@@ -7,8 +9,8 @@ class ErrorPage extends HTMLElement {
     this.render();
   }
 
-  render() {
-    const element = (
+  get element() {
+    return (
       <main class="bg-gray-100 flex items-center justify-center min-h-screen">
         <div
           class="bg-white p-8 rounded-lg shadow-md w-full text-center"
@@ -29,12 +31,10 @@ class ErrorPage extends HTMLElement {
         </div>
       </main>
     );
+  }
 
-    if (this.firstChild) {
-      this.replaceChild(element, this.firstChild);
-    } else {
-      this.appendChild(element);
-    }
+  render() {
+    renderChild(this);
   }
 }
 

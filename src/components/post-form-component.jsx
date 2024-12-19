@@ -1,5 +1,6 @@
 import { postsStoreActions } from "../stores/posts-store";
 import { authStore } from "../stores/auth-store";
+import { renderChild } from "../utils/element";
 
 class PostFormComponent extends HTMLElement {
   constructor() {
@@ -8,20 +9,6 @@ class PostFormComponent extends HTMLElement {
 
   connectedCallback() {
     this.render();
-  }
-
-  addEvent() {
-    const postForm = this.querySelector("#post-form");
-
-    const handleSubmit = (event) => {
-      if (event.target === postForm) {
-        event.preventDefault();
-        this.handleAddForm();
-      }
-    };
-
-    this.removeEventListener("submit", handleSubmit);
-    this.addEventListener("submit", handleSubmit);
   }
 
   handleAddForm() {
@@ -40,8 +27,8 @@ class PostFormComponent extends HTMLElement {
     });
   }
 
-  render() {
-    const element = (
+  get element() {
+    return (
       <form id="post-form" class="mb-4 bg-white rounded-lg shadow p-4">
         <textarea
           id="post-content"
@@ -56,12 +43,24 @@ class PostFormComponent extends HTMLElement {
         </button>
       </form>
     );
+  }
 
-    if (this.firstChild) {
-      this.replaceChild(element, this.firstChild);
-    } else {
-      this.appendChild(element);
-    }
+  addEvent() {
+    const postForm = this.querySelector("#post-form");
+
+    const handleSubmit = (event) => {
+      if (event.target === postForm) {
+        event.preventDefault();
+        this.handleAddForm();
+      }
+    };
+
+    this.removeEventListener("submit", handleSubmit);
+    this.addEventListener("submit", handleSubmit);
+  }
+
+  render() {
+    renderChild(this);
     this.addEvent();
   }
 }
