@@ -1,9 +1,9 @@
-import ServicePage from "./Pages/ServicePage.js";
-import MainTemplate from "./Pages/Templates/MainTemplate.js";
-import ProfileTemplate from "./Pages/Templates/ProfileTemplate.js";
+import ServicePage from "./pages/ServicePage.js";
+import MainTemplate from "./pages/Templates/MainTemplate.js";
+import ProfileTemplate from "./pages/Templates/ProfileTemplate.js";
 
-import LoginPage from "./Pages/LoginPage.js";
-import ErrorPage from "./Pages/ErrorPage.js";
+import LoginPage from "./pages/LoginPage.js";
+import ErrorPage from "./pages/ErrorPage.js";
 
 if (localStorage.getItem("isLogin")) {
   localStorage.setItem("isLogin", localStorage.getItem("isLogin"));
