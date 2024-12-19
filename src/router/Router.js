@@ -6,9 +6,13 @@ const Router = () => {
   const root = document.getElementById("root");
 
   const navigateTo = (path, state = null) => {
-    path = path || location.pathname;
+    const locationHash = location.hash.replaceAll("#", "");
+    const locationPath = location.pathname;
+    path = locationHash ? locationHash : path || locationPath;
     const matchPage = Validate.path(path);
-    history.pushState(state, "", matchPage.path);
+    if (!locationHash) {
+      history.pushState(state, "", matchPage.path);
+    }
     render(matchPage);
   };
   const render = (view) => {

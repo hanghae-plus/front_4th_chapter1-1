@@ -4,6 +4,7 @@ import Router from "./router/Router";
 const { router } = Router();
 
 window.addEventListener("popstate", router);
+window.addEventListener("hashchange", router);
 
 document.addEventListener("DOMContentLoaded", () => {
   document.body.addEventListener("click", (e) => {

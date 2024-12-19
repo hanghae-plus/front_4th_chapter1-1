@@ -3,9 +3,9 @@ import ErrorPage from "../pages/ErrorPage";
 import { getLocalStorage } from "./storage";
 const Validate = {
   path(checkData) {
-    if (location.pathname === "/profile" && !this.isLogin())
+    if (checkData === "/profile" && !this.isLogin())
       return ROUTE_DATA[ROUTE_PATH.LOGIN];
-    if (location.pathname === "/login" && this.isLogin())
+    if (checkData === "/login" && this.isLogin())
       return ROUTE_DATA[ROUTE_PATH.MAIN];
     const data = ROUTE_DATA.find((route) => route.path === checkData);
     return data ? data : ROUTE_DATA[ROUTE_PATH.ERROR];
