@@ -10,7 +10,7 @@ export const Header = () => `
 `;
 
 // 로그인 여부에 따른 렌더링
-function renderLoginStatus() {
+const renderLoginStatus = () => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const path = window.location.pathname;
 
@@ -26,4 +26,4 @@ function renderLoginStatus() {
       <li><a href="/login" id="login-but" class="text-gray-600">로그인</a></li>
     `;
   }
-}
+};

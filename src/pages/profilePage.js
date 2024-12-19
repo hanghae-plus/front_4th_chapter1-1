@@ -1,8 +1,9 @@
 import { Header } from "../components/Header.js";
 import { Footer } from "../components/Footer.js";
+import { getLocalStorage } from "../storage/storage.js";
 
 export const ProfilePage = () => {
-  const user = JSON.parse(localStorage.getItem("user")) || {
+  const user = getLocalStorage("user") || {
     username: "",
     email: "",
     bio: "",
@@ -74,18 +75,3 @@ export const ProfilePage = () => {
       </div>
     `;
 };
-
-// 프로필 수정
-document.addEventListener("submit", (e) => {
-  e.preventDefault();
-  if (e.target && e.target.id === "profile-form") {
-    const updatedUser = {
-      username: document.getElementById("username").value,
-      email: document.getElementById("email").value,
-      bio: document.getElementById("bio").value,
-    };
-
-    localStorage.setItem("user", JSON.stringify(updatedUser));
-    alert("프로필이 업데이트 되었습니다.");
-  }
-});

@@ -1,5 +1,3 @@
-import { navigateTo } from "../router.js";
-
 export const LoginPage = () => {
   return `
     <main class="bg-gray-100 flex items-center justify-center min-h-screen">
@@ -24,33 +22,4 @@ export const LoginPage = () => {
       </div>
     </main>
   `;
-};
-
-export const loginHandles = () => {
-  const form = document.getElementById("login-form");
-  const emailInput = document.getElementById("username");
-  const passwordInput = document.getElementById("passwordInput");
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const email = emailInput.value.trim();
-    const password = passwordInput.value.trim();
-
-    if (validateForm(email, password)) {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ username: email, email: "", bio: "" }),
-      );
-      navigateTo("/profile");
-    }
-  });
-
-  const validateForm = (email) => {
-    if (!email) {
-      alert("이메일을 입력해주세요.");
-      emailInput.focus();
-      return false;
-    }
-    return true;
-  };
 };
