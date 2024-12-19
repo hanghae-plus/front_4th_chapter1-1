@@ -3,7 +3,6 @@ import { NotFoundPage } from "./pages/not-found-page";
 import { LoginPage } from "./pages/login-page";
 import { HomePage } from "./pages/home-page";
 import { removeUser, isLoggedIn, saveUser } from "./utils/local-storage";
-import { HashRouter } from "./main.hash";
 
 class HistoryRouter {
   constructor() {
@@ -53,19 +52,12 @@ class HistoryRouter {
   }
 }
 
-const historyRouter = new HistoryRouter();
-// historyRouter.addRoute("/", () => HomePage());
-// historyRouter.addRoute("/login", () => LoginPage());
-// historyRouter.addRoute("/profile", () => ProfilePage());
-// historyRouter.addRoute("/404", () => NotFoundPage());
+// window.location.hash
+// hashchange 이벤트 사용
 
-const hashRouter = new HashRouter();
-// hashRouter.addHashRoute("/index.hash.html#/", () => HomePage())
-// hashRouter.addHashRoute("/index.hash.html#/login", () => LoginPage())
-// hashRouter.addHashRoute("/index.hash.html#/profile", () => ProfilePage())
-// router.addHashRoute("/index.hash.html#/", () => NotFoundPage())
-const type = "history";
-const router = type === "history" ? historyRouter : hashRouter;
+const historyRouter = new HistoryRouter();
+
+const router = historyRouter;
 
 router.addRoute("/", () => HomePage());
 router.addRoute("/login", () => LoginPage());
