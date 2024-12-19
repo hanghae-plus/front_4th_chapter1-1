@@ -16,16 +16,17 @@ function setAddRoute(router) {
     if (id) {
       router.navigateTo("/");
       return;
+    } else {
+      loadRoute(LoginPage());
     }
-    loadRoute(LoginPage());
   });
   router.addRoute("/profile", () => {
     const id = window.localStorage.getItem("user");
     if (!id) {
       router.navigateTo("/login");
-      return;
+    } else {
+      loadRoute(ProfilePage());
     }
-    loadRoute(ProfilePage());
   });
   router.addRoute("/", () => loadRoute(MainPage()));
   router.addRoute("/404", () => loadRoute(NotFoundPage()));
@@ -36,21 +37,19 @@ function loadRoute(content) {
   const rootElement = document.getElementById("root");
   rootElement.innerHTML = content;
 
-  const userData = window.localStorage.getItem("user");
-
-  mainPageEventController(userData);
-  profilePageEventController(JSON.parse(userData));
-  loginPageEventController();
+  mainPageController();
+  profilePageController();
+  loginPageController();
+  buttonEventController();
 }
 
-function mainPageEventController(userData) {
-  navbarEventController();
-
+function mainPageController() {
   const loginBtn =
     document.getElementById("login") || document.getElementById("logout");
   const profileStatus = document.getElementById("user-profile");
+  const userData = window.localStorage.getItem("user");
 
-  if (loginBtn && profileStatus) {
+  if (profileStatus) {
     if (userData) {
       loginBtn.textContent = "로그아웃";
       loginBtn.setAttribute("id", "logout");
@@ -60,22 +59,12 @@ function mainPageEventController(userData) {
       loginBtn.setAttribute("id", "login");
       profileStatus.hidden = true;
     }
-
-    loginBtn.addEventListener("click", (e) => {
-      e.preventDefault(); // 기본 동작 방지 (필요시)
-
-      if (userData) {
-        window.localStorage.clear();
-        router.navigateTo("/");
-      } else {
-        router.navigateTo("/login");
-      }
-    });
   }
 }
 
-function profilePageEventController(userJson) {
-  navbarEventController();
+function profilePageController() {
+  const userData = window.localStorage.getItem("user");
+  const userJson = JSON.parse(userData);
 
   if (userJson) {
     const { username, email, bio } = userJson;
@@ -86,8 +75,6 @@ function profilePageEventController(userJson) {
       const idItem = profileForm.querySelector("#username");
       const emailItem = profileForm.querySelector("#email");
       const bioItem = profileForm.querySelector("#bio");
-      const logoutBtn =
-        document.getElementById("login") || document.getElementById("logout");
 
       if (username) idItem.value = username;
       if (email) emailItem.value = email;
@@ -106,22 +93,11 @@ function profilePageEventController(userJson) {
 
         alert("프로필이 업데이트 되었습니다");
       });
-
-      logoutBtn.addEventListener("click", (e) => {
-        e.preventDefault(); // 기본 동작 방지 (필요시)
-
-        if (userJson) {
-          window.localStorage.clear();
-          router.navigateTo("/");
-        } else {
-          router.navigateTo("/login");
-        }
-      });
     }
   }
 }
 
-function loginPageEventController() {
+function loginPageController() {
   const loginForm = document.getElementById("login-form");
 
   if (loginForm) {
@@ -149,14 +125,27 @@ function loginPageEventController() {
   }
 }
 
-function navbarEventController() {
+function buttonEventController() {
+  const userData = window.localStorage.getItem("user");
   const navbar = document.querySelector("nav");
+
   if (navbar) {
     navbar.addEventListener("click", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+
       if (e.target.tagName === "A") {
-        e.preventDefault(); // 기본 링크 클릭 동작을 막음
-        const path = e.target.getAttribute("href");
-        router.navigateTo(path);
+        if (["login", "logout"].includes(e.target.id)) {
+          if (userData) {
+            window.localStorage.clear();
+            router.navigateTo("/");
+          } else {
+            router.navigateTo("/login");
+          }
+        } else {
+          const path = e.target.getAttribute("href");
+          router.navigateTo(path);
+        }
       }
     });
   }

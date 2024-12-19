@@ -16,16 +16,17 @@ function setAddRoute(router) {
     if (id) {
       router.navigateTo("/");
       return;
+    } else {
+      loadRoute(LoginPage());
     }
-    loadRoute(LoginPage());
   });
   router.addRoute("/profile", () => {
     const id = window.localStorage.getItem("user");
     if (!id) {
       router.navigateTo("/login");
-      return;
+    } else {
+      loadRoute(ProfilePage());
     }
-    loadRoute(ProfilePage());
   });
   router.addRoute("/", () => loadRoute(MainPage()));
   router.addRoute("/404", () => loadRoute(NotFoundPage()));
@@ -130,14 +131,13 @@ function buttonEventController() {
 
   if (navbar) {
     navbar.addEventListener("click", (e) => {
-      e.stopPropagation();
       e.preventDefault();
 
       if (e.target.tagName === "A") {
         if (["login", "logout"].includes(e.target.id)) {
           if (userData) {
             window.localStorage.clear();
-            router.navigateTo("/");
+            router.navigateTo("/login");
           } else {
             router.navigateTo("/login");
           }
