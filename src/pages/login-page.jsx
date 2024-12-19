@@ -1,10 +1,10 @@
-import { userStore } from "@/stores/user-store";
+import { authStore } from "@/stores/auth-store";
 import { navigateTo } from "@/utils/router";
 
 class LoginPage extends HTMLElement {
   constructor() {
     super();
-    userStore.subscribe(this.render.bind(this));
+    authStore.subscribe(this.render.bind(this));
   }
 
   connectedCallback() {
@@ -12,13 +12,13 @@ class LoginPage extends HTMLElement {
   }
 
   disconnectedCallback() {
-    userStore.unsubscribe(this.render.bind(this));
+    authStore.unsubscribe(this.render.bind(this));
   }
 
   render() {
-    const user = userStore.getState();
+    const { isLogin } = authStore.getState();
 
-    if (user.username) {
+    if (isLogin) {
       navigateTo(window.isHash ? "#/" : "/", { hash: window.isHash });
     }
 

@@ -1,10 +1,10 @@
-import { userStore, userStoreActions } from "@/stores/user-store";
+import { authStore, authStoreActions } from "@/stores/auth-store";
 import { navigateTo } from "@/utils/router";
 
 class NavComponent extends HTMLElement {
   constructor() {
     super();
-    userStore.subscribe(this.render.bind(this));
+    authStore.subscribe(this.render.bind(this));
   }
 
   addEvent() {
@@ -33,7 +33,7 @@ class NavComponent extends HTMLElement {
   }
 
   disconnectedCallback() {
-    userStore.unsubscribe(this.render.bind(this));
+    authStore.unsubscribe(this.render.bind(this));
   }
 
   handleNavigate(path) {
@@ -41,13 +41,12 @@ class NavComponent extends HTMLElement {
   }
 
   handleLogout() {
-    userStoreActions.logout();
+    authStoreActions.logout();
     navigateTo("/login", { hash: window.isHash });
   }
 
   render() {
-    const user = userStore.getState();
-    const isLogin = user?.username;
+    const { isLogin } = authStore.getState();
     const element = (
       <nav class="bg-white shadow-md p-2 sticky top-14">
         <ul class="flex justify-around">

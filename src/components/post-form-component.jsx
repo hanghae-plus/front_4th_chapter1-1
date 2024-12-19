@@ -1,5 +1,5 @@
 import { postsStoreActions } from "../stores/posts-store";
-import { userStore } from "../stores/user-store";
+import { authStore } from "../stores/auth-store";
 
 class PostFormComponent extends HTMLElement {
   constructor() {
@@ -26,8 +26,7 @@ class PostFormComponent extends HTMLElement {
 
   handleAddForm() {
     const postContent = this.querySelector("#post-content");
-    const user = userStore.getState();
-    const isLogin = user.username;
+    const { user, isLogin } = authStore.getState();
 
     if (!isLogin) {
       alert("로그인이 필요합니다.");

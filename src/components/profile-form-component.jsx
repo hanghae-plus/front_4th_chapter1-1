@@ -1,10 +1,10 @@
-import { userStore, userStoreActions } from "@/stores/user-store";
+import { authStore, authStoreActions } from "@/stores/auth-store";
 import { navigateTo } from "@/utils/router";
 
 class ProfileFormComponent extends HTMLElement {
   constructor() {
     super();
-    userStore.subscribe(this.render.bind(this));
+    authStore.subscribe(this.render.bind(this));
   }
 
   addEvent() {
@@ -27,7 +27,7 @@ class ProfileFormComponent extends HTMLElement {
   }
 
   disconnectedCallback() {
-    userStore.unsubscribe(this.render.bind(this));
+    authStore.unsubscribe(this.render.bind(this));
   }
 
   handleUpdateProfile() {
@@ -41,12 +41,17 @@ class ProfileFormComponent extends HTMLElement {
       bio,
     };
 
-    userStoreActions.updateUser(user);
+    authStoreActions.updateUser(user);
     navigateTo("/profile");
   }
 
   render() {
-    const user = userStore.getState();
+    const { isLogin, user } = authStore.getState();
+
+    if (!isLogin) {
+      return;
+    }
+
     const { username, email, bio } = user;
 
     const element = (

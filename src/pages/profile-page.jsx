@@ -1,4 +1,4 @@
-import { userStore } from "@/stores/user-store";
+import { authStore } from "@/stores/auth-store";
 import { navigateTo } from "@/utils/router";
 
 class ProfilePage extends HTMLElement {
@@ -7,9 +7,9 @@ class ProfilePage extends HTMLElement {
   }
 
   connectedCallback() {
-    const user = userStore.getState();
+    const { isLogin } = authStore.getState();
 
-    if (!user?.username) {
+    if (!isLogin) {
       navigateTo("/login", { hash: window.isHash });
       return;
     }

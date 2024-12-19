@@ -1,4 +1,4 @@
-import { userStoreActions } from "@/stores/user-store";
+import { authStoreActions } from "@/stores/auth-store";
 import { navigateTo } from "@/utils/router";
 
 class LoginFormComponent extends HTMLElement {
@@ -37,7 +37,7 @@ class LoginFormComponent extends HTMLElement {
       bio: "",
     };
 
-    userStoreActions.login(user);
+    authStoreActions.login(user);
   }
 
   render() {
