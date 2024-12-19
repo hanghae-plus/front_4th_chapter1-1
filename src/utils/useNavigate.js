@@ -4,7 +4,6 @@ import { LoginPage } from "../pages/Login";
 import { NotFoundPage } from "../pages/NotFound";
 import { ProfilePage } from "../pages/Profile";
 
-// 기본 라우팅 설정
 const routes = [
   { path: "/", element: HomePage, useLayout: true },
   { path: "/login", element: LoginPage, useLayout: false },
@@ -19,7 +18,6 @@ export const Router = (() => {
   return { findComponent };
 })();
 
-// 해시 라우터를 처리하는 함수
 export const useNavigate = () => {
   const rootElement = document.querySelector("#root");
 
@@ -39,12 +37,8 @@ export const useNavigate = () => {
   };
 
   const navigate = (path) => {
-    // 해시가 있을 때만 해시 라우팅을 처리
-    const hashPath = location.hash.slice(1) || path;
-
-    renderContent(hashPath);
-    // 해시 라우팅에 맞춰 history 업데이트
-    window.history.pushState({}, "", `#${hashPath}`);
+    renderContent(path);
+    window.history.pushState({}, "", path);
   };
 
   return { navigate, renderPage: renderContent };

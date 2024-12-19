@@ -1,7 +1,6 @@
 import { tabList } from "../constant/data";
 import { authStorage } from "../utils/authStorage";
 import { useNavigate } from "../utils/useNavigate";
-
 export const TabNavigator = {
   onMount: () => {
     const { clearLoginInfo } = authStorage();
