@@ -1,5 +1,6 @@
 import { withObserver } from "../hof/withObserver";
 
+// NOTE: pushState, replaceState를 최초 1회 오버라이드 하기 전에 원본을 백업해둡니다.
 window.history.originalPushState =
   window.history.originalPushState ?? window.history.pushState;
 window.history.originalReplaceState =
@@ -18,15 +19,13 @@ export function createRouter({ routes = {}, fallback = null } = {}) {
     },
 
     matchRoute: () => {
-      let pathname = (location.hash || location.pathname)
-        .replace("/#", "")
-        .replace("#", "");
+      const rawPathname = (location.hash || location.pathname).replace("#", "");
 
-      pathname = pathname.startsWith("/") ? pathname : `/${pathname}`;
+      const pathname = rawPathname.startsWith("/")
+        ? rawPathname
+        : `/${rawPathname}`;
 
-      const result = routes[pathname] ?? fallback;
-
-      return result;
+      return routes[pathname] ?? fallback;
     },
   });
 
@@ -34,6 +33,11 @@ export function createRouter({ routes = {}, fallback = null } = {}) {
     router.notify();
   });
 
+  window.addEventListener("hashchange", () => {
+    router.notify();
+  });
+
+  // 여러번 패치되는 것을 방지하기 위해 패치 완료 여부를 체크합니다.
   if (!window.__historyStatePatched) {
     window.history.pushState = function () {
       window.history.originalPushState.apply(this, arguments);
@@ -47,10 +51,6 @@ export function createRouter({ routes = {}, fallback = null } = {}) {
     // 이미 패치 완료 표시
     window.__historyStatePatched = true;
   }
-
-  window.addEventListener("hashchange", () => {
-    router.notify();
-  });
 
   return router;
 }
