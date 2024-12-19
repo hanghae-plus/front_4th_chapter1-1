@@ -232,7 +232,6 @@ const ProfilePage = () => `
     </div>
   </div>
 `;
-
 const state = {
   isLoggedIn: JSON.parse(localStorage.getItem('isLoggedIn')) || false,
   userData: JSON.parse(localStorage.getItem('userData')) || {
@@ -279,8 +278,6 @@ document.addEventListener('DOMContentLoaded', () => {
   navigation(initialPath);
 
   window.addEventListener('hashchange', router);
-
-  setTimeout(router, 0);
 });
 
 const pageEventListeners = () => {
@@ -367,7 +364,7 @@ const router = () => {
     }
   } else {
     page = ErrorPage();
-    window.location.hash = '#/404';
+    window.location.hash = '/404';
   }
 
   // login -> /login = / , !login -> /profile = /login
@@ -380,23 +377,44 @@ const router = () => {
   }
 
   document.body.innerHTML = page;
-  renderNav();
+
+  if (path !== '/login') {
+    renderNav();
+  }
+
   pageEventListeners();
 };
 
 // navigation render
 const renderNav = () => {
+  const currentPath = window.location.hash.slice(1) || '/';
+
+  if (currentPath === '/login' || currentPath === '/404') return;
+
   const nav = document.querySelector('nav ul');
   if (!nav) return;
 
   const isLoggedIn = state.isLoggedIn;
   nav.innerHTML = `
-    <li><a href="/" class="text-gray-600">홈</a></li>
+    <li><a href="/" class="text-blue-600">홈</a></li>
     ${
       isLoggedIn
-        ? `<li><a href="/profile" class="text-blue-600">프로필</a></li>
+        ? `<li><a href="/profile" class="text-gray-600">프로필</a></li>
     <li><a href="/login" id="logoutBtn" class="text-gray-600">로그아웃</a></li>`
         : `<li><a href="/login" class="text-gray-600">로그인</a></li>`
     }
   `;
+
+  const navLinks = nav.querySelectorAll('nav a');
+
+  navLinks.forEach(link => {
+    const linkPath = link.getAttribute('href');
+    if (linkPath === currentPath) {
+      link.classList.replace('text-gray-600', 'text-blue-600');
+    } else {
+      link.classList.replace('text-blue-600', 'text-gray-600');
+    }
+  });
 };
+
+router();
