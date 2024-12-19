@@ -1,59 +1,63 @@
 import routes from "./routes.js";
 import { MainPage, ProfilePage, LoginPage, ErrorPage } from "./pages";
 import { LOGGED_IN_STATE_STORAGE_KEY } from "./constants/storageKeys.js";
+
 const root = document.getElementById("root");
+
+const guards = {
+  [routes.profile]: () => {
+    const isLoggedIn =
+      localStorage.getItem(LOGGED_IN_STATE_STORAGE_KEY) === "true";
+    if (!isLoggedIn) {
+      window.history.replaceState({}, "", routes.login);
+      return false;
+    }
+    return true;
+  },
+  [routes.login]: () => {
+    const isLoggedIn =
+      localStorage.getItem(LOGGED_IN_STATE_STORAGE_KEY) === "true";
+    if (isLoggedIn) {
+      window.history.replaceState({}, "", routes.home);
+      return false;
+    }
+    return true;
+  },
+};
 
 function renderPage() {
   const currentPath = window.location.pathname;
   let page;
 
-  console.log("renderPage", currentPath, page);
+  // 가드 체크
+  const guard = guards[currentPath];
+  if (guard && !guard()) {
+    renderPage(); // 리다이렉션 후 다시 렌더링
+    return;
+  }
+
   switch (currentPath) {
     case routes.home:
       page = MainPage();
-      root.innerHTML = page.template;
-      if (page.init) {
-        page.init();
-      }
       break;
-    case routes.profile: {
-      const loggedInState = localStorage.getItem(LOGGED_IN_STATE_STORAGE_KEY);
-      if (!loggedInState) {
-        window.history.replaceState({}, "", routes.login);
-        page = LoginPage();
-        root.innerHTML = page.template;
-        if (page.init) {
-          page.init();
-        }
-        return;
-      }
-
+    case routes.profile:
       page = ProfilePage();
-      root.innerHTML = page.template;
-      if (page.init) {
-        page.init();
-      }
       break;
-    }
     case routes.login:
       page = LoginPage();
-      root.innerHTML = page.template;
-      if (page.init) {
-        page.init();
-      }
       break;
     default:
       page = ErrorPage();
-      root.innerHTML = page.template;
-      if (page.init) {
-        page.init();
-      }
       break;
+  }
+
+  root.innerHTML = page.template;
+  if (page.init) {
+    page.init();
   }
 }
 
 const navigate = (path) => {
-  console.log("navigate", path);
   window.history.pushState({}, "", path);
   renderPage();
 };
