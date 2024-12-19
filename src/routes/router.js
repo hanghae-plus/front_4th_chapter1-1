@@ -1,17 +1,13 @@
 import { RoutesSingleton } from "./routerSingleton.js";
 
 export const createRoutes = () => {
-  const { getInstance } = RoutesSingleton();
+  const { handlePopState, ...instance } = RoutesSingleton.getInstance();
 
-  const { handlePopState, ...instance } = getInstance();
-
-  window.addEventListener("popstate", (event) => {
-    event.preventDefault();
+  window.addEventListener("popstate", () => {
     handlePopState();
   });
 
-  window.addEventListener("load", (event) => {
-    event.preventDefault();
+  window.addEventListener("load", () => {
     handlePopState();
   });
 

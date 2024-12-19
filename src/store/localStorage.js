@@ -3,7 +3,7 @@ export const setItem = (key, value) => {
   if (typeof key !== "string" || typeof value !== "object")
     throw new Error("🚧 : 입력값이 잘못되었습니다.");
 
-  window.localStorage.setItem(key, value.stringify());
+  window.localStorage.setItem(key, JSON.stringify(value));
 };
 
 export const getItem = (key) => {

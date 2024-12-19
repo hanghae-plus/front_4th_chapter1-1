@@ -1,3 +1,3 @@
-export const render = (htmlTemplateLiteral) => {
-  document.body.innerHTML = htmlTemplateLiteral;
+export const render = (htmlFunction) => {
+  document.body.innerHTML = htmlFunction();
 };

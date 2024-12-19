@@ -1,2 +1,2 @@
 export * from "./router.js";
-export * from "./enum/enum.js";
+export * from "./shared/enum.js";
