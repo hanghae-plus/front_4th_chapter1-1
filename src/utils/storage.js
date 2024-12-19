@@ -1,6 +1,6 @@
 const getItem = (key) => {
   const item = localStorage.getItem(key);
-  return JSON.parse(item);
+  return item && JSON.parse(item);
 };
 
 const setItem = (key, value) => {
