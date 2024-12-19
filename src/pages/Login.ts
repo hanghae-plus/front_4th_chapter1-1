@@ -51,10 +51,3 @@ export const LoginPage = () => {
   </main>
 `;
 };
-
-LoginPage.render = () => {
-  const $root = document.getElementById("root");
-  const targetElement = $root ?? document.body;
-
-  targetElement.innerHTML = LoginPage();
-};

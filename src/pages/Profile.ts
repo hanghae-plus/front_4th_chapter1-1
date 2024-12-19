@@ -1,11 +1,13 @@
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Navigator } from "@/components/Navigator";
-import { User, userStore } from "@/store/userStore";
+import { userStore } from "@/store/userStore";
 
 const PROFILE_FORM_ID = "profile-form";
 
-export const ProfilePage = ({ username, email, bio }: User) => {
+export const ProfilePage = () => {
+  const { username, email, bio } = userStore.getUser();
+
   document.getElementById("root")?.addEventListener("submit", (e) => {
     if (!(e.target instanceof HTMLFormElement)) return;
 
@@ -101,14 +103,4 @@ export const ProfilePage = ({ username, email, bio }: User) => {
     </div>
   </div>
 `;
-};
-
-ProfilePage.render = () => {
-  const $root = document.getElementById("root");
-
-  if (!$root) return;
-
-  const user = userStore.getUser();
-
-  $root.innerHTML = ProfilePage(user);
 };

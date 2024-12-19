@@ -1,9 +1,12 @@
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Navigator } from "@/components/Navigator";
-import { User, userStore } from "@/store/userStore";
+import { userStore } from "@/store/userStore";
 
-export const MainPage = (user: User) => `
+export const MainPage = () => {
+  const user = userStore.getUser();
+
+  return `
   <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
       ${Header()}
@@ -103,13 +106,4 @@ export const MainPage = (user: User) => `
     </div>
   </div>
 `;
-
-MainPage.render = () => {
-  const $root = document.getElementById("root");
-
-  if (!$root) return;
-
-  const user = userStore.getUser();
-
-  $root.innerHTML = MainPage(user);
 };
