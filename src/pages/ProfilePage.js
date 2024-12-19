@@ -1,16 +1,9 @@
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
 import userStore from "@/store/userStore";
 
 const ProfilePage = () => {
   const { username, email, bio } = userStore.getUser();
 
   return `
-  <div id="root">
-    <div class="bg-gray-100 min-h-screen flex justify-center">
-      <div class="max-w-md w-full">
-        ${Header()}
-
         <main class="p-4">
           <div class="bg-white p-8 rounded-lg shadow-md">
             <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
@@ -68,11 +61,6 @@ const ProfilePage = () => {
             </form>
           </div>
         </main>
-
-        ${Footer()}
-      </div>
-    </div>
-  </div>
 `;
 };
 

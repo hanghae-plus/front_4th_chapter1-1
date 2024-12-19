@@ -1,4 +1,4 @@
-import userStore from "../store/userStore";
+import userStore from "@/store/userStore";
 
 const Header = () => {
   const isLogin = !!userStore.getUser();

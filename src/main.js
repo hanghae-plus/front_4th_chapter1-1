@@ -1,19 +1,28 @@
-import { submitEventHandler, clickEventHandler } from "@/utils";
+import { submitEventHandler, clickEventHandler } from "./utils";
 import { addRoutes, navigator, setRenderTarget } from "./router/router";
 import userStore from "@/store/userStore";
 import MainPage from "./pages/MainPage";
 import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import Layout from "./components/layout/Layout";
 
 setRenderTarget(document.getElementById("root"));
-addRoutes("/", MainPage);
-addRoutes("/profile", ProfilePage);
-addRoutes("/login", LoginPage);
-addRoutes("#/", MainPage);
-addRoutes("#/profile", ProfilePage);
-addRoutes("#/login", LoginPage);
-addRoutes("*", NotFoundPage);
+
+addRoutes(
+  {
+    element: Layout,
+    children: [
+      { path: "/", element: MainPage },
+      { path: "/profile", element: ProfilePage },
+      { path: "#/profile", element: ProfilePage },
+      { path: "#/", element: MainPage },
+    ],
+  },
+  { path: "/login", element: LoginPage },
+  { path: "#/login", element: LoginPage },
+  { path: "*", element: NotFoundPage },
+);
 
 function validateRouteUser(path) {
   const user = userStore.getUser();
