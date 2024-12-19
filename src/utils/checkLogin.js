@@ -1,5 +1,7 @@
+import { getUser } from "./user";
+
 const checkLogin = () => {
-  const user = window.localStorage.getItem("user");
+  const user = getUser();
 
   if (!user) {
     return false;
