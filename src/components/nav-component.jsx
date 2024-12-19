@@ -2,6 +2,39 @@ import { authStore, authStoreActions } from "@/stores/auth-store";
 import { navigateTo } from "@/utils/router";
 import { renderChild } from "../utils/element";
 
+const getSitemap = (isLogin) => {
+  const baseSitemap = [
+    {
+      id: "home",
+      href: "/",
+      label: "홈",
+    },
+    {
+      id: "profile",
+      href: "/profile",
+      label: "프로필",
+    },
+  ];
+
+  return isLogin
+    ? [
+        ...baseSitemap,
+        {
+          id: "logout",
+          href: "/logout",
+          label: "로그아웃",
+        },
+      ]
+    : [
+        ...baseSitemap,
+        {
+          id: "login",
+          href: "/login",
+          label: "로그인",
+        },
+      ];
+};
+
 class NavComponent extends HTMLElement {
   constructor() {
     super();
@@ -27,54 +60,32 @@ class NavComponent extends HTMLElement {
 
   get element() {
     const { isLogin } = authStore.getState();
+
+    const checkCurrentPath = (path) => {
+      const prefix = "#";
+      return window.isHash
+        ? window.location.hash === prefix + path
+        : window.location.pathname === path;
+    };
+
     return (
       <nav class="bg-white shadow-md p-2 sticky top-14">
         <ul class="flex justify-around">
-          <li>
-            <a
-              href={"/"}
-              class={
-                window.isHash
-                  ? window.location.hash === "#/"
-                    ? "text-blue-600 font-bold"
-                    : "text-gray-600"
-                  : window.location.pathname === "/"
-                    ? "text-blue-600 font-bold"
-                    : "text-gray-600"
-              }
-            >
-              홈
-            </a>
-          </li>
-          <li>
-            <a
-              href="/profile"
-              class={
-                window.isHash
-                  ? window.location.hash === "#/profile"
-                    ? "text-blue-600 font-bold"
-                    : "text-gray-600"
-                  : window.location.pathname === "/profile"
-                    ? "text-blue-600 font-bold"
-                    : "text-gray-600"
-              }
-            >
-              프로필
-            </a>
-          </li>
-          {isLogin ? (
+          {getSitemap(isLogin).map(({ id, href, label }) => (
             <li>
-              <a href="#" id="logout" class="text-gray-600">
-                로그아웃
+              <a
+                id={id}
+                href={href}
+                class={
+                  checkCurrentPath(href)
+                    ? "text-blue-600 font-bold"
+                    : "text-gray-600"
+                }
+              >
+                {label}
               </a>
             </li>
-          ) : (
-            <li>
-              <a href="/login" class={"text-gray-600"}>
-                로그인
-              </a>
-            </li>
-          )}
+          ))}
         </ul>
       </nav>
     );
