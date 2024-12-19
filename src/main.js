@@ -1,25 +1,26 @@
 import { MainPage, ErrorPage, ProfilePage, LoginPage } from "./pages/index.js";
-import {
-  createRoutes,
-  // PagesNameEnum,
-  PathToPageEnum,
-  // PageToPathEnum,
-} from "./routes/index.js";
+import { createRoutes, PagesNameEnum, PathToPageEnum } from "./routes/index.js";
+
+// ${ProfilePage()}
+// ${LoginPage()}
+// ${ErrorPage()}
 
 document.body.innerHTML = `
   ${MainPage()}
-  ${ProfilePage()}
-  ${LoginPage()}
-  ${ErrorPage()}
 `;
 
-// const { routes, addRoute, navigateTo, handleRoute, handlePopState } =
 const { addRoute, navigateTo } = createRoutes();
+
+const RenderingEnum = {
+  [PagesNameEnum.HOME]: MainPage(),
+  [PagesNameEnum.LOGIN]: LoginPage(),
+  [PagesNameEnum.PROFILE]: ProfilePage(),
+  [PagesNameEnum.ERROR]: ErrorPage(),
+};
 
 Object.keys(PathToPageEnum).forEach((path) => {
   addRoute(path, () => {
-    // TODO: 각 라우터 경로 별로 등록하고 싶은 함수 추가하기
-    console.log(PathToPageEnum[path]);
+    document.body.innerHTML = RenderingEnum[PathToPageEnum[path]];
   });
 });
 

@@ -1,4 +1,3 @@
-import "./event/eventHandler.js";
 import { RoutesSingleton } from "./routerSingleton.js";
 
 export const createRoutes = () => {

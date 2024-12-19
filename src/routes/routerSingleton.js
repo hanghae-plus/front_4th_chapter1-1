@@ -28,7 +28,6 @@ export const RoutesSingleton = () => {
     // popstate 이벤트 처리
     const handlePopState = () => {
       handleRoute(window.location.pathname);
-      // console.log(window.location);
     };
 
     // 브라우저 navigate 이벤트 처리
