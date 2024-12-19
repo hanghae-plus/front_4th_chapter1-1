@@ -1,7 +1,6 @@
 import { getLocalStorage } from "../utils/storage";
 const ProfilePage = () => {
-  const userInfo = JSON.parse(getLocalStorage("user"));
-
+  const user = JSON.parse(getLocalStorage("user"));
   return `
         <main class="p-4">
           <div class="bg-white p-8 rounded-lg shadow-md">
@@ -19,8 +18,7 @@ const ProfilePage = () => {
                   type="text"
                   id="username"
                   name="username"
-                  value=""
-                  ${userInfo ? userInfo.username : ""}
+                  value="${user ? user.username : ""}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -34,8 +32,7 @@ const ProfilePage = () => {
                   type="email"
                   id="email"
                   name="email"
-                  value=""
-                  ${userInfo ? userInfo.email : ""}
+                  value="${user ? user.email : ""}"
                   class="w-full p-2 border rounded"
                 />
               </div>
@@ -50,7 +47,7 @@ const ProfilePage = () => {
                   name="bio"
                   rows="4"
                   class="w-full p-2 border rounded"
-                >${userInfo ? userInfo.bio : ""}</textarea
+                >${user ? user.bio : ""}</textarea
                 >
               </div>
               <button
