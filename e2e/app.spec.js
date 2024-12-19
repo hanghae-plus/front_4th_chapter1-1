@@ -14,7 +14,7 @@ async function login(page) {
   await page.getByPlaceholder("사용자 이름").click();
   await page.getByPlaceholder("사용자 이름").fill("testuser");
   await page.getByPlaceholder("비밀번호").click();
-  await page.getByPlaceholder("비밀번호").fill("1234");
+  await page.getByPlaceholder("비밀번호").fill("123456");
   await page.getByRole("button", { name: "로그인" }).click();
 }
 
@@ -73,7 +73,7 @@ test.describe("SPA 기본 기능", () => {
 
     // 프로필 페이지 접근
     await page.goto("/profile");
-
+    console.log(page.locator("#username"));
     // 프로필 정보 확인
     await expect(page.locator("#username")).toHaveValue("testuser");
 

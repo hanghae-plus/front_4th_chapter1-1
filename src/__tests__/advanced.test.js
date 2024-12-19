@@ -3,8 +3,8 @@ import {
   afterAll,
   beforeAll,
   beforeEach,
-  expect,
   describe,
+  expect,
   it,
   vi,
 } from "vitest";
@@ -52,12 +52,14 @@ describe("심화과제 테스트", () => {
       const loginForm = document.getElementById("login-form");
 
       await user.type(document.getElementById("username"), "testuser");
+      await user.type(document.getElementById("password"), "123456");
 
       loginForm.dispatchEvent(
         new SubmitEvent("submit", { bubbles: true, cancelable: true }),
       );
 
       goTo("/login");
+
       expect(
         document.querySelector("nav .text-blue-600.font-bold").innerHTML,
       ).toContain("홈");
