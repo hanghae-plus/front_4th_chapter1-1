@@ -1,4 +1,3 @@
-// src/routes/index.js
 import { LoginPage, MainPage, ProfilePage, NotFoundPage } from "@pages";
 import { UserStore } from "@stores";
 
@@ -11,16 +10,20 @@ export const ROUTES = {
 
 function createRouter(options = {}) {
   const routes = options.routes || {};
+
+  // 해시 모드 여부 확인
+  // 해시 모드와 히스토리 모드에 따라 다르게 처리
   const isHashMode = () => window.location.pathname.endsWith("hash.html");
 
+  // 현재 경로 반환
   function getPath() {
     return isHashMode()
       ? window.location.hash.slice(1) || "/"
       : window.location.pathname;
   }
 
+  // 새로운 경로로 이동
   function updatePath(path) {
-    console.log("이거뭐야", isHashMode());
     if (isHashMode()) {
       window.location.hash = path;
     } else {
@@ -28,6 +31,7 @@ function createRouter(options = {}) {
     }
   }
 
+  // 현재 경로를 새로운 경로로 교체 (이전 히스토리를 유지하지 않고 덮어쓰기)
   function replacePath(path) {
     if (isHashMode()) {
       window.location.replace(`#${path}`);
@@ -36,6 +40,7 @@ function createRouter(options = {}) {
     }
   }
 
+  // 라우트 보호 처리 (로그인 상태에 따라 접근 처리)
   function protectRoute(path) {
     const isLogin = UserStore.getValue("isLogin");
 
@@ -53,7 +58,7 @@ function createRouter(options = {}) {
 
   function renderPage(path) {
     const rootElement = document.getElementById("root");
-    // DOM을 완전히 초기화
+    // DOM 초기화
     while (rootElement.firstChild) {
       rootElement.removeChild(rootElement.firstChild);
     }
@@ -66,33 +71,32 @@ function createRouter(options = {}) {
       return;
     }
 
-    // 라우트 보호 처리
+    // 라우트 보호 및 페이지 렌더링
     const protectedPath = protectRoute(path);
     const page = routes[protectedPath];
     const pageInstance = page();
 
-    // 페이지 렌더링
     if (typeof pageInstance.render === "function") {
       pageInstance.render(rootElement);
     }
   }
 
+  // 경로 업데이트 및 페이지 렌더링 수행
   function navigate(path) {
-    console.log("이거 뭐냐 navigate", path);
     updatePath(path);
     renderPage(path);
   }
 
+  // 라우트 변경 이벤트 핸들러
   function handleRouteChange() {
     const path = getPath();
-    console.log("Current path:", path);
     renderPage(path);
   }
 
+  // 링크 클릭 이벤트 핸들러
   function handleLinkClick(e) {
     const target = e.target.closest("a");
     if (!target) return;
-    console.log("이거 뭐냐 handleLinkClick", target);
     if (target.id === "logout") {
       e.preventDefault();
       UserStore.clearState();
@@ -101,45 +105,42 @@ function createRouter(options = {}) {
     }
 
     const href = target.getAttribute("href");
-    // 해시 모드일 때와 아닐 때의 링크 처리
+
+    // 해시 모드와 히스토리 모드에 따른 링크 처리
     if (isHashMode()) {
-      // 해시 모드에서는 '#'으로 시작하는 링크도 처리
       if (href?.startsWith("#") || href?.startsWith("/")) {
         e.preventDefault();
-        // '#'으로 시작하면 '#' 제거, 아니면 그대로 사용
         const path = href.startsWith("#") ? href.slice(1) : href;
         navigate(path);
       }
     } else {
-      // 히스토리 모드에서는 '/'로 시작하는 링크만 처리
       if (href?.startsWith("/")) {
         e.preventDefault();
         navigate(href);
       }
     }
   }
+
+  // 라우트 초기화
+  // 이벤트 리스너 등록 및 초기 렌더링 수행
   function init() {
     if (isHashMode()) {
-      // hashchange 이벤트 핸들러 등록
-      window.addEventListener("hashchange", () => {
-        // 즉시 실행
-        handleRouteChange();
-      });
+      window.addEventListener("hashchange", handleRouteChange);
+
+      // 초기 해시 설정 및 렌더링
       if (!window.location.hash) {
         window.location.hash = "/";
-        // 초기 렌더링 즉시 실행
-        handleRouteChange();
-      } else {
-        // 이미 해시가 있는 경우 즉시 렌더링
-        handleRouteChange();
       }
+      handleRouteChange();
     } else {
       window.addEventListener("popstate", handleRouteChange);
       handleRouteChange();
     }
 
+    // 전역 링크 클릭 이벤트 리스너
     document.addEventListener("click", handleLinkClick);
 
+    // 클린업 함수 반환
     return () => {
       window.removeEventListener("hashchange", handleRouteChange);
       window.removeEventListener("popstate", handleRouteChange);

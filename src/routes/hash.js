@@ -1,3 +1,10 @@
+/**
+ * hash.js
+ *
+ * 이 라우터는 기본 라우터(index.js)와 유사하지만 해시 모드에서만 동작하도록 설계
+ * 해시 모드는 URL의 해시(#) 부분을 사용하여 클라이언트 사이드 라우팅을 구현합니다.
+ */
+
 import { MainPage, LoginPage, ProfilePage, NotFoundPage } from "@pages";
 import { UserStore } from "@stores";
 
@@ -10,28 +17,17 @@ export const ROUTES = {
 
 function createRouter(options = {}) {
   const routes = options.routes || {};
-  const isHashMode = () => true;
 
   function getPath() {
-    return isHashMode()
-      ? window.location.hash.slice(1) || "/"
-      : window.location.pathname;
+    return window.location.hash.slice(1) || "/";
   }
 
   function updatePath(path) {
-    if (isHashMode()) {
-      window.location.hash = path;
-    } else {
-      history.pushState(null, "", path);
-    }
+    window.location.hash = path;
   }
 
   function replacePath(path) {
-    if (isHashMode()) {
-      window.location.replace(`#${path}`);
-    } else {
-      history.replaceState(null, "", path);
-    }
+    window.location.replace(`#${path}`);
   }
 
   function protectRoute(path) {
@@ -51,12 +47,10 @@ function createRouter(options = {}) {
 
   function renderPage(path) {
     const rootElement = document.getElementById("root");
-    // DOM을 완전히 초기화
     while (rootElement.firstChild) {
       rootElement.removeChild(rootElement.firstChild);
     }
 
-    // 유효하지 않은 경로 처리
     if (!routes[path]) {
       replacePath(ROUTES.ERROR);
       const notFoundPage = NotFoundPage();
@@ -64,12 +58,10 @@ function createRouter(options = {}) {
       return;
     }
 
-    // 라우트 보호 처리
     const protectedPath = protectRoute(path);
     const page = routes[protectedPath];
     const pageInstance = page();
 
-    // 페이지 렌더링
     if (typeof pageInstance.render === "function") {
       pageInstance.render(rootElement);
     }
@@ -88,6 +80,7 @@ function createRouter(options = {}) {
   function handleLinkClick(e) {
     const target = e.target.closest("a");
     if (!target) return;
+
     if (target.id === "logout") {
       e.preventDefault();
       UserStore.clearState();
@@ -96,43 +89,20 @@ function createRouter(options = {}) {
     }
 
     const href = target.getAttribute("href");
-    // 해시 모드일 때와 아닐 때의 링크 처리
-    if (isHashMode()) {
-      // 해시 모드에서는 '#'으로 시작하는 링크도 처리
-      if (href?.startsWith("#") || href?.startsWith("/")) {
-        e.preventDefault();
-        // '#'으로 시작하면 '#' 제거, 아니면 그대로 사용
-        const path = href.startsWith("#") ? href.slice(1) : href;
-        navigate(path);
-      }
-    } else {
-      // 히스토리 모드에서는 '/'로 시작하는 링크만 처리
-      if (href?.startsWith("/")) {
-        e.preventDefault();
-        navigate(href);
-      }
+    if (href?.startsWith("#") || href?.startsWith("/")) {
+      e.preventDefault();
+      const path = href.startsWith("#") ? href.slice(1) : href;
+      navigate(path);
     }
   }
-  function init() {
-    if (isHashMode()) {
-      window.addEventListener("hashchange", handleRouteChange);
-      // if (!window.location.hash) {
-      //   window.location.hash = "/";
-      //   return;
-      // }
-    } else {
-      window.addEventListener("popstate", handleRouteChange);
-    }
 
+  function init() {
+    window.addEventListener("hashchange", handleRouteChange);
     document.addEventListener("click", handleLinkClick);
     handleRouteChange();
 
     return () => {
-      // if (isHashMode()) {
       window.removeEventListener("hashchange", handleRouteChange);
-      // } else {
-      window.removeEventListener("popstate", handleRouteChange);
-      // }
       document.removeEventListener("click", handleLinkClick);
     };
   }

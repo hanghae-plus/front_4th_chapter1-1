@@ -5,7 +5,8 @@ export const LoginPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const { username } = e.target.elements;
-    // 로그인 유효성 검사 필요
+    // FIXME: 현재는 단순히 로그인 폼만 처리하지만,
+    // 추후 다른 버튼들(비밀번호 찾기, 회원가입)에 대한 이벤트 처리도 필요
     // if (!username.value || !password.value) {
     //   return alert("아이디와 비밀번호를 입력해주세요.");
     // }
@@ -44,9 +45,18 @@ export const LoginPage = () => {
 
   const render = () => {
     document.getElementById("root").innerHTML = template;
-    document
-      .getElementById("login-form")
-      .addEventListener("submit", handleSubmit);
+
+    // document
+    //   .getElementById("login-form")
+    //   .addEventListener("submit", handleSubmit);
+
+    // 처음 구현 시 개별 폼에 이벤트 리스너를 추가하는 대신 이벤트 위임 패턴 적용
+    // 개별 요소마다 리스너를 추가하는 대신 root에서 한 번에 처리
+    document.getElementById("root").addEventListener("submit", (e) => {
+      if (e.target.id === "login-form") {
+        handleSubmit(e);
+      }
+    });
   };
 
   return {

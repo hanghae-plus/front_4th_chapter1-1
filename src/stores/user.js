@@ -1,6 +1,6 @@
 import { Storage } from "@utils";
 
-// 싱글톤 패턴을 사용하여 상태 관리
+// 싱글톤 패턴과 옵저버 패턴을 결합한 상태 관리 스토어
 const createStore = () => {
   let instance;
   let observers = [];
@@ -20,7 +20,7 @@ const createStore = () => {
           ...newState,
         };
         Storage.save("user", state.user);
-        // 상태 업데이트 시 관련 컴포넌트 리렌더링을 위한 옵저버 패턴 구현
+        // 상태가 변경될 때마다 등록된 모든 옵저버 함수 실행
         observers.forEach((observer) => observer());
       },
 
@@ -36,7 +36,8 @@ const createStore = () => {
         };
       },
 
-      // 옵저버 등록 메서드
+      // 옵저버 패턴: 상태 변화 감지를 위한 구독 메서드
+      // 반환되는 cleanup 함수로 구독 해제 가능
       subscribe: (observer) => {
         observers.push(observer);
         return () => {
@@ -46,6 +47,7 @@ const createStore = () => {
     };
   };
 
+  // 싱글톤 패턴: 단일 인스턴스 반환
   return () => {
     if (!instance) {
       instance = createStoreInstance();
@@ -54,5 +56,9 @@ const createStore = () => {
   };
 };
 
-// 클로저를 사용한 싱글톤 패턴 구현으로, 첫 번째 호출 시 스토어 생성하고 두 번째 호출 시 인스턴스를 반환한다.
+// 싱글톤 인스턴스 생성
+// 애플리케이션 전체에서 단일 상태 관리 스토어로 사용
 export const UserStore = createStore()();
+
+// const storeCreator = createStore();
+// const UserStore = storeCreator();

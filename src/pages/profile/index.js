@@ -89,14 +89,25 @@ export const ProfilePage = () => {
 
   const render = () => {
     document.getElementById("root").innerHTML = template;
-    document
-      .getElementById("profile-form")
-      .addEventListener("submit", handleSubmit);
+
+    // document
+    //   .getElementById("profile-form")
+    //   .addEventListener("submit", handleSubmit);
+
+    // 이벤트 위임 패턴 적용
+    document.getElementById("root").addEventListener("submit", (e) => {
+      if (e.target.id === "profile-form") {
+        handleSubmit(e);
+      }
+    });
   };
 
-  UserStore.subscribe(render);
+  // Store의 상태가 변경될 때마다 컴포넌트를 다시 렌더링하도록 구독
+  // UserStore의 setState가 호출될 때마다 render 함수가 실행됨
+  const cleanup = UserStore.subscribe(render);
 
   return {
     render,
+    cleanup,
   };
 };
