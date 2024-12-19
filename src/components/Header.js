@@ -41,9 +41,5 @@ export const Header = () => {
 
   render();
 
-  authStore.subscribe(() => {
-    render();
-  });
-
   return container;
 };
