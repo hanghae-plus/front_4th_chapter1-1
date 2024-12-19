@@ -3,9 +3,11 @@ import { routes } from "./app/router/routes";
 
 const rootElement = document.getElementById("root");
 
+const MODE = "history";
+
 if (rootElement) {
   const router = createRouter({
-    mode: "history",
+    mode: MODE,
     root: rootElement,
   });
 

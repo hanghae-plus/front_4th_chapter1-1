@@ -39,6 +39,9 @@ function useProfileForm() {
     event.preventDefault();
 
     const form = event.target;
+
+    if (form.id !== "profile-form") return;
+
     const usernameInput = form.querySelector("#username");
     const emailInput = form.querySelector("#email");
     const bioInput = form.querySelector("#bio");

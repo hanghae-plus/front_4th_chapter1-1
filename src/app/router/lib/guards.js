@@ -1,5 +1,6 @@
+// TODO: 리팩토링 고려
+
 export function authGuard(router) {
-  console.log(router);
   if (!localStorage.getItem("user")) {
     router.navigate("/login");
     return false;

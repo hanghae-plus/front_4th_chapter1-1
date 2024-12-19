@@ -44,6 +44,9 @@ function useLoginForm() {
     event.preventDefault();
 
     const form = event.target;
+
+    if (form.id !== "login-form") return;
+
     const usernameInput = form.querySelector("#username");
     const passwordInput = form.querySelector("#password");
 
