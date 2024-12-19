@@ -1,8 +1,17 @@
-import { Page } from "./page";
+export default class LoginPage {
+  constructor(userAuth) {
+    this.userAuth = userAuth;
+    this.init();
+  }
 
-export default class LoginPage extends Page {
-  constructor() {
-    super();
+  init() {
+    this.updateView();
+    this.handleEventListeners();
+  }
+
+  updateView() {
+    const root = document.getElementById("root");
+    root.innerHTML = this.render();
   }
 
   render() {
@@ -28,5 +37,32 @@ export default class LoginPage extends Page {
       </div>
     </main>
   `;
+  }
+
+  handleEventListeners() {
+    this.handleSubmitForm();
+    this.handleClickLogout();
+  }
+
+  handleSubmitForm() {
+    document.body.addEventListener("submit", (e) => {
+      if (e.target?.id === "login-form") {
+        e.preventDefault();
+        const usernameInput = document.getElementById("username");
+        const username = usernameInput?.value || "";
+        // if (!this.validateUsername(username)) return;
+        this.userAuth.login({ username });
+      }
+    });
+  }
+
+  handleClickLogout() {
+    document.body.addEventListener("click", (e) => {
+      const logoutButton = e.target.closest("#logout");
+      if (logoutButton) {
+        e.preventDefault();
+        this.userAuth.logout();
+      }
+    });
   }
 }

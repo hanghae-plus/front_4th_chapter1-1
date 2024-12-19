@@ -1,15 +1,19 @@
-import AuthManager from "./authManager";
+import UserAuth from "./domain/userAuth";
+import UserProfile from "./domain/userProfile";
 import LoginPage from "./pages/login";
 import MainPage from "./pages/main";
 import NotFoundPage from "./pages/notFound";
 import ProfilePage from "./pages/profile";
-import Router from "./router";
-import UserProfile from "./userProfile";
+import Router from "./routers/router";
 
 const mainPage = new MainPage();
+
 const userProfile = new UserProfile();
 const profilePage = new ProfilePage(userProfile);
-const loginPage = new LoginPage();
+
+const userAuth = new UserAuth();
+const loginPage = new LoginPage(userAuth);
+
 const notFoundPage = new NotFoundPage();
 
 const routes = {
@@ -21,6 +25,3 @@ const routes = {
 
 const router = new Router(routes);
 router.init();
-
-const auth = new AuthManager(router);
-auth.init();
