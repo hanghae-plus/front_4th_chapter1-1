@@ -43,14 +43,17 @@ export class HashRouter {
   }
 
   navigateTo(path) {
-    path = `#${path}`;
-    //console.log(window.location.hash.slice(1));
-    if (path == "/login" && localStorage.getItem("user")) {
-      path = "/";
-      console.log("ttttt");
+    if (`#${path}` !== window.location.hash) {
+      window.location.hash = path;
     }
-    if (path == "/profile" && !localStorage.getItem("user")) {
-      path = "/login";
+    path = `#${path}`;
+
+    if (path == "#/login" && localStorage.getItem("user")) {
+      path = "#/";
+      console.log(path + "    " + window.location.hash);
+    }
+    if (path == "#/profile" && !localStorage.getItem("user")) {
+      path = "#/login";
     }
     history.pushState(null, "", path);
     this.handleRoute(path);
@@ -61,7 +64,7 @@ export class HashRouter {
   }
 
   handleRoute(path) {
-    path = `#${path}`;
+    path = window.location.hash.slice(1) || "/";
     const handler = this.routes[path];
     if (handler) {
       handler();

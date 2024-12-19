@@ -4,13 +4,17 @@ import { Router, HashRouter } from "./router";
 const router = window.location.hash ? new HashRouter() : new Router();
 
 const routeHtml = (route) => {
-  route = route == window.location.hash ? window.location.hash.slice(1) : route;
+  route =
+    route == window.location.hash
+      ? window.location.hash.slice(1) || "/"
+      : route;
 
   if (!pathRender[route]) {
     route = 404;
   }
   if (route == "/login" && localStorage.getItem("user")) {
     route = "/";
+    router.navigateTo("/");
   }
   if (route === "/profile" && !localStorage.getItem("user")) {
     route = "/login";
@@ -99,3 +103,6 @@ window.addEventListener("DOMContentLoaded", () => {
   );
 });
 window.addEventListener(" load ", routeRender());
+window.addEventListener("hashchange", () => {
+  routeHtml(window.location.pathname);
+});
