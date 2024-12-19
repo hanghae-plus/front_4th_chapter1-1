@@ -1,12 +1,17 @@
-import router from "../router/Router";
 import userStore from "../store/userStore";
 
 class LoginPage {
-  constructor() {
+  constructor(router) {
+    this.router = router;
     this.root = document.querySelector("#root");
   }
 
   render() {
+    if (this.auth()) {
+      this.router.navigateTo("/");
+      return;
+    }
+
     this.root.innerHTML = `
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
@@ -34,6 +39,13 @@ class LoginPage {
     this.attachEventListeners();
   }
 
+  auth() {
+    const user = localStorage.getItem("user");
+    if (user) {
+      return true;
+    }
+  }
+
   attachEventListeners() {
     const store = userStore;
 
@@ -58,7 +70,7 @@ class LoginPage {
           bio: "",
         });
 
-        router.navigateTo("/profile");
+        this.router.navigateTo("/profile");
       }
     });
   }
