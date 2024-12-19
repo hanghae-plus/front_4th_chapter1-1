@@ -14,6 +14,11 @@ import {
 
 const $root = document.getElementById("root");
 
+const hashRoutes = [
+  { path: "#/", component: () => Layout(HomePage) },
+  { path: "#/profile", component: () => Layout(ProfilePage) },
+  { path: "#/login", component: () => LoginPage },
+];
 const routes = [
   { path: "/", component: () => Layout(HomePage) },
   { path: "/profile", component: () => Layout(ProfilePage) },
@@ -26,6 +31,10 @@ const router = (path) => {
   if (_path === "/profile" && !isAuthenticated()) {
     _path = "/login";
   }
+  if (_path === "/login" && isAuthenticated()) {
+    _path = "/";
+  }
+
   const route = routes.find((route) => route.path === _path);
   window.history.pushState(null, "", _path);
 
@@ -38,8 +47,34 @@ const router = (path) => {
     $root.innerHTML = ErrorPage();
   }
 };
+const hashRouter = (path) => {
+  let _path = path ?? window.location.hash;
 
-const setProfile = () => {
+  const routeName = _path.replace("#/", "");
+
+  if (routeName === "profile" && !isAuthenticated()) {
+    window.location.hash = "#/login";
+    return;
+  }
+  if (routeName === "login" && isAuthenticated()) {
+    window.location.hash = "#/";
+    return;
+  }
+
+  const route = hashRoutes.find((route) => route.path === `#/${routeName}`);
+  window.location.hash = `#/${routeName}`;
+
+  if (route) {
+    $root.innerHTML = route.component();
+    if (routeName === "profile" && isAuthenticated()) {
+      setProfile();
+    }
+  } else {
+    $root.innerHTML = ErrorPage();
+  }
+};
+
+export const setProfile = () => {
   const user = getUserFromStorage();
   const profileForm = document.getElementById("profile-form");
 
@@ -76,10 +111,13 @@ const handleLogout = () => {
 };
 
 window.addEventListener("DOMContentLoaded", () => {
-  router();
+  window.location.hash ? hashRouter() : router();
 });
 window.addEventListener("popstate", () => {
   router();
+});
+window.addEventListener("hashchange", () => {
+  hashRouter();
 });
 window.addEventListener("click", (e) => {
   if (e.target.tagName === "A" && e.target.pathname) {
@@ -89,7 +127,9 @@ window.addEventListener("click", (e) => {
       handleLogout();
       return;
     }
-    router(e.target.pathname);
+    window.location.hash
+      ? hashRouter(e.target.pathname)
+      : router(e.target.pathname);
   }
 });
 window.addEventListener("submit", (e) => {
