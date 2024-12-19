@@ -5,14 +5,14 @@ function Nav() {
   return `<nav class="bg-white shadow-md p-2 sticky top-14">
       <ul class="flex justify-around">
         <li>
-          <a href="/" class=${path === "/" ? "text-blue-600" : "text-gray-600"}>
+          <a href="/" class="${path === "/" ? "text-blue-600 font-bold" : "text-gray-700"}" >
             홈
           </a>
         </li>
         ${
           user
             ? `<li>
-          <a href="/profile" class=${path === "/profile" ? "text-blue-600" : "text-gray-600"}>
+          <a href="/profile" class="${path === "/profile" ? "text-blue-600 font-bold" : "text-gray-600"}" >
             프로필
           </a>
         </li>`
