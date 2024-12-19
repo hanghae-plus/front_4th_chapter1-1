@@ -23,7 +23,7 @@ const app = createApp({
       router,
     });
 
-    matchedPage.register({ router });
+    matchedPage.register?.({ router });
   },
 });
 

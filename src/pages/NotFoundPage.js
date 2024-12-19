@@ -14,5 +14,4 @@ export const NotFoundPage = {
       </div>
     </main>
   `,
-  register: () => {},
 };
