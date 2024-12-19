@@ -1,4 +1,5 @@
 import { PATHS } from "../router/routes.js";
+import { getLocalStorage } from "../storage/storage.js";
 
 export const Header = () => `
     <header class="bg-blue-600 text-white p-4 sticky top-0">
@@ -13,7 +14,7 @@ export const Header = () => `
 
 // 로그인 여부에 따른 렌더링
 const renderLoginStatus = () => {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const user = getLocalStorage("user") || "{}";
   const path = window.location.hash
     ? window.location.hash.slice(1)
     : window.location.pathname;
