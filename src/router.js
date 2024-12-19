@@ -7,9 +7,13 @@
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { renderPage } from "./util/render";
 
-export class Router {
+class Router {
   constructor() {
+    if (Router.instance) {
+      return Router.instance;
+    }
     this.route = {};
+    Router.route = this;
     window.addEventListener("popstate", this.setting.bind(this));
   }
 
@@ -36,9 +40,13 @@ export class Router {
   }
 }
 
-export class HashRouter {
+class HashRouter {
   constructor() {
+    if (HashRouter.instance) {
+      return HashRouter.instance;
+    }
     this.route = {};
+    HashRouter.route = this;
     window.addEventListener("hashchange", this.setting.bind(this));
   }
 
@@ -59,3 +67,8 @@ export class HashRouter {
     this.render(location.hash);
   }
 }
+
+const route = new Router();
+const hashRoute = new HashRouter();
+
+export { route, hashRoute };
