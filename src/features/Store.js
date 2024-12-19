@@ -19,6 +19,10 @@ const Store = (function () {
         listeners.add(listener);
         return () => listeners.delete(listener);
       },
+
+      clearListeners: () => {
+        listeners.clear();
+      },
     };
   };
 

@@ -1,7 +1,12 @@
 import Routes from "./routes";
 import userService from "../features/UserService";
+import { Store } from "../features";
+
+const store = Store.getInstance();
 
 export const historyRouter = (path) => {
+  store.clearListeners();
+
   const pathToGo = interceptor(path);
 
   history.pushState({}, "", pathToGo);
@@ -14,6 +19,8 @@ export const historyRouter = (path) => {
 };
 
 export const hashRouter = (hash) => {
+  store.clearListeners();
+
   const path = hash.replace("#", "");
   const pathToGo = interceptor(path);
 

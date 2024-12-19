@@ -12,7 +12,9 @@ const Header = () => {
       : { href: "/login", title: "로그인" },
   ];
 
-  const currentPath = window.location.pathname;
+  const currentPath =
+    window.location.hash?.replace("#", "") || window.location.pathname;
+
   const isCurrNav = (path) => path === currentPath;
   const navTextColor = (path) => (isCurrNav(path) ? "blue-600" : "gray-600");
   const navFontWeight = (path) => (isCurrNav(path) ? "bold" : "");
