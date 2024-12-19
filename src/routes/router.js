@@ -12,8 +12,8 @@ const RoutesSingleton = () => {
     const routes = {};
 
     // 라우트 추가 함수
-    const addRoute = (path, page) => {
-      routes[path] = page;
+    const addRoute = (path, handler) => {
+      routes[path] = handler;
     };
 
     return {
@@ -41,4 +41,6 @@ const createRoutes = () => {
 };
 
 const { addRoute } = createRoutes();
-addRoute("/", "MainPage");
+addRoute("/", () => {
+  console.log("Main Page");
+});
