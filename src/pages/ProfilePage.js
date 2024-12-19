@@ -16,7 +16,7 @@ export const ProfilePage = () => {
   return `
   <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
-        ${Header("항해플러스")}
+        ${Header()}
 
         ${GnbMenu()}
 

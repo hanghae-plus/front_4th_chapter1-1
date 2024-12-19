@@ -44,13 +44,12 @@ export class HashRouter {
 
   navigateTo(path) {
     if (`#${path}` !== window.location.hash) {
-      window.location.hash = path;
+      window.location.hash = `#${path}`;
     }
     path = `#${path}`;
 
     if (path == "#/login" && localStorage.getItem("user")) {
       path = "#/";
-      console.log(path + "    " + window.location.hash);
     }
     if (path == "#/profile" && !localStorage.getItem("user")) {
       path = "#/login";
@@ -69,7 +68,7 @@ export class HashRouter {
     if (handler) {
       handler();
     } else {
-      document.getElementById("root").innerHTML = pathRender[404]; // 404 페이지 렌더링
+      document.getElementById("root").innerHTML = pathRender[404](); // 404 페이지 렌더링
     }
   }
 }

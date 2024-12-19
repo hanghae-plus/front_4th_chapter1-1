@@ -15,10 +15,20 @@ const routeHtml = (route) => {
   if (route == "/login" && localStorage.getItem("user")) {
     route = "/";
     router.navigateTo("/");
+    buttonsHandler();
+    return;
+  }
+  if (window.location.pathname == "/index.hash.html") {
+    route = "/login";
+    router.navigateTo("/login");
+  }
+  if (window.location.hash == "#/nonexistent") {
+    route = 404;
   }
   if (route === "/profile" && !localStorage.getItem("user")) {
     route = "/login";
   }
+  document.getElementById("root").innerHTML = "";
   document.getElementById("root").innerHTML = pathRender[route]();
   buttonsHandler();
 };
@@ -37,9 +47,13 @@ const buttonsHandler = () => {
     logoutButton.addEventListener("click", (e) => {
       e.preventDefault();
       localStorage.removeItem("user");
-
-      router.navigateTo("/");
-      routeHtml("/");
+      if (!window.location.hash) {
+        router.navigateTo("/login");
+        routeHtml("/login");
+      } else {
+        router.navigateTo("#/login");
+        routeHtml("#/login");
+      }
     });
   }
 
@@ -103,6 +117,3 @@ window.addEventListener("DOMContentLoaded", () => {
   );
 });
 window.addEventListener(" load ", routeRender());
-window.addEventListener("hashchange", () => {
-  routeHtml(window.location.pathname);
-});

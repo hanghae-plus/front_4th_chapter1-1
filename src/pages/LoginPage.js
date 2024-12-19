@@ -4,7 +4,7 @@ export const LoginPage = () => `
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
       <form id="login-form">
         <div class="mb-4">
-          <input type="text" id="username" name="user-id" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
+          <input type="text" id="username" name="user-id" placeholder="사용자 이름" class="w-full p-2 border rounded">
         </div>
         <div class="mb-6">
           <input type="password" id="userpw" name="user-pw" placeholder="비밀번호" class="w-full p-2 border rounded">
@@ -16,7 +16,7 @@ export const LoginPage = () => `
       </div>
       <hr class="my-6">
       <div class="text-center">
-        <button id="test1" class="bg-green-500 text-white px-4 py-2 rounded font-bold">새 계정 만들기</button>
+        <button class="bg-green-500 text-white px-4 py-2 rounded font-bold">새 계정 만들기</button>
       </div>
     </div>
   </main>
