@@ -1,6 +1,7 @@
-import { userStore } from "./store/userStore";
+import { userStore } from "../store/userStore";
 
 const AUTH_REQUIRED_PAGES = ["/profile"];
+
 export default class Router {
   #routes = {};
 
@@ -10,16 +11,19 @@ export default class Router {
 
   init() {
     this.handleEventListeners();
-    // const hash = window.location.hash;
-    // console.log("🚀 ~ Router ~ init ~ hash:", hash);
-    const path = window.location.pathname;
-    // console.log("🚀 ~ Router ~ init ~ path:", path);
-    // this.navigate(hash ?? path);
+    const path = this.isHash()
+      ? window.location.hash
+      : window.location.pathname;
+
     this.navigate(path);
   }
 
   navigate(path) {
     const root = document.getElementById("root");
+
+    if (this.isHash()) {
+      path = location.hash.slice(1) || "/";
+    }
     const authenticatedPath = this.checkAuth(path);
     const render = this.#routes[authenticatedPath] || this.#routes["/404"];
 
@@ -28,6 +32,7 @@ export default class Router {
 
   checkAuth(path) {
     let authenticatedPath = path;
+
     if (AUTH_REQUIRED_PAGES.includes(path) && !userStore.isLoggedIn()) {
       alert("로그인이 필요한 페이지입니다.");
       authenticatedPath = "/login";
@@ -35,11 +40,13 @@ export default class Router {
       alert("이미 로그인되어 있습니다.");
       authenticatedPath = "/";
     }
+
     return authenticatedPath;
   }
 
   handleEventListeners() {
     this.handleLinkClick();
+    this.handleHashChange();
     this.handlePopstate();
   }
 
@@ -62,8 +69,7 @@ export default class Router {
         e.preventDefault();
 
         const href = target.getAttribute("href");
-        const isHash = location.hash.slice(1);
-        if (isHash) {
+        if (this.isHash()) {
           window.location.hash = href;
           return;
         }
@@ -71,5 +77,9 @@ export default class Router {
         this.navigate(href);
       }
     });
+  }
+
+  isHash() {
+    return location.hash && location.hash.startsWith("#");
   }
 }
