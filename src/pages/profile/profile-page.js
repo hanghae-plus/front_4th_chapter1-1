@@ -71,7 +71,7 @@ export const ProfilePage = () => `
     </div>
 `;
 
-ProfilePage.init = () => {
+ProfilePage.eventFn = () => {
   if (!userService.isLogin()) {
     MyRouter.push("/login");
     return;
@@ -92,6 +92,6 @@ ProfilePage.init = () => {
     userService.updateProfile({ username, email, bio });
   });
 
-  Header.init?.();
-  Footer.init?.();
+  Header.eventFn?.();
+  Footer.eventFn?.();
 };

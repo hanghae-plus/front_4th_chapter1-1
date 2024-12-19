@@ -103,9 +103,9 @@ const HomePage = () => {
 `;
 };
 
-HomePage.init = () => {
-  Header.init?.();
-  Footer.init?.();
+HomePage.eventFn = () => {
+  Header.eventFn?.();
+  Footer.eventFn?.();
 };
 
 export default HomePage;

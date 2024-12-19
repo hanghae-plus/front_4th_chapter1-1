@@ -27,7 +27,7 @@ export const Header = () => {
   `;
 };
 
-Header.init = () => {
+Header.eventFn = () => {
   const logoutButton = document.getElementById("logout");
   logoutButton?.addEventListener("click", (e) => {
     e.preventDefault();

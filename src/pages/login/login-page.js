@@ -27,7 +27,7 @@ const LoginPage = () => {
 `;
 };
 
-LoginPage.init = () => {
+LoginPage.eventFn = () => {
   if (userService.isLogin()) {
     MyRouter.push("/");
     return;

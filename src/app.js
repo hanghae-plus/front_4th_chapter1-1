@@ -24,6 +24,6 @@ export const App = {
     const path = MyRouter.pathname;
     const CurrentPage = router(path);
     document.querySelector("#root").innerHTML = CurrentPage();
-    CurrentPage.init?.();
+    CurrentPage.eventFn?.();
   },
 };
