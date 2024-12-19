@@ -88,6 +88,7 @@ describe('기본과제 테스트', () => {
       );
 
       const logoutButton = document.getElementById('logout');
+      // expect(document.body).toBe('');
       logoutButton.click();
 
       expect(localStorage.getItem('user')).toEqual(null);

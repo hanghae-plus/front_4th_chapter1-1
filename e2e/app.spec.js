@@ -165,7 +165,7 @@ test.describe('SPA 심화 기능', () => {
           - link "로그아웃"
     `);
 
-    await page.goto('#/login');
+    await page.goto('/login');
     await expect(page.getByRole('navigation')).toMatchAriaSnapshot(`
     - navigation:
       - list:
