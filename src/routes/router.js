@@ -16,9 +16,34 @@ const RoutesSingleton = () => {
       routes[path] = handler;
     };
 
+    // 라우터에 걸려있는 이벤트 처리
+    const handleRoute = (path) => {
+      const handler = routes[path];
+      if (handler) {
+        handler();
+        return;
+      }
+      // TODO: 에러처리
+      console.log("404 Not Found");
+    };
+
+    // popstate 이벤트 처리
+    const handlePopState = () => {
+      handleRoute(window.location.pathname);
+    };
+
+    // 브라우저 navigate 이벤트 처리
+    const navigateTo = (path) => {
+      window.history.pushState({}, path, path);
+      handleRoute(path);
+    };
+
     return {
       routes,
       addRoute,
+      navigateTo,
+      handleRoute,
+      handlePopState,
     };
   };
 
@@ -35,12 +60,7 @@ const RoutesSingleton = () => {
   };
 };
 
-const createRoutes = () => {
+export const createRoutes = () => {
   const { getInstance } = RoutesSingleton();
   return getInstance();
 };
-
-const { addRoute } = createRoutes();
-addRoute("/", () => {
-  console.log("Main Page");
-});
