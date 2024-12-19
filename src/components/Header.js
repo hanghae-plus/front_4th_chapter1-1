@@ -1,16 +1,17 @@
 import userStore from "../store/UserStore.js";
 import router from "../router/Router.js";
+import { getCurrentPath } from "../router/Router.js";
 
 const Header = () => {
   const navItemList = [
     { href: "/", title: "홈" },
     { href: "/profile", title: "프로필" },
     userStore.LoginState()
-      ? { href: "/", title: "로그아웃" }
+      ? { href: "/login", title: "로그아웃" }
       : { href: "/login", title: "로그인" },
   ];
 
-  const currentPath = window.location.pathname;
+  let currentPath = getCurrentPath();
   const isCurrNav = (path) => path === currentPath;
   const navTextColor = (path) => (isCurrNav(path) ? "blue-600" : "gray-600");
   const navFontWeight = (path) => (isCurrNav(path) ? "bold" : "");
