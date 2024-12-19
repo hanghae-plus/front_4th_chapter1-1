@@ -8,9 +8,7 @@ const router = new HistoryRouter();
 
 setAddRoute(router);
 
-window.location.hash
-  ? router.navigateTo(window.location.hash.slice(1))
-  : router.navigateTo(window.location.pathname);
+router.navigateTo(window.location.pathname);
 
 function setAddRoute(router) {
   router.addRoute("/login", () => {
@@ -46,8 +44,6 @@ function loadRoute(content) {
 }
 
 function mainPageEventController(userData) {
-  navbarEventController();
-
   const loginBtn =
     document.getElementById("login") || document.getElementById("logout");
   const profileStatus = document.getElementById("user-profile");
@@ -77,8 +73,6 @@ function mainPageEventController(userData) {
 }
 
 function profilePageEventController(userJson) {
-  navbarEventController();
-
   if (userJson) {
     const { username, email, bio } = userJson;
 
@@ -151,15 +145,14 @@ function loginPageEventController() {
   }
 }
 
-function navbarEventController() {
-  const navbar = document.querySelector("nav");
-  if (navbar) {
-    navbar.addEventListener("click", (e) => {
-      if (e.target.tagName === "A") {
-        e.preventDefault();
-        const path = e.target.getAttribute("href");
-        router.navigateTo(path);
-      }
-    });
-  }
+const navbar = document.querySelector("nav");
+if (navbar) {
+  navbar.addEventListener("click", (e) => {
+    if (e.target.tagName === "A") {
+      e.preventDefault();
+      e.stopPropagation(); // 이벤트 전파 막기
+      const path = e.target.getAttribute("href");
+      router.navigateTo(path);
+    }
+  });
 }

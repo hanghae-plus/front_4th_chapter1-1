@@ -8,9 +8,7 @@ const router = new HashRouter();
 
 setAddRoute(router);
 
-window.location.hash
-  ? router.navigateTo(window.location.hash.slice(1))
-  : router.navigateTo(window.location.pathname);
+router.navigateTo(window.location.hash.slice(1));
 
 function setAddRoute(router) {
   router.addRoute("/login", () => {
