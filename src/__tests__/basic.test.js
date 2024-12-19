@@ -99,7 +99,7 @@ describe("기본과제 테스트", () => {
       goTo("/login");
 
       const loginForm = document.getElementById("login-form");
-
+      // expect(document.getElementById("root")).toBe("testuser");
       await user.type(document.getElementById("username"), "testuser");
 
       loginForm.dispatchEvent(
