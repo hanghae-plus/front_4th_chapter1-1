@@ -1,4 +1,6 @@
-import { router } from "./app/router";
+import { router } from "./app";
+import { Store } from "./features";
+import { POST_LIST } from "./shared";
 
 const initLoadedListener = () => {
   document.addEventListener("DOMContentLoaded", () => {
@@ -25,4 +27,7 @@ export const initApp = () => {
   initPopListener();
   initHashChangeListener();
   initLoadedListener();
+
+  const store = Store.getInstance();
+  store.setState({ postList: POST_LIST });
 };

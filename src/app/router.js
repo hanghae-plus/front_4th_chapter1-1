@@ -1,4 +1,4 @@
-import { Routes } from "./routes";
+import Routes from "./routes";
 import userService from "../features/UserService";
 
 export const historyRouter = (path) => {
@@ -40,5 +40,7 @@ const interceptor = (path) => {
   return redirectedPath ?? path;
 };
 
-export const router = (path) =>
+const router = (path) =>
   window.location.hash ? hashRouter(path) : historyRouter(path);
+
+export default router;

@@ -1,8 +1,8 @@
 import userService from "../features/UserService";
 import { BASE_URL } from "../shared/const";
-import { router } from "../app/router";
+import { router } from "../app";
 
-export const Header = () => {
+const Header = () => {
   const LOGOUT = "로그아웃";
   const navItemList = [
     { href: "/", title: "홈" },
@@ -53,3 +53,5 @@ export const Header = () => {
 
   return { view, init };
 };
+
+export default Header;

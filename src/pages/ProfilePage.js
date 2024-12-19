@@ -1,10 +1,9 @@
 import userService from "../features/UserService";
 import { InputName } from "../shared/const";
-import { router } from "../app/router";
-import { Footer } from "../widgets/Footer";
-import { Header } from "../widgets/Header";
+import { router } from "../app";
+import { Header, Footer } from "../widgets";
 
-export const ProfilePage = () => {
+const ProfilePage = () => {
   const user = userService.getUser();
 
   const { view: headerView, init: initHeader } = Header();
@@ -108,3 +107,5 @@ export const ProfilePage = () => {
 
   return { view, init };
 };
+
+export default ProfilePage;

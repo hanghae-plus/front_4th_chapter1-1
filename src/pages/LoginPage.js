@@ -1,8 +1,8 @@
 import userService from "../features/UserService";
 import { InputName } from "../shared/const";
-import { router } from "../app/router";
+import { router } from "../app";
 
-export const LoginPage = () => {
+const LoginPage = () => {
   const view = `
     <main class="bg-gray-100 flex items-center justify-center min-h-screen">
       <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
@@ -47,3 +47,5 @@ export const LoginPage = () => {
 
   return { view, init };
 };
+
+export default LoginPage;
