@@ -22,6 +22,7 @@ describe("심화과제 > 해시 라우터 테스트", () => {
   describe("1. 라우팅 구현", () => {
     it('"/" 경로로 접근하면 홈 페이지가 렌더링된다', () => {
       goTo("/");
+
       const headers = [...document.querySelectorAll("header")];
       expect(headers.length).toBe(1);
       expect(headers[0].innerHTML.includes("항해플러스")).toBe(true);
@@ -32,6 +33,7 @@ describe("심화과제 > 해시 라우터 테스트", () => {
       const submitButtons = [
         ...document.querySelectorAll("form button[type='submit']"),
       ];
+
       expect([...document.querySelectorAll("header")].length).toBe(0);
       expect(submitButtons.length).toBe(1);
       expect(submitButtons[0].innerHTML.includes("로그인")).toBe(true);

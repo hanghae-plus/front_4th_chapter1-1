@@ -77,7 +77,7 @@ describe("심화과제 테스트", () => {
 
       await user.click(firstTarget);
 
-      // 클릭 이벤트 생성 및 트리거
+      // 클릭 이벤트 생성 및 트리거`
       expect(document.body.querySelector("header")).not.toBeFalsy();
     });
   });
