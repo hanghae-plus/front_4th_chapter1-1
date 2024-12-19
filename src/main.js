@@ -26,6 +26,6 @@ Object.keys(PathToPageEnum).forEach((path) => {
 window.addEventListener("click", (e) => {
   if (e.target.tagName === "A") {
     e.preventDefault();
-    navigateTo(e.target.href);
+    navigateTo(e.target.getAttribute("href"));
   }
 });
