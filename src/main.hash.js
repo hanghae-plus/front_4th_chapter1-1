@@ -1,13 +1,12 @@
 import { authGuard } from "./guard/authGuard";
+import { loginHandler } from "./handler/LoginHandler";
+import { updateProfileHandler } from "./handler/ProfileHandler";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { ProfilePage } from "./pages/ProfilePage";
-import { HashRouter } from "./router";
+import { hashRoute } from "./router";
 import { authStore } from "./store/AuthStore";
 import { renderPage } from "./util/render";
-
-//router만 해시라우터로 변경
-const route = new HashRouter();
 
 const renderLoginPage = () => {
   authGuard(
@@ -38,12 +37,12 @@ const renderProfilePage = () => {
 };
 
 // 라우팅 등록
-route.registerRoute("#/", renderHomePage);
-route.registerRoute("#/login", renderLoginPage);
-route.registerRoute("#/profile", renderProfilePage);
+hashRoute.registerRoute("#/", renderHomePage);
+hashRoute.registerRoute("#/login", renderLoginPage);
+hashRoute.registerRoute("#/profile", renderProfilePage);
 
 // 현재 경로에 맞게 페이지 렌더링
-route.setting();
+hashRoute.setting();
 
 // 전역 click 이벤트 리스너 추가
 document.body.addEventListener("click", (event) => {
@@ -78,17 +77,3 @@ document.body.addEventListener("submit", (event) => {
     updateProfileHandler(formData);
   }
 });
-
-function loginHandler(formData) {
-  const username = formData.get("username");
-
-  authStore.setUser({ username, email: "", bio: "" });
-  location.hash = "#/profile";
-}
-
-function updateProfileHandler(formData) {
-  const username = formData.get("username");
-  const email = formData.get("email");
-  const bio = formData.get("bio");
-  authStore.setUser({ username, email, bio });
-}

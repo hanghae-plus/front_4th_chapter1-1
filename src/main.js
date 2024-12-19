@@ -1,12 +1,12 @@
 import { authGuard } from "./guard/authGuard";
+import { loginHandler } from "./handler/LoginHandler";
+import { updateProfileHandler } from "./handler/ProfileHandler";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { ProfilePage } from "./pages/ProfilePage";
-import { Router } from "./router";
+import { route } from "./router";
 import { authStore } from "./store/AuthStore";
 import { renderPage } from "./util/render";
-
-const route = new Router();
 
 const renderLoginPage = () => {
   authGuard(
@@ -78,17 +78,3 @@ document.body.addEventListener("submit", (event) => {
     updateProfileHandler(formData);
   }
 });
-
-function loginHandler(formData) {
-  const username = formData.get("username");
-
-  authStore.setUser({ username, email: "", bio: "" });
-  route.navigate("/profile");
-}
-
-function updateProfileHandler(formData) {
-  const username = formData.get("username");
-  const email = formData.get("email");
-  const bio = formData.get("bio");
-  authStore.setUser({ username, email, bio });
-}
