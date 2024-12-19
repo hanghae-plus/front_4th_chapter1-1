@@ -1,4 +1,5 @@
 import { defineConfig } from "vitest/config";
+import "core-js/actual/structured-clone";
 
 export default defineConfig({
   test: {

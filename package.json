@@ -22,17 +22,19 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "prettier --write",
-      "eslint --fix"
+      "node --version && prettier --write",
+      "node --version && eslint --fix"
     ]
   },
   "devDependencies": {
+    "@eslint/config-array": "^0.19.1",
     "@eslint/js": "^9.16.0",
     "@playwright/test": "^1.49.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/user-event": "^14.5.2",
     "@vitest/ui": "^2.1.8",
-    "eslint": "^9.16.0",
+    "concurrently": "^9.1.0",
+    "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "globals": "^15.13.0",
@@ -42,5 +44,8 @@
     "prettier": "^3.4.2",
     "vite": "^6.0.3",
     "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "core-js": "^3.39.0"
   }
 }
