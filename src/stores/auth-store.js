@@ -1,5 +1,6 @@
 import { getItem, removeItem, setItem } from "@/utils/storage";
 import { createStore } from "@/utils/store";
+import { navigateTo } from "../utils/router";
 
 const USER_STORE_KEY = "user";
 
@@ -27,4 +28,31 @@ const authStoreActions = {
   },
 };
 
-export { authStore, authStoreActions };
+const authGuardMiddleware = () => {
+  const { isLogin } = authStore.getState();
+
+  if (!isLogin) {
+    navigateTo("/login", { hash: window.isHash });
+    return false;
+  }
+
+  return true;
+};
+
+const guestGuardMiddleware = () => {
+  const { isLogin } = authStore.getState();
+
+  if (isLogin) {
+    navigateTo("/", { hash: window.isHash });
+    return false;
+  }
+
+  return true;
+};
+
+export {
+  authStore,
+  authStoreActions,
+  authGuardMiddleware,
+  guestGuardMiddleware,
+};

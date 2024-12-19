@@ -1,16 +1,43 @@
+const isCompletedMiddleware = (middlewares) => {
+  if (!middlewares) return true;
+  const isCompleted = middlewares.every((middleware) => middleware());
+  return isCompleted;
+};
+
+const navigateTo = (path, options) => {
+  if (options?.hash) {
+    window.location.hash = path;
+    dispatchEvent(new Event("hashchange"));
+  } else {
+    history.pushState(null, {}, path);
+    dispatchEvent(new CustomEvent("routeChange"));
+  }
+};
+
 const createRouter = (root) => {
-  const routes = new Map();
+  const routeMap = new Map();
+  const middlewareMap = new Map();
   let currentPath = window.location.pathname;
-  const addRoute = (route, element) => {
-    routes.set(route, element);
+
+  const addRoute = (route, element, middlewares) => {
+    routeMap.set(route, element);
+    middlewareMap.set(route, middlewares);
     return router;
   };
 
   const getElement = () => {
     const path = currentPath;
+
+    const middlewares = middlewareMap.get(path);
+
+    if (!isCompletedMiddleware(middlewares)) {
+      return;
+    }
+
     const element =
-      routes.get(path) || routes.get("*") || document.createElement("div");
-    return element;
+      routeMap.get(path) || routeMap.get("*") || document.createElement("div");
+
+    return element();
   };
 
   const handleRouteChange = () => {
@@ -38,31 +65,31 @@ const createRouter = (root) => {
   return router;
 };
 
-const navigateTo = (path, options) => {
-  if (options?.hash) {
-    window.location.hash = path;
-    dispatchEvent(new Event("hashchange"));
-  } else {
-    history.pushState(null, {}, path);
-    dispatchEvent(new CustomEvent("routeChange"));
-  }
-};
-
 const createHashRouter = (root) => {
-  const routes = new Map();
+  const routeMap = new Map();
+  const middlewareMap = new Map();
   let currentPath = window.location.hash;
 
-  const addRoute = (route, element) => {
+  const addRoute = (route, element, middlewares) => {
     const hashRoute = `#${route}`;
-    routes.set(hashRoute, element);
+    routeMap.set(hashRoute, element);
+    middlewareMap.set(hashRoute, middlewares);
     return router;
   };
 
   const getElement = () => {
     const path = currentPath;
+
+    const middlewares = middlewareMap.get(path);
+
+    if (!isCompletedMiddleware(middlewares)) {
+      return;
+    }
+
     const element =
-      routes.get(path) || routes.get("#*") || document.createElement("div");
-    return element;
+      routeMap.get(path) || routeMap.get("#*") || document.createElement("div");
+
+    return element();
   };
 
   const handleRouteChange = () => {
