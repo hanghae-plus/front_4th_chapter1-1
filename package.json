@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "dev:hash": "vite --open ./index.hash.html",
-    "build": "vite build",
+    "build": "tsc && vite build",
     "lint:fix": "eslint --fix",
     "prettier:write": "prettier --write ./src",
     "preview": "vite preview",
@@ -41,6 +41,7 @@
     "lint-staged": "^15.2.11",
     "prettier": "^3.4.2",
     "vite": "^6.0.3",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.8",
+    "typescript": "^5.7.2"
   }
 }
