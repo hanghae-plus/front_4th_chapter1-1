@@ -4,6 +4,8 @@ import { getLocalStorage } from "./storage";
 const Validate = {
   path(checkData) {
     if (!this.isLogin()) return ROUTE_DATA[ROUTE_PATH.LOGIN];
+    if (location.pathname === "/profile" && !this.isLogin())
+      return ROUTE_DATA[ROUTE_PATH.LOGIN];
     const data = ROUTE_DATA.find((route) => route.path === checkData);
     return data ? data : ROUTE_DATA[ROUTE_PATH.ERROR];
   },
@@ -14,8 +16,7 @@ const Validate = {
   },
 
   isLogin() {
-    if (location.pathname === "/profile" && !getLocalStorage("user"))
-      return false;
+    if (!getLocalStorage("user")) return false;
     return true;
   },
 };
