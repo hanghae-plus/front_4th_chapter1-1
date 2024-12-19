@@ -378,19 +378,26 @@ const router = () => {
 
   document.body.innerHTML = page;
 
-  if (path !== '/login') {
+  if (path !== '/login' && path !== '/404') {
     renderNav();
+    renderHeader();
   }
 
   pageEventListeners();
 };
 
+const renderHeader = () => {
+  const header = document.querySelectorAll('header');
+  if (!header) return;
+
+  header.innerHTML = `
+    <h1 class="text-2xl font-bold">항해플러스</h1>
+  `;
+};
+
 // navigation render
 const renderNav = () => {
   const currentPath = window.location.hash.slice(1) || '/';
-
-  if (currentPath === '/login' || currentPath === '/404') return;
-
   const nav = document.querySelector('nav ul');
   if (!nav) return;
 
