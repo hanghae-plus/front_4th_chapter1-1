@@ -1,6 +1,6 @@
+import userStore from "@/store/userStore";
 import { submitEventHandler, clickEventHandler } from "@/utils";
 import { addRoutes, navigator, setRenderTarget } from "@/router/router";
-import userStore from "@/store/userStore";
 import MainPage from "@/pages/MainPage";
 import ProfilePage from "@/pages/ProfilePage";
 import LoginPage from "@/pages/LoginPage";
