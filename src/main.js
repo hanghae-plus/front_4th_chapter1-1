@@ -1,6 +1,7 @@
 import { useRouter } from "./utils/useRouter";
 
-const { router } = useRouter("history");
+const { router } = useRouter();
 
 window.addEventListener("load", () => router());
 window.addEventListener("popstate", () => router());
+window.addEventListener("hashchange", () => router());

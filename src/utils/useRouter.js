@@ -4,33 +4,33 @@ import NotFoundPage from "../pages/NotFoundPage";
 import ProfilePage from "../pages/ProfilePage";
 import { useUserStore } from "../stores/useUserStore";
 
-const PATHNAME_PAGE_MAP = {
+const ROUTE_PAGE_MAP = {
   "/": () => renderMainPage(),
   "/login": () => renderLoginPage(),
   "/profile": () => renderProfilePage(),
 };
 
-export const useRouter = (type) => {
-  const routeGuard = (path) => {
-    let pathname = path;
-    const isLogin = useUserStore.isLogin();
+const routeGuard = (route, type = "path") => {
+  const isLogin = useUserStore.isLogin();
+  const isHash = type === "hash";
 
-    const refinedPathname = pathname.replace("#", "");
+  if ((route === "/login" || route === "#/login") && isLogin) {
+    return isHash ? "#/" : "/";
+  }
 
-    if (refinedPathname === "/profile" && !isLogin) {
-      pathname = `${type === "hash" ? "#" : ""}/login`;
-    } else if (refinedPathname === "/login" && isLogin) {
-      pathname = "/";
-    }
+  if ((route === "/profile" || route === "#/profile") && !isLogin) {
+    return isHash ? "#/login" : "/login";
+  }
 
-    return pathname;
-  };
+  return route;
+};
 
+export const useRouter = () => {
   const historyRouter = (path) => {
     let pathname = path || window.location.pathname;
     pathname = routeGuard(pathname);
 
-    let render = PATHNAME_PAGE_MAP[pathname];
+    let render = ROUTE_PAGE_MAP[pathname];
     if (!render) {
       render = () => renderNotFoundPage();
     }
@@ -41,9 +41,9 @@ export const useRouter = (type) => {
 
   const hashRouter = (hash) => {
     let newHash = hash || window.location.hash;
-    newHash = routeGuard(newHash);
+    newHash = routeGuard(newHash, "hash");
 
-    let render = PATHNAME_PAGE_MAP[newHash.replace("#", "")];
+    let render = ROUTE_PAGE_MAP[newHash.replace("#", "")];
     if (!render) {
       render = () => renderNotFoundPage();
     }
@@ -52,7 +52,15 @@ export const useRouter = (type) => {
     render();
   };
 
-  return { router: type === "history" ? historyRouter : hashRouter };
+  return {
+    router(value) {
+      if (window.location.hash) {
+        hashRouter(value);
+      } else {
+        historyRouter(value);
+      }
+    },
+  };
 };
 
 const renderMainPage = () => {
