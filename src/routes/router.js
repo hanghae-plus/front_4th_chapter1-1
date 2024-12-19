@@ -20,19 +20,12 @@ const router = (path) => {
 
   if (path === "/profile") {
     if (!isLogin()) {
-      window.history.pushState({}, "", "/login");
-      const component = makeComponent("/login");
-      render(component);
-      return;
+      path = "/login";
     }
   }
 
   if (path === "/login" && isLogin()) {
-    console.log("heres");
-    window.history.pushState({}, "", "/");
-    const component = makeComponent("/");
-    render(component);
-    return;
+    path = "/";
   }
 
   window.history.pushState({}, "", path);
