@@ -10,24 +10,36 @@ setAddRoute(router);
 
 router.navigateTo(window.location.hash.slice(1));
 
-function setAddRoute(router) {
-  router.addRoute("/login", () => {
+// 로그인 인증 미들웨어 함수
+function authMiddleware(isAuthRequired, callback) {
+  return () => {
     const id = window.localStorage.getItem("user");
-    if (id) {
+
+    if (isAuthRequired && !id) {
+      // 인증이 필요한데 로그인이 안된 경우
+      router.navigateTo("/login");
+      return;
+    }
+
+    if (!isAuthRequired && id) {
+      // 인증이 필요없는데 로그인이 된 경우 (예: 로그인 페이지)
       router.navigateTo("/");
       return;
-    } else {
-      loadRoute(LoginPage());
     }
-  });
-  router.addRoute("/profile", () => {
-    const id = window.localStorage.getItem("user");
-    if (!id) {
-      router.navigateTo("/login");
-    } else {
-      loadRoute(ProfilePage());
-    }
-  });
+
+    callback();
+  };
+}
+
+function setAddRoute(router) {
+  router.addRoute(
+    "/login",
+    authMiddleware(false, () => loadRoute(LoginPage())),
+  );
+  router.addRoute(
+    "/profile",
+    authMiddleware(true, () => loadRoute(ProfilePage())),
+  );
   router.addRoute("/", () => loadRoute(MainPage()));
   router.addRoute("/404", () => loadRoute(NotFoundPage()));
 }
