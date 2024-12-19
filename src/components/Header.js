@@ -26,14 +26,25 @@ const Header = () => {
 
     nav.addEventListener("click", (e) => {
       e.preventDefault();
+
+      // 로그아웃 처리
       if (e.target.innerHTML === "로그아웃") {
         userStore.deleteUser();
       }
+
       const path = e.target.href.replace(window.location.origin, ""); //상대 경로만 남기기
       router(path);
 
-      setTimeout(() => setActiveLink(path), 100); // 경로 갱신 후 활성화
+      // 로그인된 상태에서 로그인 페이지로 가려고 할 때 리다이렉트 처리
+      if (path === "/login" && LoginState) {
+        router("/"); // 홈으로 리다이렉트
+      } else {
+        // 페이지 이동 후, active 상태 갱신
+        setTimeout(() => setActiveLink(path), 100); // 경로 갱신 후 활성화
+      }
     });
+
+    // 페이지가 로드될 때 초기 경로에 맞는 링크를 활성화
     setActiveLink(window.location.pathname);
   };
 
