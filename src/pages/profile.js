@@ -1,7 +1,37 @@
 import { Layout } from "../components/layout";
+import { userStore } from "../store/userStore";
 
-export const ProfilePage = () =>
-  Layout(`
+export default class ProfilePage {
+  constructor(userProfile) {
+    this.userProfile = userProfile;
+    this.init();
+  }
+
+  init() {
+    this.userProfile.renderUserData(userStore.user);
+    this.updateView();
+
+    userStore.subscribeUser((user) => {
+      this.userProfile.renderUserData(user);
+      this.updateView();
+    });
+
+    this.handleSubmitForm();
+  }
+
+  updateView() {
+    const root = document.getElementById("root");
+    root.innerHTML = this.render();
+  }
+
+  render() {
+    const { username, email, bio } = userStore.user || {
+      username: "",
+      email: "",
+      bio: "",
+    };
+
+    return Layout(`
       <div class="bg-white p-8 rounded-lg shadow-md">
         <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
           내 프로필
@@ -17,6 +47,7 @@ export const ProfilePage = () =>
               type="text"
               id="username"
               name="username"
+              value="${username}"
               class="w-full p-2 border rounded"
             />
           </div>
@@ -30,6 +61,7 @@ export const ProfilePage = () =>
               type="email"
               id="email"
               name="email"
+              value="${email}"
               class="w-full p-2 border rounded"
             />
           </div>
@@ -44,7 +76,7 @@ export const ProfilePage = () =>
               name="bio"
               rows="4"
               class="w-full p-2 border rounded"
-            ></textarea>
+            >${bio}</textarea>
           </div>
           <button
             type="submit"
@@ -54,4 +86,16 @@ export const ProfilePage = () =>
           </button>
         </form>
       </div>
-`);
+    `);
+  }
+
+  handleSubmitForm() {
+    document.body.addEventListener("submit", (event) => {
+      if (event.target?.id === "profile-form") {
+        event.preventDefault();
+        this.userProfile.updateUserProfile();
+        this.updateView();
+      }
+    });
+  }
+}

@@ -1,4 +1,4 @@
-const isLoggedIn = () => !!localStorage.getItem("user");
+import { userStore } from "../store/userStore";
 
 const loginLink = () => `
 <a id="login-link" href="/login" data-link>로그인</a>`;
@@ -14,9 +14,9 @@ export const Header = () => `
 </header>
 <nav class="bg-white shadow-md p-2 sticky top-14">
   <ul class="flex justify-around">
-    <li><a href="/" class="text-gray-600">홈</a></li>
+    <li><a href="/" class="text-blue-600 font-bold">홈</a></li>
     <li><a href="/profile" class="text-blue-600">프로필</a></li>
-    <li>${isLoggedIn() ? logoutLink() : loginLink()}</li>
+    <li>${userStore.isLoggedIn() ? logoutLink() : loginLink()}</li>
   </ul>
 </nav>
 `;

@@ -29,6 +29,10 @@ export class UserStore {
   notify() {
     this.listeners.forEach((listener) => listener(this.state.user));
   }
+
+  isLoggedIn() {
+    return !!this.state.user;
+  }
 }
 
 export const userStore = new UserStore();

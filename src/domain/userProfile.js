@@ -1,4 +1,4 @@
-import { userStore } from "./store/userStore";
+import { userStore } from "../store/userStore";
 
 export default class UserProfile {
   constructor() {
