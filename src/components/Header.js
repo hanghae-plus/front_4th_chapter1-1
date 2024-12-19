@@ -1,5 +1,4 @@
 import { user } from "../services/user";
-import { getPathname } from "../utils/getPathname";
 
 export const Header = {
   register: ({ router }) => {
@@ -20,7 +19,7 @@ export const Header = {
     const activeStyle = "text-blue-600 font-bold";
     const deactiveStyle = "text-gray-600";
     const activeWhen = (x) =>
-      x === getPathname() ? activeStyle : deactiveStyle;
+      x === window.location.pathname ? activeStyle : deactiveStyle;
 
     return `
       <header class="bg-blue-600 text-white p-4 sticky top-0">
