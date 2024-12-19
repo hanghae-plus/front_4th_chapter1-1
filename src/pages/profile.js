@@ -1,7 +1,13 @@
 import { setUser, getUser } from "@/state/handle-state";
 import { Layout } from "@/components/layout/layout";
+import { router } from "@/components/router";
 
 export const renderProfile = () => {
+  if (getUser() === null) {
+    router.navigateTo("/login");
+    return;
+  }
+
   document.body.innerHTML = ProfilePage();
 };
 

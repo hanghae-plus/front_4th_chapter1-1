@@ -1,7 +1,12 @@
-import { setUser } from "@/state/handle-state";
+import { setUser, getUser } from "@/state/handle-state";
 import { router } from "@/components/router";
 
 export const renderLogin = () => {
+  if (getUser() !== null) {
+    router.navigateTo("/");
+    return;
+  }
+
   document.body.innerHTML = LoginPage();
 };
 
