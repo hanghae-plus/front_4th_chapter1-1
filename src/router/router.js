@@ -1,6 +1,6 @@
-import { ErrorPage } from "../components/pages/ErrorPage";
+import { NotFoundPage } from "../components/pages/NotFoundPage";
 import { LoginPage } from "../components/pages/LoginPage";
-import { MainPage } from "../components/pages/MainPage";
+import { HomePage } from "../components/pages/HomePage";
 import { ProfilePage } from "../components/pages/ProfilePage";
 import { state, subscribe } from "../store/store";
 import { initLogin } from "./../events/login";
@@ -8,7 +8,7 @@ import { initProfile } from "./../events/profile";
 import { initNavigation } from "./../events/navigation";
 
 const routes = {
-  "/": { page: MainPage, init: initNavigation },
+  "/": { page: HomePage, init: initNavigation },
   "/login": { page: LoginPage, init: initLogin },
   "/profile": { page: ProfilePage, init: initProfile },
 };
@@ -22,7 +22,7 @@ export const router = () => {
 
   const path = hashPath || BrowserPath;
 
-  const route = routes[path] || { page: ErrorPage };
+  const route = routes[path] || { page: NotFoundPage };
 
   // 비로그인 사용자는 프로필 접근 불가 → 로그인 페이지로 이동
   if (!state.user && path === "/profile") {
@@ -32,7 +32,7 @@ export const router = () => {
 
   // 로그인 사용자는 로그인 페이지 접근 불가 → 메인 페이지로 이동
   if (state.user && path === "/login") {
-    root.innerHTML = MainPage();
+    root.innerHTML = HomePage();
     return;
   }
 
